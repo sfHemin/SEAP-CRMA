@@ -1,0 +1,221 @@
+# Lightning Web Components for Analytics Dashboards
+
+There are two Lightning web components for displaying dashboards in Salesforce. The `wave-wave-dashboard-lwc` component displays a CRM Analytics dashboard in a Lightning page. The `wave-community-dashboard` component displays a CRM Analytics dashboard in Experience Cloud.
+
+The component, **LWC CRM Analytics Dashboard**, is available in both the Lightning App Builder and the Experience Cloud Builder as a drag-and-drop component. You can also create your own component to interact programmatically with the `wave-wave-dashboard-lwc` or  `wave-community-dashboard` components.
+
+To display a CRM Analytics dashboard, pass in the required attribute, which is either `dashboard` or `developer-name`. All other attributes have a default value and are specified only if you want to override the default with your own custom value.
+
+## Example: CRM Analytics Dashboard component on a Lightning Page
+
+```xml
+<template>
+  <wave-wave-dashboard-lwc dashboard="0FKxx000000000xxxx" height="800" show-title="true">
+  </wave-wave-dashboard-lwc>
+</template>
+```
+
+## Example: CRM Analytics Dashboard component on an Experience Cloud page
+
+```xml
+<template>
+  <wave-community-dashboard dashboard="0FKxx000000000xxxx" height="800" show-title="true" community-base-path="/communitySite/s">
+  </wave-community-dashboard>
+</template>
+```
+
+**See Also**
+
+- [Lightning Web Component for Analytics Dashboards Reference](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-reference.md)
+- *Salesforce Help*: [Embed Dashboards in Lightning Pages](https://help.salesforce.com/s/articleView?id=analytics.bi_embed_lightning.htm)
+- - *Salesforce Help*: [Share CRM Analytics in Experience Cloud Sites](https://help.salesforce.com/s/articleView?id=analytics.bi_app_communities.htm)
+- [Lightning Web Components Developer Guide](https://developer.salesforce.com/docs/platform/lwc/guide)
+# Reference for Analytics Dashboards Lightning Web Component
+
+Use the attributes and methods of the `wave-wave-dashboard-lwc` and `wave-community-dashboard` components to customize and change the state of the CRM Analtyics dashboard.
+
+- [Attributes for Analytics Dashboards Lightning Web Component](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-attributes.md)
+- [Methods for Analytics Dashboards Lightning Web Component](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-methods.md)
+# Reference for Analytics Dashboards Lightning Web Component
+
+The Lightning web component for CRM Analytics dashboards has attributes that can be set programmatically so you can create, render, and interact with a CRM Analytics dashboard on a page at runtime. A majority of the attributes are present for both the Lightning and Experience Cloud components, but there are a few differences that are noted.
+
+## Attributes
+
+| Name                   | Type    | Required or Optional                          | Description                                                                                                                                                                                                                                                                                                                                                                             |
+| ---------------------- | ------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `context`              | string  | Optional                                      | Specifies the context for the dashboard.                                                                                                                                                                                                                                                                                                                                                |
+| `dashboard`            | string  | Required if `developer-name` isn’t specified. | Specifies the unique ID of the dashboard. You can get a dashboard’s ID, an 18-character code beginning with `0FK`, from the dashboard’s URL, or you can request it through the API. You can use this attribute instead of `developer-name`, but you can’t include `dashboard` if the name has been set. Either the `developer-name` attribute or the `dashboard` attribute is required. |
+| `dashboard-metadata`   | object  | Optional                                      | Specifies the metadata for the dashboard.                                                                                                                                                                                                                                                                                                                                               |
+| `developer-name`       | string  | Required if `dashboard` isn’t specified.      | Specifies the unique developer name of the dashboard. You can request the developer name through the API. You can use this attribute instead of `dashboard`, but you can’t include `developer-name` if the ID has been set. Either the `developer-name` attribute or the `dashboard` attribute is required.                                                                             |
+| `enable-notifications` | boolean | Optional                                      | Indicates whether users can set and manage notifications on widgets (`true`) or not (`false`). The default is `false`.                                                                                                                                                                                                                                                                  |
+| `enable-subscriptions` | boolean | Optional                                      | Indicates whether users can subscribe to widgets and manage their subscriptions (`true`) or not (`false`). The default is `false`.                                                                                                                                                                                                                                                      |
+| `height`               | integer | Optional                                      | Specifies the height of the dashboard in pixels. The default is 300.                                                                                                                                                                                                                                                                                                                    |
+| `hide-on-error`        | boolean | Optional                                      | Indicates whether users see a dashboard that has an error (`true`) or not (`false`). When this attribute is set to `true`, if the dashboard has an error it doesn’t appear on the page. When set to `false`, the dashboard appears but doesn’t show any data. An error can occur if a user doesn’t have access to the dashboard or the dashboard is deleted. The default is `false`.    |
+| `is-loaded`            | boolean | Optional                                      | Indicates whether the dashboard is fully loaded on the page (`true`) or not (`false`). The default is `false`.                                                                                                                                                                                                                                                                          |
+| `open-location`        | string  | Optional                                      | Specifies where the dashboard opens if the user chooses to launch the dashboard in its own page.                                                                                                                                                                                                                                                                                        |
+| `page-id`              | string  | Optional                                      | Specifies the initial dashboard page to show.                                                                                                                                                                                                                                                                                                                                           |
+| `record-id`            | string  | Optional                                      | Specifies the ID of the current entity in the context of which the dashboard is being shown.                                                                                                                                                                                                                                                                                            |
+| `show-header`          | boolean | Optional                                      | Indicates whether the dashboard displays a header bar that includes dashboard information and controls (`true`) or not (`false`). The header bar automatically appears when either `show-sharing` or `show-title` is `true`. The default is `false`.                                                                                                                                    |
+| `show-post-to-slack`   | boolean | Optional                                      | Indicates whether the Post to Slack icon appears in the dashboard header (`true`) or not (`false`). **This attribute isn’t available for the `wave-community-dashboard` component.**                                                                                                                                                                                                    |
+| `show-sharing`         | boolean | Optional                                      | Indicates whether to show the Share icon for a dashboard (`true`) or not (`false`). If set to `true` and the dashboard is shareable, then the dashboard shows the Share icon. If you choose to show the Share icon in the dashboard, the smallest supported frame size is 800x612 pixels. The default is `false`.                                                                       |
+| `show-title`           | boolean | Optional                                      | Indicates whether to show the dashboard's title above the dashboard (`true`) or not (`false`). The default is `false`.                                                                                                                                                                                                                                                                  |
+| `state`                | string  | Optional                                      | Specifies the state of the dashboard including any filters or selections that have been applied. See [Filter and Selection Syntax for Embedded Dashboards](https://help.salesforce.com/articleView?id=bi_embed_filters.htm).                                                                                                                                                            |
+| `width`                | integer | Optional                                      | Specifies the width of the dashboard in pixels.                                                                                                                                                                                                                                                                                                                                         |
+
+## Lightning Page Example: Attributes for a CRM Analytics Dashboard Component
+
+```xml
+<template>
+  <wave-wave-dashboard-lwc
+    dashboard="0FKxx000000000xxxx"
+    height="800"
+    show-title="true"
+    show-sharing="true"
+    show-header="false"
+    open-location="OPEN_IN_TAB">
+  </wave-wave-dashboard-lwc>
+</template>
+```
+
+## Experience Cloud Page Example: Attributes for a CRM Analytics Dashboard Component
+
+```xml
+<template>
+  <wave-community-dashboard
+    dashboard="0FKxx000000000xxxx"
+    community-base-path="/communitySite/s"
+    height="600"
+    show-title="true"
+    show-sharing="true"
+    show-header="false"
+    open-location="OPEN_IN_TAB">
+  </wave-community-dashboard>
+</template>
+```
+# Methods for Analytics Dashboards Lightning Web Component
+
+To change the state of a CRM Analytics dashboard at runtime, use the Lightning web component CRM Analytics dashboard component methods.
+
+- [`getState` Method](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-getstatemethod.md)
+- [`setState` Method](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-setstatemethod.md)
+# Lightning Web Component `getState` Method
+
+Use the `getState` method to retrieve the current state of the rendered Lightning web component for CRM Analytics dashboards.
+
+## Arguments
+
+| Argument Name | Description                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------- |
+| `callback`    | The callback function to handle the `getState` response. See the next section for a basic `callback` example. |
+
+## Example
+
+Add your implementation of the `getState` call into the wrapper Javascript and HTML for your component.
+
+:::note
+To use the communityDashboard component, replace `wave-wave-dashboard-lwc` with `wave-community-dashboard`.
+:::
+
+The HTML for the component:
+
+```html
+<template>
+  <lightning-button variant="brand" label="Get Dashboard State" title="Get State Action" onclick={getState} class="slds-m-left_x-small"></lightning-button>
+  <wave-wave-dashboard-lwc dashboard="0FK5B000000XiK14AK" height="1000"></wave-wave-dashboard-lwc>
+</template>
+```
+
+The Javascript for the component, which implements `getState()`:
+
+```javascript
+import { LightningElement } from 'lwc';
+
+export default class DashboardWrapper extends LightningElement {
+  getState () {
+    const dashboard = this.template.querySelector('wave-wave-dashboard-lwc');
+    dashboard.getState(function (result, error) {
+      if (error) {
+        console.warn("getState error: ", error);
+      }
+      if (result) {
+        let state = JSON.parse(JSON.stringify(result.payload));
+        console.warn("getState state: ", state);
+        let json = JSON.stringify(state, null, 2);
+        console.wave("getState as json: ", json);
+      }
+    });
+  }
+}
+```
+
+In this example, the `callback` function result contains a JSON payload with `state` attributes. Here’s a sample callback result.
+
+```json
+{
+  "state": {
+    "datasets": {},
+    "sObjects": {},
+    "steps": {
+      "Step_1": {
+        "values": [],
+        "metadata": {
+          "groups": ["Field1__c"]
+        }
+      }
+    }
+  }
+}
+```
+
+**See Also**
+
+- [Lightning Web Component `setState` Method](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-setstatemethod.md)
+# Lightning Web Component `setState` Method
+
+Use the `setState` method to set the state of the rendered Lightning web component for CRM Analytics dashboards.
+
+## Arguments
+
+| Argument Name | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `state`       | The state to update the CRM Analytics dashboard component with. |
+
+## Example
+
+Add your implementation of the `setState` call into the wrapper Javascript and HTML for your component.
+
+:::note
+To use the communityDashboard component, replace `wave-wave-dashboard-lwc` with `wave-community-dashboard`.
+:::
+
+The HTML for the component:
+
+```html
+<template>
+  <lightning-button variant="brand" label="Set Dashboard State" title="Set State Action" onclick={setState} class="slds-m-left_x-small"></lightning-button>
+  <wave-wave-dashboard-lwc dashboard="0FK5B000000XiK14AK" height="1000"></wave-wave-dashboard-lwc>
+</template>
+```
+
+The Javascript for the component, which implements `setState()`:
+
+```javascript
+import { LightningElement } from 'lwc';
+
+export default class DashboardWrapper extends LightningElement {
+  _state = {};
+
+  setState () {
+    const dashboard = this.template.querySelector('wave-wave-dashboard-lwc');
+    dashboard.setState(this._state);
+    console.warn("setState complete");
+  }
+}
+```
+
+The `state` can be set dynamically from user input or from another dashboard’s `state`. For the complete dashboard `state` structure, refer to the [Analytics Dashboard JSON Reference](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_json.meta/bi_dev_guide_json/bi_dbjson_intro.htm) guide.
+
+**See Also**
+
+- [Lightning Web Component `getState` Method](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-getstatemethod.md)

@@ -1,0 +1,137 @@
+Add Actions to Dimensions
+Set up record-level actions on a dimension so that dashboard viewers can perform actions directly from a CRM Analytics chart or table. Each action applies to a single Salesforce record, such as creating a task for an opportunity record. You can also create an action to open the Salesforce record or a URL.
+Important
+
+Salesforce recommends that you set up actions using the UI because it’s easier. For information about setting up actions with clicks, not code, see Perform Actions on a Salesforce Record from CRM Analytics.
+
+Open a Salesforce Record
+You can add a link in the action menu to open a Salesforce record directly from CRM Analytics charts and tables. The link name appears as Open Record. To let the dashboard viewer know the purpose of the link, add a tooltip that appears when the user hovers over the link.
+
+The Open Record link appears in the action menu for each account.
+CRM Analytics determines which record to open based on the Salesforce ID provided in the dataset field. When a user tries to open the record and multiple Salesforce records apply to the selected dimension, a popup asks which record to open. For example, the chart shows the value for all opportunities for each account. When the user tries to open the opportunity record for an account and the account has multiple opportunities, the user is prompted to select one. To help the user choose the correct record, the dataset fields show the opportunity name, account name, and owner for each opportunity.
+
+The dialog shows you information about each opportunity and asks you to pick a record.
+The bold text in the XMD example shows how to set up this type of action.
+"dimensions": [{
+  "field": "Account.Name",
+  "linkTemplateEnabled": true,
+  "linkTooltip": "Open the opportunity record associated with this account.",
+  "members": [],
+  "recordDisplayFields": ["Name", "Account.Name", "Owner.Name"],
+  "recordIdField": "Id",
+  "salesforceActions": [],
+  "salesforceActionsEnabled": false
+}],
+Open a Salesforce Record in a Multi-Org Environment
+You can configure the action menu in a chart or table to open Salesforce records from multiple orgs. Before we get into how to configure the XMD, let’s look at an example.
+
+You previously loaded opportunity records from multiple orgs into a dataset.
+
+One opportunity from each of four orgs is loaded into the dataset.
+Now you want to allow dashboard viewers to open the Salesforce record directly from a dimension in a chart or table. To locate a Salesforce record in a multi-org environment, CRM Analytics needs the dataset fields that identify each Salesforce record and its org. To provide CRM Analytics with this information.
+
+In the recordIdField and recordOrganizationIdField fields under dimensions specify the dataset fields that contain the record ID and org ID, respectively.The "dimensions" field shows the field, recordId, and recordOrganizationIdField XMD fields.
+In the id and instanceURL fields under organizations, map the org IDs to the org URLs. You can also specify a label for each org.The "organizations" section of the XMD maps the org IDs to the org URLs.
+When a user clicks the link to open a Salesforce record, CRM Analytics determines which Salesforce record to open by using the org URL and the record ID. CRM Analytics looks up the org ID in the dataset field specified in the recordOrganizationIdField of the XMD. It then uses the org ID to look up the org URL in the organizations section. CRM Analytics retrieves the record ID from the dataset field specified in the recordIdField field of the XMD. For example, if the org URL is https://mydomain.salesforce.com and the record ID is 006f4000002fjpCAAQ, the link to the record in its org is https://mydomain.salesforce.com/006f4000002fjpCAAQ.
+
+The bold text in the XMD example shows how to set up this type of action.
+
+"dimensions": [{
+  "field": "Account.Name",
+  "label": "Account Name",
+  "linkTemplateEnabled": true,
+  "members": [],
+  "recordDisplayFields": [
+    "Account.Name",
+    "Account.Owner.Name",
+    "Account.Owner.Role.ParentRoleId"
+  ],
+  "recordIdField": "AccountId", 
+  "recordOrganizationIdField": "SFOrgId",
+  "salesforceActions": [],
+  "salesforceActionsEnabled": false
+}],
+This XMD snippet shows the organizations XMD parameter.
+
+"organizations": [
+  {
+    "id": "00DB00000003brXMAQ",
+    "instanceUrl": "https://westregion.salesforce.com",
+    "label": "West Region Org"
+  },
+  {
+    "id": "00DB0000000pqd1MAA",
+    "instanceUrl": "https://eastregion.salesforce.com",
+    "label": "East Region Org"
+  },
+  {
+    "id": "00DB0000000paacMAA",
+    "instanceUrl": "https://southregion.salesforce.com",
+    "label": "South Region Org"
+  },
+  {
+    "id": "00DB00000001234MAA",
+    "instanceUrl": "https://northregion.salesforce.com",
+    "label": "North Region Org"
+  }
+ ]
+Open a Website
+You can add a link to open a website from charts and tables. You can pass dataset field values in the URL using the following syntax.
+“<website url>{{row.<dataset_field_name>}}"
+The bold text in the XMD example shows how to set up this type of action.
+"dimensions": [{
+  "field": "CompanyName",
+  "linkTemplate": "http://www.google.com/search?q={{row.CompanyName}}",
+  "linkTemplateEnabled": true,
+  "linkTooltip": "Search Google for this company name.",
+  "members": [],
+  "recordDisplayFields": [],
+  "salesforceActions": [],
+  "salesforceActionsEnabled": false
+}],
+When a dashboard viewer clicks the Open Record link, CRM Analytics performs a search in Google based on the company name specified in the CompanyName dataset field.
+
+The Open Record link appears in the action menu for each company.
+Perform a Salesforce Action on a Salesforce Record from CRM Analytics
+You can add Salesforce actions to the action menu. You can only add actions defined in the page layouts for the corresponding Salesforce object. Actions are only available for the local org, and are not supported for multi-org records.
+
+The bold text in the XMD example shows how to set up this type of action. In this example, all actions defined for any page layout for the object show up in the actions menu.
+"dimensions": [{
+		"field": "Name",
+		"linkTemplateEnabled": false,
+		"members": [],
+		"recordDisplayFields": ["Name", "Owner.Name", "Account.Name"],
+		"recordIdField": "Id",
+		"salesforceActions": [],
+		"salesforceActionsEnabled": true
+	}],
+The list of all actions defined in all page layouts for this object appear in the actions menu.
+
+Note
+
+Each dashboard viewer sees only the actions that are assigned to the viewer’s page layout for this object.
+
+The actions menu shows all Salesforce actions defined for the object.
+In this example, only the specified set of actions defined in the page layouts show up in the actions menu.
+
+"dimensions": [{
+		"field": "Name",
+		"linkTemplateEnabled": false,
+		"members": [],
+		"recordDisplayFields": ["Name", "Owner.Name", "Account.Name"],
+		"recordIdField": "Id",
+		"salesforceActions": [{
+			"enabled": true,
+			"name": "NewCase"
+		}, {
+			"enabled": true,
+			"name": "NewEvent"
+		}, {
+			"enabled": true,
+			"name": "NewContact"
+		}, {
+			"enabled": true,
+			"name": "NewLead"
+		}],
+		"salesforceActionsEnabled": true
+	}],

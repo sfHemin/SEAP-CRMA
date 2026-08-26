@@ -1,0 +1,45 @@
+Annotation Resources
+Annotate Analytics dashboard widgets with comments posted in the dashboard and in Chatter.
+Available resources:
+Resource	Description	Supported HTTP Method	Resource URL
+Annotations List Resource	Returns a list of annotations and creates an annotation.	GET POST	/wave/annotations
+Annotations Resource	Returns an asset's annotations and updates an annotation	GET PATCH	/wave/annotations/<annotationId>
+Annotations List Resource
+Returns a list of annotations and creates an annotation.
+Annotation Resource
+Returns an asset's annotations and updates an annotation.Annotations List Resource
+Returns a list of annotations and creates an annotation.
+Resource URL
+/wave/annotations
+Formats
+JSON
+Available Version
+37.0
+HTTP Methods
+GET POST
+Request parameters for GET
+Parameter Name	Type	Description	Required or Optional	Available Version
+assetId	Id	The ID of the asset.	Required	37.0
+The following REST URL shows how to use the assetId parameter in the GET request.
+
+/wave/annotations?assetId=<id>
+Response body for GET
+Annotation Collection
+Request body for POST
+Annotation Input
+Response body for POST
+Annotation
+Annotation Resource
+Returns an asset's annotations and updates an annotation.
+Resource URL
+/wave/annotations/<annotationId>
+Formats
+JSON
+Available Version
+37.0
+HTTP Methods
+GET PATCH
+Response body for GET and PATCH
+Annotation
+Request body for PATCH
+Annotation Input

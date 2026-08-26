@@ -1,0 +1,16 @@
+Create a Derived Dimension
+Perform string manipulations on existing dimensions to create a new, or derived, dimension.
+CRM Analytics creates derived dimensions at run time.
+Note
+
+You can also create a derived dimension in a dataflow rather than at runtime.
+
+Example - Create a Field with City and State
+Suppose that you have an Opportunities dataset with a City and a State field. You want to create a single field containing both city and state. Use SAQL to create a derived dimension.
+
+q = load "Ops";
+q = foreach q generate 'Account' as 'Account', 'Amount' as 'Amount', 'City' + "-" + 'State' as 'City - State';
+The resulting table contains city and state in the same field.
+
+Derived dimension shows time to win
+

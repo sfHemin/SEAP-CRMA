@@ -1,0 +1,59 @@
+Asset Files Resources
+Analytics assets contain files to define their previews. Get a collection of files available and individual files, and create and update asset files
+Available resources:
+Resource	Description	Supported HTTP Method	Resource URL
+Asset Files List Resource	Returns a collection of asset files for an asset and creates an asset file.	GET POST	/analytics​/assetfiles/​<assetIdOrAPiName>/files
+Asset File Resource	Returns a preview file for an asset and updates the file.	GET PUT	/analytics​/assetfiles/​<assetIdOrAPiName>/files/​<fileId>
+Asset Files List Resource
+Returns a collection of asset files for an asset and creates an asset file.
+Asset File Resource
+Returns a preview file for an asset and updates the file.
+Asset Files List Resource
+Returns a collection of asset files for an asset and creates an asset file.
+Resource URL
+/analytics​/assetfiles/​<assetIdOrAPiName>/files
+Formats
+JSON
+
+Available Version
+57.0
+
+HTTP Methods
+GET POST
+
+Request parameters for GET and POST
+Parameter Name	Type	Description	Required or Optional	Available Version
+asset​Id​Or​Api​Name	String	The ID or API name of the asset.	Required	52.0
+Response body for GET
+Analytics Data Asset File
+
+Request body for POST
+A binary preview file.
+
+Response body for POST
+Analytics Data Asset File
+Asset File Resource
+Returns a preview file for an asset and updates the file.
+Resource URL
+/analytics​/assetfiles/​<assetIdOrAPiName>/files/​<fileId>
+Formats
+JSON
+
+Available Version
+57.0
+
+HTTP Methods
+GET PUT
+
+Request parameters for GET and PUT
+Parameter Name	Type	Description	Required or Optional	Available Version
+asset​Id​Or​Api​Name	String	The ID or API name of the asset.	Required	52.0
+file​Id	String	The ID of the file.	Required	52.0
+Response body for GET
+A binary stream of the contents for the specified file.
+
+Request body for PUT
+A binary preview file.
+
+Response body for PUT
+Analytics Data Asset File

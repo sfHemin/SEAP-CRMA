@@ -1,0 +1,16 @@
+Change the Default Fields for a Values Table
+When you create a values table, particular dataset fields are shown by default. When the fields are sorted in alphabetical order, which includes dates, the table shows the first five measures and first five dimensions. You can change the default fields by editing the XMD.
+For example, the explorer shows the following default fields.The values table shows the first 5 measures and first 5 dimensions, when they are sorted alphabetically.
+
+To change the default fields, specify the field names, not the labels, in the XMD.
+"showDetailsDefaultFields":[
+  "CreatedDate_day_epoch",
+  "Id",
+  "Type",
+  "Name",
+  "Owner.Name",
+  "Account.Name",
+  "Amount"
+]
+After applying the XMD to the dataset, here’s the values table with the default fields.The values table shows the new, default fields.
+

@@ -1,0 +1,16 @@
+Extended Metadata (XMD) Reference
+You can modify the XMD file to customize the formatting of dataset fields and field values that appear in Analytics lenses and dashboard widgets.
+Any fields in the XMD that aren’t described in this document aren’t supported and must not be customized. Configuring unsupported fields might cause unexpected behavior. You also can’t export XMD. When saving XMD files, use UTF-8 format to be sure that Analytics visualizations correctly display international characters.
+
+Almost all of the XMD functionality is now supported in the UI for editing datasets and lenses. The Edit Dataset page allows you to customize actions for the dataset, and the Lenses Dataset Fields section allows you to customize other actions.
+
+Dates in XMD
+Specify date conventions for Analytics dashboards and lenses.
+Dimensions and Derived Dimensions in XMD
+You can add an action menu to a dimension value in Analytics lens and dashboard charts and tables. Users can then open a record and perform record-level actions. The available XMD parameters are the same for dimensions and derived dimensions.
+Measures and Derived Measures in XMD
+You can specify the format and multiplier for each measure. The XMD parameters are the same for measures and derived measures.
+Organizations in XMD
+If your datasets combine records from multiple Salesforce orgs, map Salesforce orgs to their URLs. Analytics uses these mappings to locate a record in a multi-org environment. The organizations section is used for opening links, not performing Salesforce actions.
+ShowDetailsDefaultFields in XMD
+Specify the default fields that appear in a Analytics values table. You can override the defaults and show other fields when you create a values table.

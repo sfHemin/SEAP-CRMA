@@ -1,0 +1,13 @@
+Change the Label for the Row Count Measure
+When you add a row count measure, it appears as “Count of Rows” by default. You can change this label to whatever you want.
+Here’s the default label.
+
+The default label for a count measure is "Count of Rows."
+You can specify a new label in the derivedMeasures section of the XMD. Because you’re counting rows and not a particular field, use * as the field name.
+"derivedMeasures": [{
+  "field": "*",
+  "label": "Data Points"
+}],
+This change yields the following results.
+
+The new label for a count measure is Count of Data Points.

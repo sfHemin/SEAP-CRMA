@@ -1,0 +1,863 @@
+# Lightning Web Component `setState` Method
+
+Use the `setState` method to set the state of the rendered Lightning web component for CRM Analytics dashboards.
+
+## Arguments
+
+| Argument Name | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `state`       | The state to update the CRM Analytics dashboard component with. |
+
+## Example
+
+Add your implementation of the `setState` call into the wrapper Javascript and HTML for your component.
+
+:::note
+To use the communityDashboard component, replace `wave-wave-dashboard-lwc` with `wave-community-dashboard`.
+:::
+
+The HTML for the component:
+
+```html
+<template>
+  <lightning-button variant="brand" label="Set Dashboard State" title="Set State Action" onclick={setState} class="slds-m-left_x-small"></lightning-button>
+  <wave-wave-dashboard-lwc dashboard="0FK5B000000XiK14AK" height="1000"></wave-wave-dashboard-lwc>
+</template>
+```
+
+The Javascript for the component, which implements `setState()`:
+
+```javascript
+import { LightningElement } from 'lwc';
+
+export default class DashboardWrapper extends LightningElement {
+  _state = {};
+
+  setState () {
+    const dashboard = this.template.querySelector('wave-wave-dashboard-lwc');
+    dashboard.setState(this._state);
+    console.warn("setState complete");
+  }
+}
+```
+
+The `state` can be set dynamically from user input or from another dashboard’s `state`. For the complete dashboard `state` structure, refer to the [Analytics Dashboard JSON Reference](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_json.meta/bi_dev_guide_json/bi_dbjson_intro.htm) guide.
+
+**See Also**
+
+- [Lightning Web Component `getState` Method](/docs/analytics/dashboard-component/guide/bi-dbcomp-lwc-getstatemethod.md)
+# View or Modify a Dashboard JSON File
+
+Use the JSON Editor to modify the JSON for a dashboard or lens.
+
+| Required Editions                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Available in Salesforce Classic and Lightning Experience.                                                                                                                   |
+| Available with CRM Analytics, which is available for an extra cost in **Enterprise**, **Performance**, and **Unlimited** Editions. Also available in **Developer** Edition. |
+
+| User Permissions Needed                           |                                          |
+| ------------------------------------------------- | ---------------------------------------- |
+| To modify the JSON file that defines a dashboard: | Create and Edit CRM Analytics Dashboards |
+
+JSON Editor displays the JSON of a lens or dashboard and lets you quickly see the effect of your edits in the running asset.
+
+1. To access JSON Editor, open the lens or dashboard you want to edit, and press CTRL+E for PCs or CMD+E for Macs.
+
+2. Modify the JSON in the editor. You can use standard keyboard shortcuts for editing functions and search.
+
+3. To go back to the user interface and see how edits to the JSON appear in the lens or dashboard, click **Done**.
+
+4. To retain your edits, save the lens or dashboard. Changes made in the JSON editor are not saved until you explicitly save the lens or dashboard.
+
+## Next Steps
+
+In JSON Editor, the following shortcuts let you perform basic actions from your keyboard.
+
+| JSON Editor Keyboard Shortcut             | Description                                                       |
+| ----------------------------------------- | ----------------------------------------------------------------- |
+| CRTL+3 (Windows); CMD+3 (Mac)             | Disregard changes and load the original JSON                      |
+| CRTL+X (Windows); CMD+X (Mac)             | Cut                                                               |
+| CRTL+C (Windows); CMD+C (Mac)             | Copy                                                              |
+| CRTL+V (Windows); CMD+V (Mac)             | Paste                                                             |
+| CRTL+Z (Windows); CMD+Z (Mac)             | Undo                                                              |
+| SHIFT+CRTL+Z (Windows); SHIFT+CMD+Z (Mac) | Redo                                                              |
+| CRTL+F (Windows); CMD+F (Mac)             | Search (RegExp, case-sensitive, or whole word searches available) |
+| CRTL+E (Windows); CMD+E (Mac)             | View dashboard with changes to JSON                               |
+# CRM Analytics Dashboard JSON Example
+
+The JSON for each CRM Analytics dashboard contains multiple levels of properties. Review the sample JSON provided in this section to learn about the basic JSON structure of a dashboard.
+
+The sample JSON defines this dashboard.
+
+![Sample dashboard created in dashboard designer.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboard_wave_designer_dashboard_sample.png)
+
+The Account Analysis dashboard consists of the following objects.
+
+- Layouts:
+  - Default, which has pages:
+    - Page 1
+    - Page 2
+  - Mobile
+- Widgets:
+  - Values table `table_1` based on step `lens_1` (Not shown in the screenshot because it exists only on Page 2.)
+  - Global filter panel `filterpanel_1`
+  - Link `link_1`
+  - Horizontal Bar Chart `chart_1` based on step `Amount_by_Acct_Owner_1`
+- Steps:
+  - `Amount_by_Acct_Owner_1`
+  - `Account_Owner_Name_1`
+  - `lens_1`
+- Dataset `0FbB000000017QxKAI`
+
+```nolang
+{
+    "label": "Account Analysis",
+    "mobileDisabled": false,
+    "state": {
+        "dataSourceLinks": [],
+        "filters": [
+            {
+                "dataset": {
+                    "id": "0FbB000000017QxKAI",
+                    "name": "opportunity",
+                    "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+                },
+                "fields": [
+                    "Account.Owner.Name"
+                ],
+                "label": "Account.Owner.Name",
+                "locked": false,
+                "operator": "in",
+                "value": [
+                    "Annie Kelly",
+                    "Bill Johnson",
+                    "Chan Lao",
+                    "Ellen Bruxton",
+                    "Erin Baker",
+                    "Frank Tom",
+                    "Jason Hunt",
+                    "Jennifer McCarthy",
+                    "Leslie Pham",
+                    "Michelle Nguyen",
+                    "Nathan Sinha",
+                    "Norman Truman",
+                    "Priya Anand",
+                    "Rob Wilkens",
+                    "Sam Gunderson",
+                    "Valerie Thom",
+                    "Walker Chan",
+                    "Wang Lee"
+                ]
+            },
+            {
+                "dataset": {
+                    "id": "0FbB000000017QxKAI",
+                    "name": "opportunity",
+                    "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+                },
+                "fields": [
+                    "Close Date"
+                ],
+                "label": "Close Date",
+                "locked": false,
+                "operator": ">=<=",
+                "value": [
+                    [
+                        1451635200000,
+                        1564642800000
+                    ]
+                ]
+            }
+        ],
+        "gridLayouts": [
+            {
+                "name": "Default",
+                "numColumns": 9,
+                "pages": [
+                    {
+                        "label": "Page 1",
+                        "name": "41f040d6-48a6-4dc7-9166-eb985df7e9d8",
+                        "widgets": [
+                            {
+                                "colspan": 9,
+                                "column": 0,
+                                "name": "filterpanel_1",
+                                "row": 0,
+                                "rowspan": 3,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 9,
+                                "column": 0,
+                                "name": "chart_1",
+                                "row": 3,
+                                "rowspan": 5,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 2,
+                                "column": 0,
+                                "name": "link_1",
+                                "row": 8,
+                                "rowspan": 1,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Page 2",
+                        "name": "ac750443-1729-47fb-8d60-a35703076bf7",
+                        "widgets": [
+                            {
+                                "colspan": 9,
+                                "column": 0,
+                                "name": "filterpanel_1",
+                                "row": 0,
+                                "rowspan": 3,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 9,
+                                "column": 0,
+                                "name": "table_1",
+                                "row": 3,
+                                "rowspan": 7,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "rowHeight": "normal",
+                "selectors": [],
+                "style": {
+                    "alignmentX": "left",
+                    "alignmentY": "top",
+                    "backgroundColor": "#44A2F5",
+                    "cellSpacingX": 4,
+                    "cellSpacingY": 4,
+                    "fit": "original",
+                    "gutterColor": "#A3B8CC"
+                },
+                "version": 1
+            },
+            {
+                "name": "Mobile",
+                "numColumns": 2,
+                "pages": [
+                    {
+                        "label": "Page 1",
+                        "name": "41f040d6-48a6-4dc7-9166-eb985df7e9d8",
+                        "widgets": [
+                            {
+                                "colspan": 2,
+                                "column": 0,
+                                "name": "filterpanel_1",
+                                "row": 0,
+                                "rowspan": 2,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 2,
+                                "column": 0,
+                                "name": "chart_1",
+                                "row": 2,
+                                "rowspan": 10,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "rowHeight": "normal",
+                "selectors": [
+                    "maxWidth(599)"
+                ],
+                "style": {
+                    "alignmentX": "left",
+                    "alignmentY": "top",
+                    "backgroundColor": "#2EC2BA",
+                    "cellSpacingX": 4,
+                    "cellSpacingY": 4,
+                    "fit": "original",
+                    "gutterColor": "#091A3E"
+                },
+                "version": 1
+            }
+        ],
+        "layouts": [],
+        "steps": {
+            "Amount_by_Acct_Owner_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0FbB000000017QxKAI",
+                        "label": "Opportunities",
+                        "name": "opportunity",
+                        "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Amount by Acct Owner",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Account.Owner.Name"
+                    ],
+                    "order": [
+                        [
+                            "count",
+                            {
+                                "ascending": false
+                            }
+                        ]
+                    ]
+                },
+                "receiveFacet": true,
+                "selectMode": "multi",
+                "type": "aggregateflex",
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {},
+                    "parameters": {
+                        "autoFitMode": "none",
+                        "showValues": true,
+                        "bins": {
+                            "breakpoints": {
+                                "high": 100,
+                                "low": 0
+                            },
+                            "bands": {
+                                "high": {
+                                    "color": "#008000",
+                                    "label": ""
+                                },
+                                "low": {
+                                    "color": "#B22222",
+                                    "label": ""
+                                },
+                                "medium": {
+                                    "color": "#ffa500",
+                                    "label": ""
+                                }
+                            }
+                        },
+                        "legend": {
+                            "showHeader": true,
+                            "show": true,
+                            "customSize": "auto",
+                            "position": "right-top",
+                            "inside": false
+                        },
+                        "axisMode": "multi",
+                        "tooltip": {
+                            "showBinLabel": true,
+                            "measures": "",
+                            "showPercentage": false,
+                            "showDimensions": true,
+                            "showMeasures": true,
+                            "customizeTooltip": false,
+                            "dimensions": ""
+                        },
+                        "visualizationType": "hbar",
+                        "title": {
+                            "fontSize": 14,
+                            "subtitleFontSize": 11,
+                            "label": "",
+                            "align": "center",
+                            "subtitleLabel": ""
+                        },
+                        "binValues": false,
+                        "trellis": {
+                            "flipLabels": false,
+                            "showGridLines": true,
+                            "size": [
+                                100,
+                                100
+                            ],
+                            "enable": false,
+                            "type": "x",
+                            "chartsPerLine": 4
+                        },
+                        "measureAxis2": {
+                            "sqrtScale": false,
+                            "showTitle": true,
+                            "showAxis": true,
+                            "title": "",
+                            "customDomain": {
+                                "showDomain": false
+                            }
+                        },
+                        "measureAxis1": {
+                            "sqrtScale": false,
+                            "showTitle": true,
+                            "showAxis": true,
+                            "title": "",
+                            "customDomain": {
+                                "showDomain": false
+                            }
+                        },
+                        "theme": "wave",
+                        "dimensionAxis": {
+                            "showTitle": true,
+                            "customSize": "auto",
+                            "showAxis": true,
+                            "title": "",
+                            "icons": {
+                                "useIcons": false,
+                                "iconProps": {
+                                    "fit": "cover",
+                                    "column": "",
+                                    "type": "round"
+                                }
+                            }
+                        }
+                    },
+                    "type": "chart",
+                    "visualizationType": "hbar"
+                }
+            },
+            "Account_Owner_Name_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0FbB000000017QxKAI",
+                        "label": "Opportunities",
+                        "name": "opportunity",
+                        "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+                    }
+                ],
+                "isGlobal": false,
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ],
+                        [
+                            "avg",
+                            "Amount"
+                        ]
+                    ],
+                    "groups": [
+                        "Account.Owner.Name"
+                    ],
+                    "order": [
+                        [
+                            "count",
+                            {
+                                "ascending": false
+                            }
+                        ]
+                    ]
+                },
+                "receiveFacet": true,
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "parameters": {
+                        "autoFitMode": "none",
+                        "showPoints": false,
+                        "legend": {
+                            "showHeader": true,
+                            "show": true,
+                            "customSize": "auto",
+                            "position": "right-top",
+                            "inside": false
+                        },
+                        "axisMode": "multi",
+                        "tooltip": {
+                            "showBinLabel": true,
+                            "measures": "",
+                            "showPercentage": false,
+                            "showDimensions": true,
+                            "showMeasures": true,
+                            "customizeTooltip": false,
+                            "dimensions": ""
+                        },
+                        "visualizationType": "line",
+                        "dashLine": {
+                            "measures": "",
+                            "showDashLine": false
+                        },
+                        "title": {
+                            "fontSize": 14,
+                            "subtitleFontSize": 11,
+                            "label": "",
+                            "align": "center",
+                            "subtitleLabel": ""
+                        },
+                        "trellis": {
+                            "flipLabels": false,
+                            "showGridLines": true,
+                            "size": [
+                                100,
+                                100
+                            ],
+                            "enable": false,
+                            "type": "x",
+                            "chartsPerLine": 4
+                        },
+                        "fillArea": true,
+                        "showZero": true,
+                        "measureAxis2": {
+                            "sqrtScale": false,
+                            "showTitle": true,
+                            "showAxis": true,
+                            "title": "",
+                            "customDomain": {
+                                "showDomain": false
+                            }
+                        },
+                        "measureAxis1": {
+                            "sqrtScale": false,
+                            "showTitle": true,
+                            "showAxis": true,
+                            "title": "",
+                            "customDomain": {
+                                "showDomain": false
+                            }
+                        },
+                        "theme": "wave",
+                        "dimensionAxis": {
+                            "showTitle": true,
+                            "customSize": "auto",
+                            "showAxis": true,
+                            "title": "",
+                            "icons": {
+                                "useIcons": false,
+                                "iconProps": {
+                                    "fit": "cover",
+                                    "column": "",
+                                    "type": "round"
+                                }
+                            }
+                        },
+                        "drawArea": {
+                            "measure": "",
+                            "showDrawArea": false,
+                            "bounding1": "",
+                            "bounding2": ""
+                        }
+                    },
+                    "type": "chart",
+                    "options": {}
+                }
+            },
+            "lens_1": {
+                "datasets": [
+                    {
+                        "id": "0FbB000000017QxKAI",
+                        "label": "Opportunities",
+                        "name": "opportunity",
+                        "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+                    }
+                ],
+                "isFacet": true,
+                "isGlobal": false,
+                "label": "lens_1",
+                "query": {
+                    "values": [
+                        "Name",
+                        "Owner.Name",
+                        "StageName",
+                        "Amount",
+                        "CloseDate",
+                        "ForecastCategoryName",
+                        "Account.Owner.Name"
+                    ]
+                },
+                "selectMode": "none",
+                "type": "grain",
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {},
+                    "parameters": {
+                        "borderColor": "#e0e5ee",
+                        "borderWidth": 1,
+                        "cell": {
+                            "backgroundColor": "#ffffff",
+                            "fontColor": "#16325c",
+                            "fontSize": 12
+                        },
+                        "columns": [],
+                        "customBulkActions": [],
+                        "header": {
+                            "backgroundColor": "#f4f6f9",
+                            "fontColor": "#16325c",
+                            "fontSize": 12
+                        },
+                        "innerMajorBorderColor": "#a8b7c7",
+                        "innerMinorBorderColor": "#e0e5ee",
+                        "maxColumnWidth": 300,
+                        "minColumnWidth": 40,
+                        "mode": "variable",
+                        "numberOfLines": 1,
+                        "totals": true,
+                        "verticalPadding": 8
+                    },
+                    "type": "table",
+                    "visualizationType": "valuestable"
+                }
+            }
+        },
+        "widgetStyle": {
+            "backgroundColor": "#FFFFFF",
+            "borderColor": "#E6ECF2",
+            "borderEdges": [],
+            "borderRadius": 0,
+            "borderWidth": 1
+        },
+        "widgets": {
+            "table_1": {
+                "parameters": {
+                    "columnProperties": {
+                         "Amount": {
+                           "type": "bar",
+                           "parameters": {}
+                          }
+                    }
+                    "borderColor": "#e0e5ee",
+                    "borderWidth": 1,
+                    "cell": {
+                        "backgroundColor": "#ffffff",
+                        "fontColor": "#16325c",
+                        "fontSize": 12
+                    },
+                    "columns": [],
+                    "customBulkActions": [],
+                    "exploreLink": true,
+                    "header": {
+                        "backgroundColor": "#f4f6f9",
+                        "fontColor": "#16325c",
+                        "fontSize": 12
+                    },
+                    "innerMajorBorderColor": "#a8b7c7",
+                    "innerMinorBorderColor": "#e0e5ee",
+                    "maxColumnWidth": 300,
+                    "minColumnWidth": 40,
+                    "mode": "variable",
+                    "numberOfLines": 1,
+                    "showRowIndexColumn": true,
+                    "step": "lens_1",
+                    "totals": true,
+                    "verticalPadding": 8,
+                    "evenRowColor": null,
+                    "oddRowColor": null
+                },
+                "type": "table"
+            },
+            "filterpanel_1": {
+                "parameters": {
+                    "filterItemOptions": {
+                        "backgroundColor": "#FFFFFF",
+                        "borderColor": "#E6ECF2",
+                        "borderRadius": 4,
+                        "propertyColor": "#54698D",
+                        "valueColor": "#16325C",
+                        "borderWidth": 1
+                    },
+                    "itemsPerRow": 2,
+                    "title": {
+                        "separatorColor": "#E6ECF2",
+                        "text": {
+                            "align": "left",
+                            "color": "#091A3E",
+                            "fontSize": 16,
+                            "label": "Filters"
+                        },
+                        "visible": true
+                    }
+                },
+                "type": "filterpanel"
+            },
+            "link_1": {
+                "parameters": {
+                    "destinationLink": {
+                        "name": "ac750443-1729-47fb-8d60-a35703076bf7"
+                    },
+                    "destinationType": "page",
+                    "fontSize": 12,
+                    "includeState": false,
+                    "text": "Opp Details",
+                    "textAlignment": "center",
+                    "textColor": "#44A2F5"
+                },
+                "type": "link"
+            },
+            "chart_1": {
+                "parameters": {
+                    "autoFitMode": "none",
+                    "showValues": true,
+                    "bins": {
+                        "breakpoints": {
+                            "high": 100,
+                            "low": 0
+                        },
+                        "bands": {
+                            "high": {
+                                "color": "#008000",
+                                "label": ""
+                            },
+                            "low": {
+                                "color": "#B22222",
+                                "label": ""
+                            },
+                            "medium": {
+                                "color": "#ffa500",
+                                "label": ""
+                            }
+                        }
+                    },
+                    "legend": {
+                        "showHeader": true,
+                        "show": true,
+                        "customSize": "auto",
+                        "position": "right-top",
+                        "inside": false
+                    },
+                    "axisMode": "multi",
+                    "tooltip": {
+                        "showBinLabel": true,
+                        "measures": "",
+                        "showPercentage": false,
+                        "showDimensions": true,
+                        "showMeasures": true,
+                        "customizeTooltip": false,
+                        "dimensions": ""
+                    },
+                    "visualizationType": "hbar",
+                    "exploreLink": true,
+                    "title": {
+                        "fontSize": 14,
+                        "subtitleFontSize": 11,
+                        "label": "",
+                        "align": "center",
+                        "subtitleLabel": ""
+                    },
+                    "binValues": false,
+                    "trellis": {
+                        "flipLabels": false,
+                        "showGridLines": true,
+                        "size": [
+                            100,
+                            100
+                        ],
+                        "enable": false,
+                        "type": "x",
+                        "chartsPerLine": 4
+                    },
+                    "measureAxis2": {
+                        "sqrtScale": false,
+                        "showTitle": true,
+                        "showAxis": true,
+                        "title": "",
+                        "customDomain": {
+                            "showDomain": false
+                        }
+                    },
+                    "measureAxis1": {
+                        "sqrtScale": false,
+                        "showTitle": true,
+                        "showAxis": true,
+                        "title": "",
+                        "customDomain": {
+                            "showDomain": false
+                        }
+                    },
+                    "theme": "wave",
+                    "step": "Amount_by_Acct_Owner_1",
+                    "dimensionAxis": {
+                        "showTitle": true,
+                        "customSize": "auto",
+                        "showAxis": true,
+                        "title": "",
+                        "icons": {
+                            "useIcons": false,
+                            "iconProps": {
+                                "fit": "cover",
+                                "column": "",
+                                "type": "round"
+                            }
+                        }
+                    }
+                },
+                "type": "chart"
+            }
+        }
+    },
+    "datasets": [
+        {
+            "id": "0FbB000000017QxKAI",
+            "label": "Opportunities",
+            "name": "opportunity",
+            "url": "/services/data/v41.0/wave/datasets/0FbB000000017QxKAI"
+        }
+    ]
+}
+```
+
+
+
+
+
+
+
+
+# Dashboard JSON Properties
+
+The dashboard JSON consists of properties that define layouts, pages, widgets, and steps. Some properties are exposed and editable in the Dashboard Designer user interface. Others are only editable via JSON.
+
+Each dashboard JSON contains the following high-level properties.
+
+| Property Name    | Type    | Details                                                                                                                                                                                                                                                  |
+| ---------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`          | String  | Name of the dashboard. Included in the Dashboard Designer's user interface.                                                                                                                                                                              |
+| `mobileDisabled` | Boolean | Specifies whether the dashboard can be accessed in the mobile app. Use this parameter to hide dashboards that don't perform well on mobile devices. Default is `false`. Included in the Dashboard Designer's user interface.                             |
+| `description`    | String  | Description of the dashboard. Included in the Dashboard Designer's user interface.                                                                                                                                                                       |
+| `state`          | Array   | Specifies properties for all layouts, widgets, and steps defined in the dashboard. When you save a dashboard using the Dashboard Designer, the state of the dashboard is persisted in the JSON. Not included in the Dashboard Designer's user interface. |
+| `datasets`       | Array   | Specifies all datasets used by steps in the dashboard. Not included in the Dashboard Designer's user interface.                                                                                                                                          |
+
+The following sections describe the different properties nested under `state`.
+
+- **[dataSourceLinks JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-datasourcelinks.md)**
+
+  The `dataSourceLinks` section defines all data sources configured for the dashboard.
+
+- **[gridLayouts JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayouts.md)**
+
+  The `gridLayouts` section defines all layouts built for the dashboard.
+
+- **[widgetStyle JSON and Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-widgetstyle.md)**
+
+  The `widgetStyle` key contains the default widget properties that can be applied to each widget.
+
+- **[steps JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-properties.md)**
+
+  The `steps` key defines all steps available in a CRM Analytics dashboard. It contains a separate node for each step. Each step node has properties that define the query or list of static values. It also contains properties that control the behavior of the step, like whether to facet the step. The properties and JSON syntax vary based on the step type and whether the step is in compact form or SAQL form.
+
+- **[widgets JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-widgets.md)**
+
+  The `widgets` section defines the widgets that appear in the dashboard. Each widget has a name.
+
+- **[filters JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-filters.md)**
+
+  The `filters` section defines the global filters added to a global filter panel widget, which is available in the dashboard designer.

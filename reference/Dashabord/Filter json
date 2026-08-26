@@ -1,0 +1,64 @@
+# `filters` JSON
+
+The `filters` section defines the global filters added to a global filter panel widget, which is available in the dashboard designer.
+
+## Global Filters Example
+
+```nolang
+"filters": [
+    {
+        "label": "Account.Type",
+        "fields": [
+            "Account.Type"
+        ],
+        "operator": "in",
+        "locked": false,
+        "dataset": {
+            "name": "opportunity"
+        },
+        "value": [
+            "Customer"
+        ]
+    },
+    {
+        "label": "ForecastCategory",
+        "fields": [
+            "ForecastCategory"
+        ],
+        "operator": "in",
+        "locked": true,
+        "dataset": {
+            "name": "opportunity"
+        },
+        "value": [
+            "BestCase"
+        ]
+    }
+],
+```
+
+- **[filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-filters-parameters.md)**
+
+  The `filters` key defines all global filters included in the dashboard. It contains a separate node, with configurable properties, for each global filter. Global filters apply to all layouts, but you can specify whether each widget applies the global filters.
+# `filters` Properties
+
+The `filters` key defines all global filters included in the dashboard. It contains a separate node, with configurable properties, for each global filter. Global filters apply to all layouts, but you can specify whether each widget applies the global filters.
+
+| Property Name | Description                                                                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`       | Field label displayed in the global filter                                                                                                                      |
+| `fields`      | API name of the field by which to filter the records; a global filter can’t be based on multiple fields                                                         |
+| `operator`    | Filter operator; supported operators are `in` (equals), `not in` (doesn’t equal), and `matches` (contains)                                                      |
+| `locked`      | Prevents dashboard viewers from being able to change the global filter and for an incoming filter passed from a linked dashboard to overwrite the global filter |
+| `dataset`     | Contains the `name` field, which specifies the API name of the dataset that contains the filter field.                                                          |
+| `value`       | Array of field values used to filter the records                                                                                                                |
+
+Example `dataset`:
+
+```nolang
+"dataset": {
+    "name": "opportunity"
+},
+```
+
+To view an example of the `filters` key configured with the properties in the table, see [filters JSON](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-filters.md). Each hash contains the configured properties for a single filter.

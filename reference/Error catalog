@@ -1,0 +1,263 @@
+# CRMA Copilot — Known Error Catalog
+
+Complete reference of known errors for recipes, dashboards, SAQL, and deploy operations.
+Each entry: error pattern → root cause → fix steps → whether auto-fixable.
+
+---
+
+## Recipe Run Errors
+
+### "Object with name X and connection SFDC_LOCAL has not setup replication"
+**Root cause:** The Salesforce object (e.g. Apartment__c) has not been connected to the SFDC_LOCAL
+connector in CRMA Data Manager. The connector has no data for that object.
+**Auto-fixable:** NO — REST API is read-only on sourceObjects (PATCH returns METHOD_NOT_ALLOWED).
+**Fix:**
+1. Open Salesforce → Analytics Studio → Data Manager
+2. Click Connect → SFDC Local
+3. Find the object in the list, toggle it ON
+4. Click Sync Now (or wait for the scheduled sync)
+5. After sync completes, retry the recipe run.
+
+---
+
+### "the '<Field>' field ... isn't accessible to the Integration User"
+**Root cause:** CRMA syncs data as the Analytics Cloud Integration User, not the signed-in user.
+That user lacks READ permission on the named field. Hits custom fields (__c) hard.
+**Auto-fixable:** YES — use check-field-access to confirm, then grant-field-access.
+**Fix:**
+1. Call check-field-access with the object + blocked fields to confirm.
+2. Call grant-field-access with confirm=true (deploys FLS-only perm set, assigns to Integration User).
+3. Re-run the recipe.
+**Note:** NEVER include required/system fields in FLS — they always 400 (already readable).
+NEVER add object CRUD — the Integration User's license rejects it with "user license doesn't allow the permission".
+
+---
+
+### "Output dataset label can not be empty"
+**Root cause:** The recipe's save (OUTPUT) node has `parameters.dataset.label` missing or empty.
+The label is distinct from the dataset API name — both must be present.
+**Auto-fixable:** YES.
+**Fix:**
+1. Call apply-recipe-edits: setValue on `parameters.dataset.label` in the OUTPUT node.
+2. Redeploy the recipe.
+3. Re-run.
+
+---
+
+### "UNKNOWN_EXCEPTION" on recipe run
+**Root cause:** Usually means the source object has not been replicated, but the error surfaces
+as a generic exception because the dataflow job failed to initialize the connector scan.
+**Auto-fixable:** NO.
+**Fix:**
+1. Call check-replication for all source objects first.
+2. If any are unreplicated → follow replication fix steps above.
+3. If all are replicated → check FLS (check-field-access).
+4. If both pass → retry once; if still fails, check the org's background job logs.
+
+---
+
+### "A Recipe must specify a Dataflow"
+**Root cause:** Agent tried to create a NEW recipe via Metadata deploy (sf project deploy start).
+New recipes MUST be created via Wave REST POST (/wave/recipes). Metadata deploy only works for
+updating existing recipes that already have a server-side dataflow record.
+**Auto-fixable:** YES — use deploy-recipe tool which auto-detects create vs update.
+**Fix:** Use the deploy-recipe tool (not raw Metadata deploy). It calls waveFindRecipe first;
+if not found → Wave REST POST; if found → Wave REST PATCH.
+
+---
+
+### "JSON_PARSER_ERROR" on recipe deploy/validate
+**Root cause:** The load node is missing `parameters.dataset.type: "connectedDataset"`. This field
+is required — omitting it causes the API to fail JSON parsing the dataset config.
+**Auto-fixable:** YES.
+**Fix:** In the load node, set `parameters.dataset.type` to `"connectedDataset"`.
+Full required shape: `{ type: "connectedDataset", connectionName: "SFDC_LOCAL", sourceObjectName: "ObjectName__c" }`.
+
+---
+
+### Recipe Builder shows "Can't Load the Recipe"
+**Root cause:** The `ui` section of the R3 JSON does not match the Builder-native format.
+Common causes: ui.nodes uses lowercase type strings (e.g. "load_dataset" instead of "LOAD_DATASET"),
+missing ui.hiddenColumns, missing ui.connectors, or wrong field names in the node objects.
+**Auto-fixable:** YES.
+**Fix:** Rebuild the ui section with:
+- `ui.nodes`: each key = node id, value = `{ label, type, top, left }`.
+  Types MUST be uppercase: "LOAD_DATASET", "FILTER", "TRANSFORM", "OUTPUT".
+  Positions: top:112, left:112/252/392/532 (140px apart).
+- `ui.connectors`: array of `{ source: "LOAD_DATASET0", target: "FILTER0" }` etc.
+- `ui.hiddenColumns`: `[]` (always present, usually empty).
+
+---
+
+### Recipe run succeeds but output dataset has 0 rows
+**Root cause:** The filter operand values do not match the actual data in the org.
+Common example: BillingCountry filter set to "United States" but org data uses "USA".
+**Auto-fixable:** YES — check actual values first.
+**Fix:**
+1. Call run-soql to group the filter field: `SELECT FieldName, COUNT(Id) FROM Object GROUP BY FieldName`.
+2. Identify the actual values in the data.
+3. Update the filter operand via apply-recipe-edits.
+4. Redeploy and re-run.
+
+---
+
+## Dashboard Errors
+
+### "Column X does not exist for grouping"
+**Root cause:** The agent put SAQL alias names into the `groups` array of a `type:"saql"` step.
+CRMA resolves `groups` as raw dataset field names, not SAQL output aliases.
+**Auto-fixable:** YES.
+**Fix:** In every saql step: set `groups: []` (always empty). Put dimension aliases in `strings`,
+measure aliases in `numbers`. The `columnMap.dimensionAxis` and `columnMap.plots` on the widget
+reference these alias strings directly.
+
+---
+
+### Number/KPI tile renders as broken bar chart (warning triangle, no data)
+**Root cause:** The agent used `type: "chart"` with `visualizationType: "hbar"` (or similar) for
+a KPI tile. Chart-specific keys (`visualizationType`, `dimensionAxis`, `measureAxis`, `legend`,
+`trellis`, `bins`) are ignored or cause errors on a number widget type.
+**Auto-fixable:** YES.
+**Fix:** The widget must be `type: "number"`, not `type: "chart"`. Replace the entire widget object:
+```json
+{
+  "type": "number",
+  "parameters": {
+    "step": "step_id",
+    "columnMap": { "number": ["MeasureAlias"] },
+    "compact": true,
+    "numberDecimalDigits": 0,
+    "showActionMenu": true,
+    "exploreLink": true,
+    "title": { "fontSize": 14, "label": "Title", "align": "center", "subtitleLabel": "" }
+  }
+}
+```
+
+---
+
+### Dashboard shows Salesforce record IDs instead of human-readable names
+**Root cause:** A lookup/reference field (type="reference") stores a Salesforce record ID (e.g.
+"a2vId0000015MO4IAM") as its raw value. The recipe loaded the __c field but not the relationship
+name traversal (__r.Name). SAQL then groups by the ID column, not the name.
+**Auto-fixable:** YES — requires recipe edit + redeploy + rerun + dashboard SAQL edit.
+**Fix:**
+1. Edit the recipe: add `Apt_Location__r.Name` (or equivalent) to the load node's fields array.
+2. Redeploy and re-run the recipe.
+3. Edit the dashboard step SAQL: change `group by 'Apt_Location__c'` to
+   `group by 'Apt_Location__r.Name'` and alias it: `'Apt_Location__r.Name' as Location`.
+4. Update the step's `strings` to `["Location"]`.
+
+---
+
+### "can not instantiate from JSON String" on dashboard deploy update
+**Root cause:** The definition was passed as a JSON string (already serialized) to the deploy tool,
+which then called JSON.stringify() on it again — double-encoding.
+**Auto-fixable:** YES — handled by the `typeof` guard in `metadataDeploy`. If it still occurs,
+the caller is passing a string where the tool expects an object. Parse it first.
+**Fix:** Ensure `definitionObj` is a plain JS object before passing to deploy-dashboard.
+The guard `typeof definitionObj === "string" ? JSON.parse(definitionObj) : definitionObj` in
+metadataDeploy handles this automatically.
+
+---
+
+### Widget shows no data / blank tile (no error shown)
+**Root cause (check in order):**
+1. Dataset does not exist — recipe has not been run yet.
+2. Dataset exists but has 0 rows — recipe ran but filter conditions produced no output.
+3. Step references wrong dataset name (typo or stale name after recipe rename).
+4. SAQL references a field that doesn't exist in the dataset.
+5. Step's `strings`/`numbers` aliases don't match the SAQL output aliases.
+**Fix:** Call diagnose-dashboard first. It checks dataset existence, row counts, and field references.
+
+---
+
+### Widget defined in widgets but not visible on dashboard
+**Root cause:** The widget is missing from the gridLayouts pages.widgets array. It exists in the
+definition but has no position assigned in the layout.
+**Auto-fixable:** YES.
+**Fix:** Add an entry to `gridLayouts[0].pages[0].widgets`:
+```json
+{ "name": "widget_id", "row": N, "column": N, "rowspan": N, "colspan": N,
+  "widgetStyle": { "backgroundColor": "#FFFFFF", "borderColor": "#E6ECF2",
+                   "borderEdges": ["all"], "borderRadius": 16, "borderWidth": 1 } }
+```
+
+---
+
+### Widget in grid layout but not in widgets map
+**Root cause:** A grid layout entry references a widget name that no longer exists in the widgets map
+(e.g. deleted the widget but forgot to remove the layout entry).
+**Auto-fixable:** YES.
+**Fix:** Either (a) delete the grid layout entry for that widget name, or (b) add the widget
+definition back to the widgets map.
+
+---
+
+### Step references a widget that does not exist / widget references a step that does not exist
+**Root cause:** Stale reference — a rename or delete left an orphaned pointer.
+**Auto-fixable:** YES.
+**Fix:** Either add the missing resource or update the reference to point to the correct id.
+diagnose-dashboard surfaces this as an error with the specific ids involved.
+
+---
+
+## SAQL Errors
+
+### "Field X not found" / Unknown field in SAQL
+**Root cause:** The SAQL query references a field name that doesn't exist in the dataset's XMD.
+Common causes: (a) using the Salesforce field API name instead of the flattened dataset field name,
+(b) using a relationship traversal (Apt_Location__r.Name) that the recipe didn't include,
+(c) the dataset was rebuilt and a field was removed.
+**Fix:**
+1. Call get-dataset-fields for the dataset to see actual dimension/measure names.
+2. Update the SAQL field reference to match.
+3. If the field genuinely isn't there, edit the recipe to include it, rerun, then revisit.
+
+---
+
+### SAQL query returns empty results (no error, just 0 records)
+**Root cause:** Filter conditions don't match actual data values. SAQL string comparisons are
+case-sensitive and exact-match. Common case: filtering `BillingCountry = "USA"` but data has
+"United States", or filtering a boolean as `true` (boolean) instead of `"true"` (string).
+**Fix:**
+1. Call query-dataset with a group-by on the filter field to see actual values.
+2. Update the SAQL filter to match.
+
+---
+
+### "Unexpected end of SAQL" / SAQL parse error
+**Root cause:** Malformed SAQL — unclosed quotes, missing semicolons, wrong operator.
+Key rules:
+- Double quotes = field reference (`"FieldName"`)
+- Single quotes = string literal (`'value'`) or field reference in some contexts
+- Every statement ends with `;`
+- `foreach` must follow `group`
+**Fix:** Re-read the SAQL statement reference docs. Use search-reference "SAQL Statement" to pull
+the grammar rules. Rebuild the query from scratch if needed.
+
+---
+
+## Deployment / Infrastructure Errors
+
+### "DEPLOY_DRY_RUN is enabled — no changes were written"
+**Not an error.** The default config has DEPLOY_DRY_RUN=true. To enable live writes:
+set `DEPLOY_DRY_RUN=false` in `.env` and restart the server.
+
+---
+
+### "SF_TARGET_ORG is not set"
+**Fix:** Add `SF_TARGET_ORG=your-org-alias` to `.env`. Get the alias from `sf org list`.
+
+---
+
+### "gateway provider needs SF_GATEWAY_BASE_URL and SF_GATEWAY_TOKEN"
+**Fix:** Either set those env vars for gateway mode, or switch to `LLM_PROVIDER=anthropic`
+and set `ANTHROPIC_API_KEY`.
+
+---
+
+### Studio stops responding after 15 tool calls
+**Root cause:** Mastra Studio frontend hardcodes maxSteps:15 in its generate call.
+**Fix:** Run `npm install` — the postinstall script patches the Studio bundle to maxSteps:100.
+If already installed, check that `.mastra/output/studio/assets/main-*.js` contains `maxSteps:100`.

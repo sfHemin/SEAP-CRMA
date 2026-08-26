@@ -1,0 +1,169 @@
+# Build Data Serialization Interactions
+
+The most common SAQL interactions are data serializations. You can build filter, grouping, and projection interactions. These examples show queries that start with `q = filter q by` or `q = group q by` followed by the filter or grouping logic. To make the query dynamic, you replace this static logic with an interaction.
+
+You can execute this full sample SAQL query and these interaction examples in a Trailhead Analytics developer org by using the DTC Opportunity data.
+
+```sql
+q = load "DTC_Opportunity_SAMPLE";
+q = filter q by date('Close_Date_Year', 'Close_Date_Month', 'Close_Date_Day') in ["1 year ago".."1 year ago"];
+q = filter q by 'Account_Type' == "Customer";
+q = filter q by 'Amount' >= 2910928 && 'Amount' <= 8577295;
+q = group q by 'Industry';
+q = foreach q generate 'Industry' as 'Industry', sum('Amount') as 'sum_Amount';
+q = order q by 'Industry' asc;
+q = limit q 2000;
+```
+
+These examples use a static step as the query source for simplicity. Each example illustrates the SAQL without and then with an interaction.
+
+## Date Range Filter Interaction
+
+The static step to filter is:
+
+```json
+"values": [
+  {
+    "display": "CY",
+    "value": ["current year", "current year"]
+  },
+  {
+    "display": "LY",
+    "value": ["1 year ago", "1 year ago"]
+  }
+]
+```
+
+A date range filter in SAQL is:
+
+```sql
+q = filter q by date('Close_Date_Year', 'Close_Date_Month', 'Close_Date_Year') in ["1 year ago".."1 year ago"];
+```
+
+To get that specific format, use the `asDateRange()` interaction with the `date` function and parameters.
+
+```sql
+q = filter q by {{cell(StaticFilterDate_1.selection, 0, "value").asDateRange("date('Close_Date_Year', 'Close_Date_Month', 'Close_Date_Day')")}};
+```
+
+## Range Filter Interaction
+
+The static step to filter is:
+
+```json
+"values": [
+  {
+    "display": "Low",
+    "value": [0, 5000000]
+  },
+  {
+    "display": "High",
+    "value": [5000000, 10000000]
+  }
+]
+```
+
+The SAQL filter for a measure uses the between option `&&`:
+
+```sql
+q = filter q by 'Amount' >= 2910928 && 'Amount' <= 8577295;
+```
+
+This type of filter has a minimum and maximum value like the `asDateRange()` function.
+
+The interaction looks like:
+
+```sql
+q = filter q by {{cell(StaticFilterRange_1.selection, 0, "value").asRange("Amount")}};
+```
+
+## Equality Filter Interaction
+
+The most commonly used filter is the equality filter where one field or column is equal to a specific value.
+The static step to filter is:
+
+```json
+"values": [
+  {
+    "display": "Account Type: Partner",
+    "value": "Partner"
+  },
+  {
+    "display": "Account Type: Customer",
+    "value": "Customer"
+  }
+]
+```
+
+Here's a SAQL example:
+
+```sql
+q = filter q by 'Account_Type' == "Customer";
+```
+
+The interaction is:
+
+```sql
+q = filter q by {{cell(StaticFilterDim_1.selection, 0, "value").asEquality("Account_Type")}};
+```
+
+## Range Interactions Without a Static Step
+
+For nonstatic steps, use binding ranges with minimum and maximum values. To bind multiple cell values, use the `row` data selection function. Define one or more rows that you want to take data from directly after the binding function. In these examples, the value is `[0]`, which indicates only data from the first row of the query results. To define multiple rows, use a comma-separated list, `[0,1,2,3]`. To include all the rows of the results, use an empty array, `[]`.
+
+Here's a SAQL example for a date range:
+
+```sql
+q = filter q by {{row(Close_Date_1.selection, [0], ["min", "max"]).asDateRange("date('Close_Date_Year', 'Close_Date_Month', 'Close_Date_Day')")}};
+```
+
+Here's a SAQL example for a numeric range:
+
+```sql
+q = filter q by {{row(Amount_1.selection, [0], ["min", "max"]).asRange("Amount")}};
+```
+
+## Group and Projection Interaction
+
+To create a group interaction, define the grouping and then project it.
+
+The static step for this example is:
+
+```json
+"values" : [
+  {
+    "display": "Industry",
+    "value": "AccountId.Industry",
+    "expression": "'AccountId.Industry'",
+    "alias": "Industry"
+  },
+  {
+    "display": "Stage",
+    "value": "StageName",
+    "expression": "'StageName'",
+    "alias": "Stage"
+  }
+]
+```
+
+Here’s a SAQL example for a grouping:
+
+```sql
+q = group q by 'Industry';
+q = foreach q generate 'Industry' as 'Industry', ...;
+```
+
+To create the grouping interaction, use this statement:
+
+```sql
+q = group q by {{cell(StaticGroup_1.selection, 0, "value").asGrouping()}};
+```
+
+The data selection function is `cell` and it references the `value` field from the static step.
+
+The second part of the interaction, the projection, is a little more complex. The projection takes a field from the dataset, in this example it's the grouping, and defines how it’s displayed.
+This interaction uses the `expression` and `alias` values. With two or more values, you must use the `row` selection function.
+
+```sql
+q = foreach q generate {{row(StaticGroup_1.selection, [0], ["expression", "alias"]).asProjection()}}, ...;
+```

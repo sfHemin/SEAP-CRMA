@@ -1,0 +1,31 @@
+# Interaction Syntax in the Dashboard
+
+You must specify the correct syntax when creating an interaction in a dashboard designer dashboard. The syntax is different for each dashboard designer.
+
+To specify a selection or results interaction in the dashboard designer, use this syntax.
+
+```javascript
+{{<stepID>.<result|selection>}}
+```
+
+For example,
+
+```javascript
+{{mySourceStep.selection}}
+```
+
+:::note
+When specifying the query, you specify the ID, not the label.
+:::
+
+## Creating an Interaction
+
+To create an interaction:
+
+- Determine the source step and parameters.
+- Start with the basics, `"{{}}"`. Interactions are case sensitive.
+- An interaction with a trigger is `"{{.selection}}"` and without a trigger is `"{{.result}}"`.
+- Define which step to make the interaction by using the API name, not the label. `"{{Step_1.selection}}"`
+- Identify where the information for the interaction comes from: a cell, column, or row. Cell and column are more common than row. `"{{column(Step_1.selection)}}"`
+- Define the data serialization function by the expected result of the data, one value or an array of values. In most cases, the `column` function works with `asObject()` data serialization and the `cell` function works with `asString()`. `"{{column(Step_1.selection).asObject()}}"`
+- To complete the data selection, define the information that the interaction must take then add the field. For `asObject()`, wrap the field in `[]` and quotes. With `asString()`, the brackets aren't needed: `"{{column(Step_1.selection, ["value"]).asObject()}}"`. For `cell`,  define which row to take the cell from: `"{{cell(Step_1.selection, 0, "value").asString()}}"`.

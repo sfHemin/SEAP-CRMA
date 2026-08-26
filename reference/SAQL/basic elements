@@ -1,0 +1,22 @@
+SAQL Basic Elements
+Basic elements are the building blocks of your SAQL query.
+Statements
+A SAQL query loads input data, operates on it, and outputs the result data. A query is made up of statements. Each SAQL statement has an input stream, an operation, and an output stream.
+Keywords
+Keywords are case-sensitive and must be lowercase.
+Identifiers
+SAQL identifiers are case-sensitive and must be enclosed in single quotation marks (').
+Number Literals
+A number literal represents a number in your script.
+String Literals
+A string is a set of characters inside double quotes (").
+Boolean Literals
+A boolean literal represents true or false (yes or no) in your script.
+Multivalue Field
+A multivalue field contains more than one value.
+Quoted String Escape Sequences
+Strings can be escaped with the backslash character.
+Special Characters
+Certain characters have special meanings in SAQL.
+Comments
+To add a single-line comment in SAQL, preface your comment with two hyphens (--). To add a multi-line comment, start your comment with a forward slash and asterisk (/*) and end it with an asterisk and forward slash (*/).

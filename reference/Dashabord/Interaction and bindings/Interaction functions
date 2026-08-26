@@ -1,0 +1,1639 @@
+# Interaction Functions
+
+Dashboard designer dashboards support a variety of interaction functions that get data from a source query, manipulate it, and serialize it to make it consumable by the target query.
+
+If the input data has empty results, the function returns a null value. If the specified location of the data doesn’t exist, an error occurs. For example, the interaction is defined to get data from row 3, but row 3 doesn’t exist. An error also occurs if the shape of the input data doesn’t meet the requirement for the function.
+
+Interaction functions operate on input data with one of these shapes.
+
+- Scalar value, like `0`, `"this is scalar"`, or `null`.
+
+- One-dimensional array, like `([1, 2, 3])` or `(["one","two","three"])`
+
+- Two-dimensional array (an array of arrays), like `([ [1, 2], [3, 4] ])`
+
+The required shape of the input data varies with each function. After processing the data, the functions can change the shape of the data.
+
+Each interaction consists of nested functions. Each interaction must have one data selection function and one data serialization function. Optionally, interactions can have multiple data manipulation functions. This example illustrates how nested functions in an interaction work together to produce the expected result for a target query in which they’re defined. The example is based on this interaction.
+
+```javascript
+coalesce(cell(mySourceStep.selection, 0, \"grouping\"), \"state\")**.asString()**
+```
+
+The `mySourceStep` query has this input data.
+
+| display       | grouping |
+| ------------- | -------- |
+| Regional Area | region   |
+| Country       | country  |
+| State         | state    |
+
+Technically, the data for this query is stored as a two-dimensional array, where each row is stored as a map of key-value pairs.
+
+```json
+[
+    ["display":"Regional Area", "grouping":"region"],
+    ["display":"Country", "grouping":"country"],
+    ["display":"State", "grouping":"state"]
+]
+```
+
+At runtime, CRM Analytics evaluates the interaction functions, starting with the innermost function. Using that logic, CRM Analytics evaluates the example’s interaction functions in this order.
+
+| Function                                                                        | Description                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mySourceStep.selection`                                                        | CRM Analytics returns each row of selected data as a map of key-value pairs. If a single selection is made, only one row returns. If multiple selections are made, multiple rows return.                                                                                                               |
+| `cell(mySourceStep.selection, 0, \"grouping\")`                                 | The `cell` function returns a scalar value from the `"grouping"` column of the first row (indicated by the 0 index) returned by `mySourceStep.selection`. Based on the selection, the return value can be `"region"`, `"country"`, or `"state"`. If no selection is made, the function returns `null`. |
+| `coalesce(cell(mySourceStep.selection, 0, \"grouping\"), \"state\")`            | The `coalesce` function returns the value of the `cell` function if a selection was made. If no selection was made, the `coalesce` function returns the specified default value `"state"`.                                                                                                             |
+| `coalesce(cell(mySourceStep.selection, 0, \"grouping\"), \"state\").asString()` | The `.asString` function returns the result of the `coalesce` function as a SAQL string.                                                                                                                                                                                                               |
+
+:::tip
+Use the `coalesce` function to provide a default value so that an error doesn’t occur when a null value is encountered.
+:::
+
+# Data Selection Functions
+
+A data selection function selects data from a source. The source can be either a selection or results of a query. The function returns a table of data, where each column has a name, and each row has an index, starting with 0. From the table, you can select one or more rows, one or more columns, or a cell to include in your interaction.
+
+In cases where multiple rows or columns of data are selected, the function returns a two-dimensional array. When a single row or single column is selected, the function returns a one-dimensional array. When a cell is selected, the function returns a scalar value. The function returns null if the source is empty. If the function tries to select data that doesn’t exist, an interaction error occurs. For example, the table only has two rows, but you try to select data from the third row.
+
+## `cell` Function
+
+Returns a single cell of data as a scalar, like `"This salesperson rocks"`, `2`, or `null`. An error occurs if the `rowIndex` isn’t an integer, the `columnName` isn’t a string, or the cell doesn’t exist in the table.
+
+### Syntax
+
+```nolang
+cell(source, rowIndex, columnName)
+```
+
+### Arguments
+
+| Argument   | Description                                                           |
+| ---------- | --------------------------------------------------------------------- |
+| source     | (Required) Specify the name of the query and `selection` or `result`. |
+| rowIndex   | (Required) Specify the row using its index. Row index starts at 0.    |
+| columnName | (Required) Specify the column name.                                   |
+
+This example is based on the `myStep` source query. Assume that `myStep.selection` retrieves these rows from the query.
+
+```json
+[
+    {stateName: ‘CA’, Amount:100},
+    {stateName: ‘TX’, Amount:200},
+    {stateName: ‘OR’’, Amount:300},
+    {stateName: ‘AL’, Amount:400},
+]
+```
+
+Although CRM Analytics doesn’t store this data as a table, let’s show the data in this format to make it easier to understand the example.
+
+| (row index) | stateName | Amount |
+| ----------- | --------- | ------ |
+| 0           | CA        | 100    |
+| 1           | TX        | 200    |
+| 2           | OR        | 300    |
+| 3           | AL        | 400    |
+
+### Example
+
+Function:
+
+```javascript
+cell(myStep.selection, 1, "stateName")
+```
+
+Output:
+
+```nolang
+"TX"
+```
+
+## `column` Function
+
+Returns one column of data as a one-dimensional array or multiple columns of data as a two-dimensional array.
+
+### Syntax
+
+```javascript
+column(source, [columnNames...])
+```
+
+### Arguments
+
+| Argument    | Description                                                                                                                                                                                                                                                                                                     |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source      | (Required) Specify the name of the query and `selection` or `result`.                                                                                                                                                                                                                                           |
+| columnNames | (Required) Specify an array of column names. The order of the listed columns affects the order that the columns appear in the output. The order is important for serialization functions. For example, the `asOrder` function requires the first element to be a field name and the second to be the direction. |
+
+These examples are based on the `myStep` source query. Assume that `myQuery.selection` retrieves these rows from the query.
+
+```json
+[
+    {stateName: ‘CA’, Amount:100},
+    {stateName: ‘TX’, Amount:200},
+    {stateName: ‘OR’’, Amount:300},
+    {stateName: ‘AL’, Amount:400},
+]
+```
+
+### Examples
+
+Although CRM Analytics doesn’t store this data as a table, let’s show the data in this format to make it easier to understand the examples that follow.
+
+| (row index) | stateName | Amount |
+| ----------- | --------- | ------ |
+| 0           | CA        | 100    |
+| 1           | TX        | 200    |
+| 2           | OR        | 300    |
+| 3           | AL        | 400    |
+
+Function:
+
+```javascript
+column(myStep.selection, ["stateName"])
+```
+
+Output:
+
+```sql
+["CA", "TX", "OR", "AL"]
+```
+
+***
+
+Function:
+
+```javascript
+column(myStep.selection, [])
+```
+
+Output:
+
+```sql
+[ ["CA", "TX", "OR", "AL"], ["100", "200”," "300", "400"] ]
+```
+
+## `row` Function
+
+Returns one row of data as a one-dimensional array or multiple rows as a two-dimensional array. For selection interactions, you typically use this function to return the first row or all rows. For results interactions, you might want specific rows. To determine the row index, display the query results in a values table.
+
+### Syntax
+
+```javascript
+row(source), [rowIndices...], [columnNames...])
+```
+
+### Arguments
+
+| Argument    | Description                                                                                                                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source      | (Required) Specify the name of the query and `selection` or `result`.                                                                                                                                                                       |
+| rowIndices  | (Required) Specify an array of row indices, where each element of the array identifies a row. Row index `0` identifies the first row. To include all rows, specify an empty array.                                                          |
+| columnNames | (Optional) Specify an array of column names to select and order them. If not specified, all columns are selected and every row has the same order of columns. However, that order isn't guaranteed to be the same across different queries. |
+
+These examples are based on the `myStep` source query. Assume that `myStep.selection` retrieves these rows from the query.
+
+```json
+[
+    {stateName: ‘CA’, Amount:100},
+    {stateName: ‘TX’, Amount:200},
+    {stateName: ‘OR’’, Amount:300},
+    {stateName: ‘AL’, Amount:400},
+]
+```
+
+### Examples
+
+Although CRM Analytics doesn’t store this data as a table, let’s show the data in this format to make it easier to understand the examples that follow.
+
+| (row index) | stateName | Amount |
+| ----------- | --------- | ------ |
+| 0           | CA        | 100    |
+| 1           | TX        | 200    |
+| 2           | OR        | 300    |
+| 3           | AL        | 400    |
+
+Function:
+
+```javascript
+row(myStep.selection, [0], ["Amount"])
+```
+
+Output:
+
+```sql
+["100"]
+```
+
+***
+
+Function:
+
+```javascript
+row(myStep.selection, [0,2], [])
+```
+
+Output:
+
+```sql
+[ ["CA", "100"], ["OR", "300"] ]
+```
+
+***
+
+Function:
+
+```javascript
+row(myStep.selection, [], ["stateName"])
+```
+
+Output:
+
+```sql
+[ ["CA"], ["TX"], ["OR"], ["AL"] ]
+```
+
+***
+
+Function:
+
+```javascript
+row(myStep.selection, [0,2], ["stateName", "Amount"])
+```
+
+Output:
+
+```sql
+[ ["CA", "100"], ["OR", "300"] ]
+```
+# Data Manipulation Functions
+
+A data manipulation function changes the data into the format required by the data serialization function (see the next section). You can apply a manipulation function on the results from a data selection or other data manipulation function. If the input data is `null`, the manipulation function returns `null`, unless otherwise specified.
+
+:::note
+If data manipulation isn’t required, add a data serialization function to the results of the data selection functions.
+:::
+
+## `coalesce` Function
+
+Returns the first non-null source from a list of sources. Useful for providing a default value in case a function returns a null value.
+
+### Syntax
+
+```javascript
+coalesce(source1, source2,...)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Source can be the results of a data selection or other data manipulation function. The source can have any shape. |
+
+### Example
+
+Function:
+
+```javascript
+coalesce(cell(step1.selection, 0, "column1"), "green")
+```
+
+Output:
+The output is the result returned by `cell(step1.selection, 0, "column1")`. However, if `cell(step1.selection, 0, "column1")` returns `null`, then the output is
+
+```nolang
+"green"
+```
+
+See Also
+
+- [Change the Map Type Based on a Toggle Widget](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-changing-map-type.md)
+
+## `concat` Function
+
+Joins streams from multiple sources into a one- or two-dimensional array. Null sources are skipped.
+
+### Syntax
+
+```javascript
+concat(source1, source2,...)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                                                                                                                                                                                                                                   |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Each source can be the results of a data selection or other data manipulation function. Each source must be either a one- or two-dimensional array. An error occurs if you try to concatenate data from sources of different shapes. For example, the following function produces an error: `concat(["a", "b"], ["c", "d", "e"])`. |
+
+### Examples
+
+Function:
+
+```javascript
+concat(["a", "b"], ["c", "d"])
+```
+
+Output:
+
+```sql
+["a", "b", "c", "d"]
+```
+
+***
+
+Function:
+
+```javascript
+concat([["a", "b"]], [["c", "d"]])
+```
+
+Output:
+
+```sql
+[["a", "b"], ["c", "d"]]
+```
+
+## `flatten` Function
+
+Flattens a two-dimensional array into a one-dimensional array.
+
+### Syntax
+
+```javascript
+flatten(source)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                                                                                                                                  |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Source can be the results of a data selection or other data manipulation function. The source must be a two-dimensional array. Otherwise, an error occurs because there’s no reason to flatten a one-dimensional array or scalar. |
+
+### Example
+
+Function:
+
+```javascript
+flatten([["CDG", "SAN"], ["BLR", "HND"], ["SMF", "JFK"]])
+```
+
+Output:
+
+```sql
+["CDG", "SAN", "BLR", "HND", "SMF", "JFK"]
+```
+
+## `join` Function
+
+Converts a one- or two-dimensional array into a string by joining the elements using the specified token. An error occurs if the data has any other shape.
+
+### Syntax
+
+```javascript
+join(source, token)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                                                           |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Source can be the results of a data selection or other data manipulation function. The source must be a two-dimensional array. Otherwise, an error occurs. |
+| token    | (Required) Any string value, like `+` or `,`.                                                                                                                         |
+
+### Examples
+
+Function:
+
+```javascript
+join(["a", "b", "c"], "+")
+```
+
+Output:
+
+```sql
+["a+b+c"]
+```
+
+***
+
+Function:
+
+```javascript
+join([["a", "b", "c"], [1, 2]], "~")
+```
+
+Output:
+
+```sql
+["a~b~c~1~2"]
+```
+
+## `slice` Function
+
+Selects one or more values from a one-dimensional array given a start and, optionally, an end position, and returns a one-dimensional array. An error occurs if the start value is greater than the end value. Negative indices are supported.
+
+### Syntax
+
+```javascript
+slice(source, start, end)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Source can be the results of a data selection or other data manipulation function. The source can have any shape. |
+| start    | (Required) Index that identifies the start value in the array. For example, `0` represents the first element in the array.   |
+| end      | (Optional) Index that identifies the end value in the array.                                                                 |
+
+### Example
+
+```javascript
+slice(step.selection, -1, 0)
+```
+
+Returns the last selected row.
+
+## `toArray` Function
+
+Converts scalars to a one-dimensional array, and one-dimensional arrays to a two-dimensional array. For example, use this function to convert the scalar result of a cell function to an array, which is required by compact-form measures, groups, and order clauses. The function returns an error if the input is a series of static one-dimensional arrays, a two-dimensional array, or a mix of scalars and one-dimensional arrays.
+
+### Syntax
+
+```javascript
+toArray (source1, source2,...)
+```
+
+### Arguments
+
+| Argument | Description                                                                               |
+| -------- | ----------------------------------------------------------------------------------------- |
+| source   | (Required) The input must be scalars, including static values, or one-dimensional arrays. |
+
+### Examples
+
+Consider these Opportunities query result.
+
+| Oppty_Name | Owner | Region   | Amount | Created_Date |
+| ---------- | ----- | -------- | ------ | ------------ |
+| Alpha      | Danny | Americas | 1000   | 2/20/2017    |
+| Bravo      | Danny | Americas | 500    | 4/15/2017    |
+| Charlie    | Jeff  | EMEA     | 2000   | 5/1/2017     |
+
+These interactions use the Opportunities query as a source.
+
+| Interaction                                                                                             | Result                                                                                             |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `toArray( cell(Opportunities.selection, 0, "Region") )`                                                 | `["Americas"]`                                                                                     |
+| `toArray( "EMEA" )`                                                                                     | `["EMEA"]`                                                                                         |
+| `toArray( cell(Opportunities.selection, 0, "Region"), "EMEA" )`                                         | `["Americas", "EMEA"]`                                                                             |
+| `toArray( column(Opportunities.selection, ["Oppty_Name"]), column(Opportunities.selection, ["Region] )` | `[["Alpha", "Bravo", "Charlie"], ["Americas", "Americas", "EMEA"]]`                                |
+| `toArray( column(Opportunities.selection, ["Oppty_Name", "Region"]) )`                                  | Error. The column interaction function returns a two-dimensional array, which is an invalid input. |
+| `toArray( [1, 2, 3], [4, 5, 6] )`                                                                       | Error. The input can't be a series of static one-dimensional arrays.                               |
+
+## `valueAt` Function
+
+Returns the single scalar value at the given index.
+
+### Syntax
+
+```javascript
+valueAt(source, index)
+```
+
+### Arguments
+
+| Argument | Description                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| source   | (Required) Source can be the results of a data selection or other data manipulation function. The source can have any shape. |
+| index    | (Required) Negative indexes are supported. If you specify an index that doesn't exist, the function returns null.            |
+
+### Example
+
+```javascript
+valueAt(cell(step.selection, 0, "column"), -1)
+```
+
+Returns the last selected value.
+# Data Serialization Functions
+
+Serialization functions convert the data into the form expected by the query in which the interaction is inserted. For example, if the interaction is used in a compact-form query, use the `asObject` function to format the data into a one-dimensional object.
+
+## `asDateRange` Function
+
+Returns the date range filter condition as a string for a SAQL query. The date range is inclusive. Use the string as part of a filter based on dates.
+
+The input data must be a one- or two-dimensional array. If the input data is a one-dimensional array with two elements, the function uses the first element as the minimum and the second element as the maximum. Null results in `fieldName in all`, which applies no filter.
+
+To view an example of this function, see [Date Range Filter Interaction](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-filter-interactions.md#date-range-filter-interaction).
+
+### Syntax
+
+```javascript
+<input data>.asDateRange(fieldName)
+```
+
+### Arguments
+
+| Argument  | Description                            |
+| --------- | -------------------------------------- |
+| fieldName | (Required) The name of the date field. |
+
+This example is based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves this row from the query.
+
+```json
+[{ "min": 1016504910000, "max": 1281655993000 }]
+```
+
+### Example
+
+Function:
+
+```javascript
+row(stepFoo.selection, [0], ["min", "max"]).asDateRange("date(year, month, day)");
+```
+
+Output:
+
+```sql
+date(year, month, day) in [dateRange([2002,3,19], [2010,8,12])]
+```
+
+See Also
+
+- [Date Range Filters](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-filter-date-range.md)
+
+## `asEquality` Function
+
+Returns an equality or "in" filter condition as a string for a SAQL query. The input data must be a scalar, one-dimensional array, or a two-dimensional array.
+
+If a single field name is provided, the returned string contains the `in` operator for a one-dimensional array, `fieldName in ["foo", "bar"]`, or the equality operator for a scalar, `fieldName == "foo"`.
+
+If multiple field names are provided, the returned string contains a composite filter. For this case, a two-dimensional array is expected. The number of values in each array must match the number of specified fields.
+
+:::note
+If the input to this function is `null`, the function returns `<fieldName> is null`, where `<fieldName>` is the first field. For example, if `cell(step1.selection, 0, "column1")` evaluates to `null`, `cell(step1.selection, 0, "column1").asEquality("field1")` evaluates to `'field1' is null`. If there are no selected rows, `cell(step1.selection, "column1")`, the function evaluates to `<fieldName> in all`.
+:::
+
+### Syntax
+
+```javascript
+<input data>.asEquality(fieldName)
+```
+
+### Arguments
+
+| Argument  | Description                       |
+| --------- | --------------------------------- |
+| fieldName | (Required) The name of the field. |
+
+These examples are based on the `myStep` source query. Assume that `myStep.selection` is:
+
+```json
+[
+    {grouping: "first", measure: 19}
+    {grouping: "second", measure: 32}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+cell(myStep.selection, 1, "measure").asEquality("bar");
+```
+
+Output:
+
+```sql
+bar == 32
+```
+
+***
+
+Function:
+
+```javascript
+column(myStep.selection, ["grouping"]).asEquality("bar");
+```
+
+Output:
+
+```sql
+bar in ['first','second']
+```
+
+***
+
+This example illustrates how a lack of input data is handled. Imagine that `myStep.selection` resolves as
+
+```nolang
+[]
+```
+
+Function:
+
+```javascript
+cell(myStep.selection, 0, "value").asEquality("bar");
+```
+
+Output:
+
+```sql
+'bar' in all
+```
+
+***
+
+The next examples illustrate how null values and empty arrays are evaluated when present in the `myStep.selection`.
+
+```json
+[
+  { "grouping": "first", "measure": null },
+  { "grouping": "second", "measure": 32 }
+]
+```
+
+Function:
+
+```javascript
+cell(myStep.selection, 0, "measure").asEquality("bar");
+```
+
+Output:
+
+```sql
+'bar' is null
+```
+
+```sql
+[
+    {label: "Bananas", value: []}
+]
+```
+
+Function:
+
+```javascript
+cell(myStep.selection, 0, "value").asEquality("bar");
+```
+
+Output
+
+```sql
+'bar' in all
+```
+
+See Also
+
+- [Filters](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-filter-equality.md)
+
+## `asGrouping` Function
+
+Returns a grouping as a string. Can also return multiple groupings
+
+The input data must be a scalar or one-dimensional array of groupings. Null results in a `group by all`.
+
+To view an example of this function, see [Group and Project Interaction](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-filter-interactions.md#group-and-projection-interaction).
+
+### Syntax
+
+```javascript
+<input data>.asGrouping()
+```
+
+Let's look at some examples where the selection determines the groupings in a SAQL-form query. These examples are based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves these rows from the query.
+
+```json
+[
+    {grouping: "first", alias: "foo"}
+    {grouping: "second", alias: "bar"}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+cell(stepFoo.selection, 1, "grouping").asGrouping();
+```
+
+Output:
+
+```sql
+'second'
+```
+
+***
+
+Function:
+
+To make the interaction return multiple fields for the grouping, replace the `cell` interaction function with a `column` function and update the arguments.
+
+```javascript
+column(stepFoo.selection, ["grouping"]).asGrouping();
+```
+
+Output:
+
+```sql
+('first', 'second')
+```
+
+See Also
+
+- [Group Interactions](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-group.md)
+
+## `asObject` Function
+
+Passes data through with no serialization. Returns data as an object that is an array of strings.
+
+### Syntax
+
+```javascript
+<input data>.asObject()
+```
+
+### Examples
+
+Function:
+
+```javascript
+column(StaticMeasureNamesStep.selection, [\"value\"]).asObject()
+```
+
+***
+
+Function:
+
+```javascript
+cell(static_1.selection, 0, \"value\").asObject()
+```
+
+See Also
+
+- [Bind Parts of a Query](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-query-parts.md)
+
+## `asProjection` Function
+
+Returns the query expression and alias as a string that you can use to project a field in a query. The query expression determines the value of the field. The alias is the field label.
+
+Use this function to write a `foreach` statement for a field projection. The function concatenates the query expression `as` and the field label in this format.
+
+```nolang
+<`query_expression`> as <`field_label`>
+```
+
+Here's a sample projection that rounds the price to two decimals and stores the result in the `SalesPrice` field.
+
+```javascript
+q = foreach q generate round(Price, 2) as SalesPrice;
+```
+
+In this sample, `round(Price, 2)` is the expression and `SalesPrice` is the field label.
+
+### Syntax
+
+```javascript
+<input data>.asProjection()
+```
+
+This example is based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves these rows from the query.
+
+```json
+[
+    {expression: "first", alias: "foo"}
+    {expression: "second", alias: "bar"}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+stepFoo.selection, [0], ["expression", "alias"]).asProjection()
+```
+
+Output:
+
+```sql
+first as 'foo'
+```
+
+***
+
+Function:
+
+```javascript
+stepFoo.selection, [], ["expression", "alias"]).asProjection()
+```
+
+Output:
+
+```sql
+first as 'foo', second as 'bar'
+```
+
+See Also
+
+- [Projection Interactions](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-projection.md)
+
+## `asRange` Function
+
+Returns a range filter condition as a string for a SAQL query. The range is inclusive.
+
+The input data must be a one-dimensional array with at least two elements. The function uses the first as the minimum and the second as the maximum. Null results in `fieldName in all`, which applies no filter.
+
+To view an example of this function, see [Range Filter Interaction](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-filter-interactions.md#range-filter-interaction).
+
+### Syntax
+
+```javascript
+<input data>.asRange(fieldName)
+```
+
+### Arguments
+
+| Argument  | Description                       |
+| --------- | --------------------------------- |
+| fieldName | (Required) The name of the field. |
+
+This example is based on the `myStep` source query. Assume that `myStep.selection` retrieves these rows from the query.
+
+```json
+[
+    {grouping: "first", measure: 19}
+    {grouping: "second", measure: 32}
+]
+```
+
+### Example
+
+Function:
+
+```javascript
+row(myStep.selection, [0], ["min", "max"]).asRange("bar");
+```
+
+Output:
+
+```sql
+bar >= 19 && bar <= 32
+```
+
+See Also
+
+- [Range Filters](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-use-case-filter-range.md)
+
+## `asString` Function
+
+Serializes a scalar, one-dimensional array, or a two-dimensional array as a string. Escapes double quotes in strings.
+
+### Syntax
+
+```javascript
+<input data>.asString()
+```
+
+### Examples
+
+Function:
+
+```javascript
+cell(stepOpportunity.selection, 1, "measure").asString();
+```
+
+***
+
+Function:
+
+```javascript
+cell(color_1.result, 0, "color").asString();
+```
+
+See Also
+
+- [Highlight Values with Color Coding](/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-color-code-values.md)
+# Data Serialization Functions for SQL and SOQL
+
+SQL and SOQL serialization functions convert the data into the form expected by the query in which the interaction is inserted.
+
+## `asSQLGrouping` Function
+
+Returns a grouping as a string in a SQL or SOQL query. Can also return multiple groupings.
+
+The input data must be a scalar or a one-dimensional array of groupings. Null or no results returns an ungrouped query.
+
+### Syntax
+
+```javascript
+<input data>.asSQLGrouping(SQLType, includeKeywords)
+```
+
+### Arguments
+
+| Argument          | Description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `SQLType`         | (Required) Specify SQL or SOQL variant. Valid values are `dataset`, `snowflake`, and `sobject`. |
+| `includeKeywords` | (Optional) The default value is `false`.                                                        |
+
+:::note
+For SOQL, use `sobject`.
+:::
+
+Let's look at some examples where the selection detemines the groupings in a SQL or SOQL-form query. These examples are based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves these rows from the query.
+
+```json
+[
+    {grouping: "first", alias: "foo"}
+    {grouping: "second", alias: "bar"}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "grouping").asSQLGrouping("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+GROUP BY "first"
+```
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "grouping").asSQLGrouping("sboject", true))
+```
+
+Output in SOQL:
+
+```sql
+GROUP BY first
+```
+
+***
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "grouping").asSQLGrouping("snowflake", false))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+"first"
+```
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "grouping").asSQLGrouping("sboject", false))
+```
+
+Output in SOQL:
+
+```sql
+first
+```
+
+***
+
+To make the interaction return multiple fields for the grouping, replace the `cell` interaction function with a `column` function and update the arguments.
+
+Function:
+
+```javascript
+(column(stepFoo.selection, ["alias"]).asSQLGrouping("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+GROUP BY "foo", "bar"
+```
+
+Function:
+
+```javascript
+(column(stepFoo.selection, ["alias"]).asSQLGrouping("sobject", true))
+```
+
+Output in SOQL:
+
+```sql
+GROUP BY foo, bar
+```
+
+***
+
+Function:
+
+```javascript
+(column(stepFoo.selection, ["alias"]).asSQLGrouping("snowflake", false))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+"foo", "bar"
+```
+
+Function:
+
+```javascript
+(column(stepFoo.selection, ["alias"]).asSQLGrouping("sobject", false))
+```
+
+Output in SOQL:
+
+```sql
+foo, bar
+```
+
+## `asSQLHaving` Function
+
+Returns the grouped results for a SQL or SOQL query restricted by a conditional filter logic applied on aggregate functions. This function is similar to the `asSQLWHERE` function.
+
+### Syntax
+
+```javascript
+<input data>.asSQLHaving(SQLType, includeKeywords)
+```
+
+### Arguments
+
+| Argument          | Description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `SQLType`         | (Required) Specify SQL or SOQL variant. Valid values are `dataset`, `snowflake`, and `sobject`. |
+| `includeKeywords` | (Optional) The default value is `false`.                                                        |
+
+:::note
+For SOQL, use `sobject`.
+:::
+
+These examples are based on the `stepFoo` source query.
+
+:::note
+The  `<` and `>=<=` operators aren't supported.
+:::
+
+### Examples
+
+Function:
+
+```javascript
+(toArray("SUM(Revenue)", ">",column(stepFoo.selection, ["Revenue"]).asSQLHaving("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+HAVING "SUM(Revenue)" > 10
+```
+
+Function:
+
+```javascript
+(toArray("SUM(Revenue)", ">",column(stepFoo.selection, ["Revenue"]).asSQLHaving("sobject", true))
+```
+
+Output in SOQL:
+
+```sql
+HAVING SUM(Revenue) > 10
+```
+
+***
+
+Function:
+
+```javascript
+(toArray("SUM(Revenue)", ">",column(stepFoo.selection, ["Revenue"]).asSQLHaving("dataset"))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+"SUM(Revenue)" > 10
+```
+
+Output in SOQL:
+
+```sql
+SUM(Revenue) > 10
+```
+
+***
+
+Function:
+
+```javascript
+([].asSQLHaving('dataset')) or ([].asSQLHaving('dataset', 'false'))
+```
+
+Output in standard, Snowflake live dataset, or SOQL:
+
+```sql
+""
+```
+
+## `asSQLOrder` Function
+
+Returns the sort order as a string for a SQL or SOQL query.
+
+The input data must be scalar, one-dimensional, or a two-dimensional array. A two-dimensional array is treated as a tuple of interactions.
+
+### Syntax
+
+```javascript
+<input data>.asSQLOrder(SQLType, includeKeywords)
+```
+
+### Arguments
+
+| Argument          | Description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `SQLType`         | (Required) Specify SQL or SOQL variant. Valid values are `dataset`, `snowflake`, and `sobject`. |
+| `includeKeywords` | (Optional) The default value is `false`.                                                        |
+
+:::note
+For SOQL, use `sobject`.
+:::
+
+These examples are based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves these rows from the query.
+
+```json
+values: [
+    {order: "first", direction: "desc"}
+    {order: "second", direction: "asc"}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "order").asSQLOrder("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+ORDER BY "first"
+```
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, 0, "order").asSQLOrder("sboject", true))
+```
+
+Output in SOQL:
+
+```sql
+ORDER BY first
+```
+
+***
+
+Function:
+
+```javascript
+(cell(stepFoo.selection,["order")].asSQLOrder("snowflake"))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+"first", "second"
+```
+
+Function:
+
+```javascript
+(cell(stepFoo.selection, ["order"]).asSQLOrder("sboject"))
+```
+
+Output in SOQL:
+
+```sql
+first, second
+```
+
+***
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [], ["order", "direction"]).asSQLOrder("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+ORDER BY "first" DESC, "second", ASC
+```
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [], ["order", "direction"]).asSQLOrder("sobject", true))
+```
+
+Output in SOQL:
+
+```sql
+ORDER BY first DESC, second ASC
+```
+
+## `asSQLSelect` Function
+
+Returns the SQL or SOQL expression and alias as a string that you can use to project a field in the query. The query expression determines the value of the field. The alias is the field label.
+
+### Syntax
+
+```javascript
+<input data>.asSQLSelect(SQLType)
+```
+
+### Arguments
+
+| Argument  | Description                                                                                     |
+| --------- | ----------------------------------------------------------------------------------------------- |
+| `SQLType` | (Required) Specify SQL or SOQL variant. Valid values are `dataset`, `snowflake`, and `sobject`. |
+
+:::note
+For SOQL, use `sobject`.
+:::
+
+These examples are based on the `stepFoo` source query. Assume that `stepFoo.selection` retrieves these rows from the query.
+
+```json
+values: [
+    {expression: "SUM("first")", alias: "foo"}
+    {expression: "second", alias: "bar"}
+]
+```
+
+### Examples
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [0], ["expression", "alias"]).asSQLSelect("snowflake"))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+SUM("first") AS "foo"
+```
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [0], ["expression", "alias"]).asSQLSelect("sobject"))
+```
+
+Output in SOQL:
+
+```sql
+SUM("first") foo
+```
+
+***
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [0], ["expression"]).asSQLSelect("snowflake"))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+SUM("first")
+```
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [0], ["expression"]).asSQLSelect("sobject"))
+```
+
+Output in SOQL:
+
+```sql
+SUM("first")
+```
+
+***
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [], ["expression", "alias"]).asSQLSelect("snowflake"))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+SUM("first") AS "foo", "second" AS "bar"
+```
+
+Function:
+
+```javascript
+(row(stepFoo.selection, [], ["expression", "alias"]).asSQLSelect("sobject"))
+```
+
+Output in SOQL:
+
+```sql
+SUM("first") foo, second bar
+```
+
+## `asSQLWhere` Function
+
+Returns the SQL or SOQL query results restricted by a conditional filter logic applied on a measure, dimension, or date.
+
+### Syntax
+
+```javascript
+<input data>.asSQLWhere(SQLType, includeKeywords)
+```
+
+### Arguments
+
+| Argument          | Description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `SQLType`         | (Required) Specify SQL or SOQL variant. Valid values are `dataset`, `snowflake`, and `sobject`. |
+| `includeKeywords` | (Optional) The default is false.                                                                |
+
+:::note
+For SOQL, use `sobject`.
+:::
+
+These examples are based on the `stepFoo` source query.
+
+### Examples
+
+Function:
+
+```javascript
+([].asSQLWhere('dataset')) or ([].asSQLWhere('dataset', 'false'))
+```
+
+Output in standard dataset, Snowflake live dataset, or SOQL:
+
+```sql
+""
+```
+
+***
+
+Function:
+
+```javascript
+((toArray("foo", "IN", column(stepFoo.selection, ["foo"])).asSQLWhere("snowflake", true))
+toArray("foo", "IN", column(stepFoo.selection, ["foo"])  =>  ["foo", "IN", ["a", "b"]]
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+WHERE "foo" in ('a', 'b')
+```
+
+Function:
+
+```javascript
+((toArray("foo", "IN", column(stepFoo.selection, ["foo"])).asSQLWhere("sobject", true))
+toArray("foo", "IN", column(stepFoo.selection, ["foo"])  =>  ["foo", "IN", ["a", "b"]]
+```
+
+Output in SOQL:
+
+```sql
+WHERE foo in ('a', 'b')
+```
+
+***
+
+Function:
+
+```javascript
+((toArray("bar", "><", column(stepFoo.selection, ["bar"])).asSQLWhere("snowflake", true))
+toArray("bar", "><", column(stepFoo.selection, ["bar"])  =>  ["bar", "><", [10, 100]]
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+"bar" > 10 AND "bar" < 100
+```
+
+Function:
+
+```javascript
+((toArray("bar", "><", column(stepFoo.selection, ["bar"])).asSQLWhere("sobject", true))
+toArray("bar", "><", column(stepFoo.selection, ["bar"])  =>  ["bar", "><", [10, 100]]
+```
+
+Output in SOQL:
+
+```sql
+bar > 10 ad bar < 100
+```
+
+***
+
+*Multiple Filters*
+
+Function:
+
+```javascript
+(toArray(toArray("foo", "IN", column(stepFoo.selection, ["foo"]),
+toArray("bar", "><;", column(stepFoo.selection, ["bar"]))).asSQLWhere("snowflake", true))
+```
+
+Output in standard or Snowflake live dataset:
+
+```sql
+WHERE "foo" IN ('a', 'b') AND ("bar" > 10 AND "bar" < 100)
+```
+
+Function:
+
+```javascript
+(toArray(toArray("foo", "IN", column(stepFoo.selection, ["foo"]),
+toArray("bar", "><;", column(stepFoo.selection, ["bar"]))).asSQLWhere("sobject", true))
+```
+
+Output in SOQL:
+
+```sql
+WHERE foo IN ('a', 'b') AND (bar > 10 AND bar < 100)
+```
+
+***
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("dataset", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [1016504910000, 1281655993000]]
+```
+
+Output in standard dataset:
+
+```sql
+WHERE ("CreatedDate"  >= DATE '2002-3-19' AND "CreatedDate" &lt;= '2010-8-12'))
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("snowflake", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [1016504910000, 1281655993000]]
+```
+
+Output in Snowflake live dataset:
+
+```sql
+WHERE ("CreatedDate"  BETWEEN to_date('2002-3-19') AND to_date('2010-8-12'))
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("sobject", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [1016504910000, 1281655993000]]
+```
+
+Output in SOQL:
+
+```sql
+WHERE (CreatedDate  >= DATE 2002-3-19 AND CreatedDate <= 2010-8-12))
+```
+
+***
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("dataset"))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [null, 1281655993000]]
+```
+
+Output in standard dataset:
+
+```sql
+"CreatedDate" <= DATE '2010-8-12'
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("snowflake"))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [null, 1281655993000]]
+```
+
+Output in Snowflake live dataset:
+
+```sql
+"CreatedDate" <= to_date('2010-8-12')
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("sobject"))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [null, 1281655993000]]
+```
+
+Output in SOQL:
+
+```sql
+CreatedDate <= 2010-8-12
+```
+
+***
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("dataset", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [2015, 8, 1], [2021, 3, 1]]
+```
+
+Output in standard dataset:
+
+```sql
+WHERE ("CreatedDate" >= DATE '2015-8-1' AND CreatedDate <= '2021-3-1'))
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("snowflake", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [2015, 8, 1], [2021, 3, 1]]
+```
+
+Output in Snowflake live dataset:
+
+```sql
+WHERE ("CreatedDate" BETWEEN to_date('2015-8-1') AND to_date('2021-3-1'))
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("sobject", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", [2015, 8, 1], [2021, 3, 1]]
+```
+
+Output in SOQL:
+
+```sql
+WHERE (CreatedDate >= 2015-8-1 AND CreatedDate <= 2021-3-1))
+```
+
+***
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("snowflake", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", ["quarter", -2], ["quarter", 3]
+```
+
+Output in Snowflake live dataset:
+
+```sql
+WHERE ("CreatedDate" >= date_trunc(quarter, dateadd(quarter, -2, current_date()))AND "CreatedDate" <>= date_trunc(quarter, dateadd(quarter, 3, current_date())))
+```
+
+Function:
+
+```javascript
+(toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])).asSQLWhere("sobject", true))
+toArray("CreatedDate", "BETWEEN", column(stepFoo.selection, ["CreatedDate"])) =>  ["CreatedDate", "BETWEEN", ["quarter", -2], ["quarter", 3]
+```
+
+Output in SOQL:
+
+```sql
+WHERE (CreatedDate >= LAST_N_QUARTERS:2 AND CreatedDate <>= NEXT_N_QUARTERS:3)
+```

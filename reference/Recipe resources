@@ -1,0 +1,69 @@
+Recipe Resource
+Returns, updates, or deletes a Data Prep recipe.
+Resource URL
+/wave/recipes/<id>
+Formats
+JSON
+
+Available Version
+38.0
+
+Available in Postman
+To view and test a working example of this resource, see getRecipe in Postman. For information about how to authenticate your org with Postman, see the CRM Analytics Rest API Quickstart.
+
+Available Components
+LWC — lightning/analyticsWaveApi deleteRecipe()
+LWC — lightning/analyticsWaveApi getRecipe()
+LWC — lightning/analyticsWaveApi updateRecipe()
+HTTP Methods
+DELETE GET PATCH PUT
+
+Run a Recipe
+To run a Data Prep recipe, use the Dataflow Jobs Resource API. For examples of how to start and stop recipes, see Start and Stop a Dataflow Job or Recipe.
+
+Schedule a Recipe
+To schedule a recipe, use the Schedule Resource API. For examples of how to schedule recipes, see Schedule Dataflows, Recipes, and Data Syncs.
+
+Request Parameters for GET
+Parameter Name	Type	Description	Required or Optional	Available Version
+format	Connect​Recipe​Format​Type​Enum	Specifies the format of the returned recipe. Valid values are:
+R2 (Data Prep Classic)
+R3 (Data Prep)
+Required for Data Prep recipes, Optional for Data Prep Classic recipes.	49.0
+history​Id	Id	Use the history ID to request a specific recipe version.	Optional	51.0
+The following REST URL shows how to use the format request parameter to return a Data Prep recipe via the GET request.
+
+/wave/recipes/<05vS7000000xxxxxxx>?format=R3
+Note
+
+With API version 49.0 and higher, the format request parameter is required for recipes created in the Data Prep format. For recipes created in the Data Prep Classic format, the format request parameter isn’t needed. If you want to up-convert the Data Prep Classic recipe format to the Data Prep recipe format, use the format request parameter set to R3.
+
+Response Body for GET, PATCH, and PUT
+Recipe
+
+Request Body for PATCH
+Property Name	Type	Description	Required or Optional	Available Version
+enable​Editor​Validation	Boolean	Indicates whether editor validation for the recipe is enabled (true) or not ( false).	Required	53.0
+recipe​File	Binary	The recipe file.	Required	38.0
+recipe​Object	Recipe​Input[]	The recipe definition.	Required	38.0
+validation​Context	Connect​Recipe​Validation​Context​Enum	The recipe validation context. Valid values are:
+Default
+Editor
+Required	53.0
+The following JSON shows how to update a recipe, specifically the license type for the recipe.
+
+{
+  "recipeObject" : {
+     "licenseAttributes": { "type": "Sonic" }
+  } 
+}
+Note
+
+If the recipe was created in the Data Prep Classic format, then is retrieved in the Data Prep format, a PATCH request with the Data Prep format up-converts the recipe permanently to the Data Prep format.
+
+Request Body for PUT
+Use the PUT API request to revert to a previous historical version. Asset Revert History Input The following JSON shows the revert request for a recipe version.
+
+{
+    "historyId" : "0RmRM000000xxxxxxx"
+}

@@ -1,0 +1,78 @@
+Recipes List Resource
+Returns a collection of Data Prep recipes and creates a recipe.
+Resource URL
+/wave/recipes
+Formats
+JSON
+
+Available Version
+38.0
+
+Available in Postman
+To view and test a working example of this resource, see getRecipeCollection in Postman. For information about how to authenticate your org with Postman, see the CRM Analytics Rest API Quickstart.
+
+Available Components
+LWC — lightning/analyticsWaveApi getRecipes()
+HTTP Methods
+GET
+
+Request Parameters for GET
+Parameter Name	Type	Description	Required or Optional	Available Version
+folder​Id	Id	Returns a collection filtered by recipes belonging to the specified folder ID.	Optional	61.0
+format	Connect​Recipe​Format​Type​Enum	Returns a collection filtered by the format of the current recipe definition. Valid values are:
+R2 (Data Prep Classic)
+R3 (Data Prep)
+Optional	48.0
+last​Modified​After	String	Returns a collection filtered by recipes with a last modified date after the given value.	Optional	55.0
+last​Modified​Before	String	Returns a collection filtered by recipes with a last modified date before the given value.	Optional	55.0
+license​Type	Connect​Analytics​License​Type​Enum	Filters the collection by the Analytics license type. Valid values are
+Cdp (Data 360)
+Data​Pipeline​Query (Data Pipeline Query)
+Einstein​Analytics (CRM Analytics)
+Intelligent​Apps (Intelligent Apps)
+Mulesoft​Data​Path (Mulesoft Data Works)
+Sonic (Salesforce Data Pipeline)
+Optional	52.0
+next​Scheduled​After	String	Returns a collection filtered by recipes with a scheduled run after the given value.	Optional	55.0
+next​Scheduled​Before	String	Returns a collection filtered by recipes with a scheduled run before the given value.	Optional	55.0
+page	String	A generated token that indicates the view of the objects to be returned.	Optional	38.0
+page​Size	Int	Number of items to be returned in a single page. Minimum is 1, maximum is 200, and the default is 25.	Optional	38.0
+q	String	Search terms. Individual terms are separated by spaces. A wildcard is automatically appended to the last token in the query string. If the user’s search query contains quotation marks or wildcards, those symbols are automatically removed from the query string in the URI along with any other special characters.	Optional	38.0
+sort	Connect​Wave​Sort​Order​Type​Enum	The type of sort order to be applied to the returned collection. Valid values are:
+App
+Created​By
+Created​By​Id
+Created​Date
+Folder​Name
+Last​Modified
+Last​Modified​By
+Last​Modified​By​Id
+Last​Modified​Date
+Location
+Mru (Most Recently Used, last viewed date)
+Name
+Outcome
+Refresh​Date (for assets like datasets)
+Run​Date (for assets like reports)
+Status
+Title
+Type
+Optional	38.0
+status	Connect​Recipe​Status​Enum[]	Returns a collection filtered by the statuses of the recipe. Valid values are:
+Cancelled
+Failure
+New (Never run or has no recent run)
+Queued
+Running
+Success
+Warning
+Optional	55.0
+The following REST URL shows how to use the q parameter as a search query in the GET request.
+
+/wave/recipes?q=MyRecipe
+Response Body for GET
+Recipe Collection
+
+Important
+
+Recipes require the recipe editor UI for creation and aren’t supported using POST via this API endpoint.

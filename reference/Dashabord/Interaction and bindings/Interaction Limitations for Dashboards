@@ -1,0 +1,14 @@
+# Interaction Limitations for Dashboards
+
+CRM Analytics supports interactions in numerous places, but not everywhere. Review these limitations before you create any interactions.
+
+You can bind widget properties in chart and number widgets only. You can bind all except these properties.
+
+| Widget Type | Unsupported Widget Properties                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Number      | <ul><li>`borderEdges`</li><li>`borderWidth`</li><li>`compact`</li><li>`exploreLink`</li><li>`measureField`</li><li>`textAlignment`</li></ul> |
+| Chart       | <ul><li>`borderEdges`</li><li>`borderRadius`</li><li>`borderWidth`</li><li>`exploreLink`</li><li>`measureField`</li></ul>                    |
+
+You can’t bind these query properties:
+
+- `selectMode`

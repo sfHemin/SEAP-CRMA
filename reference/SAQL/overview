@@ -1,0 +1,22 @@
+Use SAQL (Salesforce Analytics Query Language) to access data in CRM Analytics dataset. CRM Analytics uses SAQL behind the scenes in lenses, dashboards, and explorer to gather data for visualizations.
+Developers can write SAQL to directly access CRM Analytics data via:
+CRM Analytics REST API
+Build your own app to access and analyze CRM Analytics data or integrate data with existing apps.
+
+Dashboard JSON
+Create advanced dashboards. A dashboard is a curated set of charts, metrics, and tables.
+
+Compare Table
+Use SAQL to perform calculations on data in your tables and add the results to a new column.
+
+Transformations During Data Flow
+Use SAQL to perform manipulations or calculations on data when bringing it in to CRM Analytics.
+
+Introduction
+Most actions you take in Analytics result in one or more SAQL queries. Every lens, dashboard, and explorer action generates and executes a SAQL query to build the data needed for the visualization.
+Use SAQL in the CRM Analytics Dashboard
+Use the CRM Analytics Studio user interface to modify existing SAQL queries or write new ones. Writing SAQL queries in the user interface is the easiest way to get started.
+SAQL Null Measures and Dimensions
+With CRM Analytics, you can use null measure handling to add null as the default value for numeric columns in datasets. Use null dimensions to return grouped null values from your SAQL queries.
+Analytics SAQL Release Notes
+Use the Salesforce Release Notes to learn about the most recent updates and changes to Analytics SAQL.

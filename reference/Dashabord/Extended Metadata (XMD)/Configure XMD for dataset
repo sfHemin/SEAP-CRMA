@@ -1,0 +1,23 @@
+Configure the XMD for a Dataset
+You can configure the XMD file to override the default appearance of dataset fields and field values and to add actions to dimensions in charts and tables. Each dataset has a separate XMD file. While you can edit the XMD, you can’t export it.
+You can also use the XMD API endpoints to edit an XMD file. For more information, see the CRM Analytics REST API Developer Guide.
+
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+User Permissions Needed	
+To edit the XMD:	Edit CRM Analytics Dataflows OR Upload External Data to CRM Analytics
+Edit the dataset.
+Download the XMD file from the Edit page. If you download an old XMD version, CRM Analytics converts it to the current version.
+CRM Analytics ignores settings that it can’t convert.
+Edit the file with a text editor.
+To ensure that the JSON format is correct, validate it with a JSON editor.
+Save the file in UTF-8 format to ensure that CRM Analytics visualizations display international characters.
+Upload the updated file to the Edit page.
+CRM Analytics validates the XMD file. If the XMD isn’t valid, an error occurs and the updated XMD settings aren’t applied. All formatting reverts to the defaults.
+
+Each time you upload the XMD file, CRM Analytics overwrites the current dataset customizations. Changes in the XMD aren’t appended to previous customizations. Ensure that your XMD file contains all required customizations.
+
+The validation rules and related errors are in the Extended Metadata (XMD) 2.0 Validation Rules and Errors knowledge article.
+
+If the dataset metadata changes after you configure the XMD, such as a field is deleted or renamed as a result of changes to the dataflow, you must update the associated XMD. For example, if the XMD refers to the old field names, errors occur when you try to configure actions using the UI. The error also appears in the errorMessage field in the XMD file.

@@ -1,0 +1,1845 @@
+SAQL Reference
+SAQL Functions
+SAQL Functions
+Use functions to perform complex operations on your data.
+Aggregate Functions
+Aggregate functions perform computations across all values of a grouped field.
+Date Functions
+Use SAQL date functions to perform time-based analysis.
+Time Zone Date Functions
+When you enable the time zone feature, you can use the fields of the DateTime and DateOnly type to access date information
+in the specified time zone. For example, if a user in New York runs a SAQL query, they see date information displayed in Eastern
+Standard time.
+Work with Custom Fiscal Year Data
+After inheriting custom fiscal years, SAQL queries support custom fiscal year data.
+String Functions
+Use SAQL string functions to format your measure and dimension fields.
+Math Functions
+To perform numeric operations in a SAQL query, use math functions.
+Windowing Functions
+Use SAQL windowing functionality to calculate common business cases such as percent of grand total, moving average, year and
+quarter growth, and ranking.
+coalesce
+Use coalesce() to get the first non-null value from a list of parameters, or to replace nulls with a different value.
+Aggregate Functions
+Aggregate functions perform computations across all values of a grouped field.
+If you don't precede an aggregate function by a group on an empty set returns null.
+by statement, it treats each line as its own group. Using an aggregate function
+avg() or average()
+Returns the average of the values of a measure field.
+count()
+first()
+Returns the number of rows that match the query criteria.
+Returns the first value for the specified field.
+last()
+Returns the last value in the tuple for the specified field.
+max()
+Returns the maximum value of a dimension or measure field.
+76
+SAQL Reference
+Aggregate Functions
+median()
+Returns the median value of a measure field.
+min()
+Returns the minimum value of a dimension or measure field.
+sum()
+Returns the sum of a numeric field.
+unique()
+Returns the count of unique values.
+stddev()
+Returns the standard deviation of the values in a field. Accepts measure fields (but not expressions) as input.
+stddevp()
+Returns the population standard deviation of the values in a field. Accepts measure fields as input but not expressions.
+var()
+Returns the variance of the values in a field. Accepts measure fields as input but not expressions.
+varp()
+Returns the variance of the values in a field. Accepts measure fields as input but not expressions.
+percentile_cont()
+Calculates a percentile based on a continuous distribution of the column value.
+percentile_disc()
+Returns the value corresponding to the specified percentile.
+regr_intercept()
+Uses two numerical fields to calculate a trend line, then returns the y-intercept value. Use this function to find out the likely value of
+field_y when field_x is zero.
+regr_slope()
+Uses two numerical fields to calculate a trend line, then returns the slope. Use this function to learn more about the relationship
+between two numerical fields.
+regr_r2()
+your data.
+Uses two numerical fields to calculate R-squared, or goodness of fit. Use regr_r2() to understand how well the trend line fits
+grouping()
+otherwise returns 0.
+Returns 1 if null dimension values are due to higher-level aggregates (which usually means the row is a subtotal or grand total),
+SEE ALSO:
+group-by
+avg() or average()
+Returns the average of the values of a measure field.
+77
+SAQL Reference
+Aggregate Functions
+Example - Calculate the Average Amount of an Opportunity Grouped by Type
+Use avg() to compare the average size of opportunities for each account type.
+q = load "DTC_Opportunity";
+q = group q by 'Account_Type';
+q = foreach q generate 'Account_Type' as 'Account_Type', avg('Amount') as 'avg_Amount';
+SEE ALSO:
+median()
+count()
+Returns the number of rows that match the query criteria.
+For example, to calculate the number of carriers:
+q = foreach q generate 'carrier' as 'carrier', count() as 'count';
+count() operates on the stream that is input to the group or cogroup statement. It doesn’t operate on the newly grouped
+stream or on an ungrouped stream.
+q = load "Carriers";
+q = group q by (Year);
+q = foreach a1 generate count(q) as countYear, count() as count, Year as year;
+first()
+Returns the first value for the specified field.
+Use first() to return the first value of a measure or dimension. You can also use first() used to return the value of a field
+without grouping by that field.
+Note: If the values are not sorted, the 'first' value could be any value in the tuple.
+Example - Return the First Industry for an Account Owner
+Your reps own opportunities in several industries. You need a list of rep names with their first industry, where industry is sorted
+alphabetically. Group by account owner and industry, sort by industry, then use first() to get the first industry.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by ('Account_Owner', 'Industry');
+q = foreach q generate 'Account_Owner' as 'Account_Owner', 'Industry' as 'Industry';
+q = order q by 'Industry';
+q = foreach q generate 'Account_Owner' as 'Account_Owner', first('Industry') as 'One
+Industry';
+78
+SAQL Reference
+Aggregate Functions
+Example - Return Any Industry for an Account Owner
+Your reps own opportunities in several industries. You need a list of rep names with any one of a rep's industry - it doesn't matter which
+one. In this case. Group by account owner then use first() to get the first industry from an unsorted collection.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by 'Account_Owner';
+q = foreach q generate 'Account_Owner' as 'Account_Owner', first('Industry') as 'One
+Industry';
+The resulting table displays each rep along with one of their industries (basically the first industry from an unsorted collection).
+SEE ALSO:
+last()
+79
+SAQL Reference
+Aggregate Functions
+last()
+Returns the last value in the tuple for the specified field.
+Use last() to return the last value of a measure or dimension. You can also use last() to return the value of a field without
+grouping by that field.
+Note: If the values are not sorted, the 'last' value could be any value in the tuple.
+Example - Return the Last Industry for an Account Owner
+Your reps own opportunities in several industries. You need a list of rep names with their last industry, where industry is sorted
+alphabetically. Group by account owner and industry, sort by industry, then use first() to get the last industry.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by ('Account_Owner', 'Industry');
+q = foreach q generate 'Account_Owner' as 'Account_Owner', 'Industry' as 'Industry';
+q = order q by 'Industry';
+q = foreach q generate 'Account_Owner' as 'Account_Owner', last('Industry') as 'One
+Industry';
+SEE ALSO:
+first()
+max()
+Returns the maximum value of a dimension or measure field.
+Example - Find the Largest Opportunity for Each Account
+q = load "Ops";
+q = group q by 'Account_Name';
+q = foreach q generate 'Company' as 'Company', max('Amount') as 'Largest Deal';
+80
+SAQL Reference
+Aggregate Functions
+Example - Find the Last Value in List of Airline Destinations per Origin
+For dimensions, max() sorts the values alphabetically and the last value is returned.
+q = load "Airlines";
+q = group q by 'origin';
+q = foreach q generate 'origin' as 'Origin', max('dest') as 'Max Destination';
+SEE ALSO:
+min()
+median()
+Returns the median value of a measure field.
+Example - Find the Median Time to Close a Case
+Use median() to find the median amount of time it takes to resolve a case, grouped by company.
+q = load "Case";
+q = group q by 'Account_Name';
+q = foreach q generate 'Account_Name' as 'Account_Name', median('CallDuration') as
+'median_CallDuration';
+q = order q by 'Account_Name' asc;
+SEE ALSO:
+avg() or average()
+min()
+Returns the minimum value of a dimension or measure field.
+Example - Find the Smallest Opportunity For Each Account
+q = load "Ops";
+q = group q by 'Account_Name';
+q = foreach q generate 'Company' as 'Company', min('Amount') as 'Smallest Deal';
+Example - Find the First Value in List of Airline Destinations per Origin
+For dimensions, min() sorts the values alphabetically and the first value is returned.
+q = load "Airlines";
+q = group q by 'origin';
+q = foreach q generate 'origin' as 'Origin', min('dest') as 'Min Destination';
+SEE ALSO:
+max()
+81
+SAQL Reference
+Aggregate Functions
+sum()
+Returns the sum of a numeric field.
+Example - Calculate the Total Meeting Time
+Suppose that you have a database of meeting information. Use sum() to see that the total time spent meeting with each account.
+q = load "Meetings";
+q = group q by 'Company';
+q = foreach q generate 'Company' as 'Company', sum('MeetingDuration') as 'sum_meetings';
+unique()
+Returns the count of unique values.
+Example - Count the Number of Industries
+Use unique() to count the number of different industries that you have opportunities with.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by all;
+q = foreach q generate unique('Industry') as 'unique_Industry';
+stddev()
+Returns the standard deviation of the values in a field. Accepts measure fields (but not expressions) as input.
+Example - Look at Variability in Amount
+Use stddev() to get a feel for the amount of spread, or dispersion, in the size of your deals.
+q = load "DTCOpps";
+q = group q by all;
+q = foreach q generate stddev('Amount') as 'stddev_Amount';
+Should I Use stddev() or stddevp()?
+Use stddev() when the values in your field are a partial sample of the entire set of values (that is, a partial sampling of the whole
+population). Use stddevp() when your field contains the complete set of values (that is, the entire population of values).
+SEE ALSO:
+stddevp()
+stddevp()
+Returns the population standard deviation of the values in a field. Accepts measure fields as input but not expressions.
+82
+SAQL Reference
+Aggregate Functions
+Example - Calculate the Population Standard Deviation of Amount
+Use stddevp() to calculate the population standard deviation of the amount of each opportunity. Group by product family to see
+which type of product has the greatest variability in deal size.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by 'Product_Family';
+q = foreach q generate 'Product_Family' as 'Product_Family', stddevp('Amount') as
+'stddevp_Amount';
+SEE ALSO:
+stddev()
+var()
+Returns the variance of the values in a field. Accepts measure fields as input but not expressions.
+Example - Calculate the Variance of Deal Amount
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by all;
+q = foreach q generate var('Amount') as 'var_Amount';
+SEE ALSO:
+varp()
+varp()
+Returns the variance of the values in a field. Accepts measure fields as input but not expressions.
+Example - Calculate the Population Variance of Deal Amount
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by all;
+q = foreach q generate varp('Amount') as 'var_Amount';
+SEE ALSO:
+var()
+percentile_cont()
+Calculates a percentile based on a continuous distribution of the column value.
+percentile_cont(p) within group (order by expr [asc | desc])
+percentile_cont() accepts a numeric grouped expression expr and sorts it in the specified order. If order is not specified, the
+default order is ascending. It returns the value behind which (100*p)% of values in the group fall in the sorted order, ignoring null values.
+83
+SAQL Reference
+Aggregate Functions
+p can be any real numeric value between 0 and 1. expr can be any identifier, such as 'xInt' or 'price', but cannot be a complex expression,
+such as price/100 or ceil(distance), or a literal, such as 2.5.
+If expr contains no value that falls exactly at the 100*p-th percentile mark, percentile_cont() returns a value interpolated
+from the two closest values in expr.
+For example, if Mea1 contains the values [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] then:
+percentile_cont(0.25) within group (order by Mea1 asc) = 3.25
+percentile_cont(0.25) within group (order by Mea1 desc) = 9.75
+percentile_cont(0) within group (order by Mea1 asc) = 0
+percentile_cont(1) within group (order by Mea1 asc) = 13
+Example - Display the Interpolated Value of the Bottom 15% of Deals
+Suppose that you want to see the bottom 15% of deals for each rep. You don't need to see the actual deal size - just the 'average' size
+of the bottom 15%. Use percentile_cont(.15).
+SEE ALSO:
+percentile_disc()
+percentile_disc()
+Returns the value corresponding to the specified percentile.
+percentile_disc(p) within group (order by expr [asc | desc])
+percentile_disc() accepts a numeric grouped expression expr and sorts it in the specified order. If order is not specified, the
+default order is ascending. It returns the value behind which (100*p)% of values in the group fall in the sorted order, ignoring null values.
+p can be any real numeric value between 0 and 1, and is accurate to 8 decimal places of precision. expr can be any identifier, such
+as 'xInt' or 'price', but cannot be a complex expression, such as price/100 or ceil(distance), or a literal, such as 2.5.
+If expr contains no value that falls exactly at the 100*p-th percentile mark, percentile_disc() returns the next value from
+expr in the sort order.
+For example, if Mea1 contains the values [54, 35, 15, 15, 76, 87, 78] then:
+percentile_disc(0.5) within group (order by Mea1) == 54
+percentile_disc(0.72) within group (order by Mea1) == 78
+84
+SAQL Reference
+Aggregate Functions
+Example - Rank Your Reps by Top Quartile of Deal Size
+Suppose that you want to see which reps close the biggest deals. (The result may be different than the sum of deal amount, if some
+reps close a lot of smaller deals). You also want the chart to display the size of actual deals, not an average of deal size. Use
+percentile_disc(.25) to look at the top quarter of the deal size for each rep.
+q = load "DTC_Opportunity_SAMPLE";
+q = group q by 'Account_Owner';
+q = foreach q generate 'Account_Owner' as 'Account_Owner', percentile_disc(0.25) within
+group (order by 'Amount' desc) as 'Amount';
+q = order q by 'Amount' desc;
+You can see that 25% of Julie Chavez's deals are bigger than $2.4 million, and 25% of Kelly Frazier's deals are bigger than $2.2 million.
+You also know that Julie closed a deal worth$2.4 million, and that number isn't an average.
+SEE ALSO:
+percentile_cont()
+Show the Top and Bottom Quartile
+regr_intercept()
+Uses two numerical fields to calculate a trend line, then returns the y-intercept value. Use this function to find out the likely value of
+field_y when field_x is zero.
+regr_intercept(field_y, field_x)
+field_y is a grouped dependent numeric expression and field_x is a grouped independent numeric expression.
+regr_intercept(field_y, field_x) uses simple linear regression to calculate the trend line. The input fields (field_y,
+field_x) must contain at least two pairs of non-null values. This function works with simple grouped values but not with cogroups.
+Example - What Is the Likely Amount Won If the Number of Activities Is Zero?
+Suppose that you have a dataset that includes the number of activities (such as meetings) and the won opportunity amount.
+85
+SAQL Reference
+Aggregate Functions
+What size of deal can you expect to win if you don't have any activities with an account? regr_intercept performs a linear analysis
+on your data then calculates the y-intercept (that is, the value of Amount Won when Number of Activities is zero).
+q = load "Data";
+q = group q by all;
+--trunc() truncates the result to two decimal places
+q = foreach q generate trunc(regr_intercept('Amount', 'NumActivities'),2) as intercept;
+The projected deal size with no activities is $15.04 million dollars.
+SEE ALSO:
+regr_slope()
+regr_slope()
+two numerical fields.
+Uses two numerical fields to calculate a trend line, then returns the slope. Use this function to learn more about the relationship between
+regr_slope(field_y, field_x)
+field_y is a grouped dependent numeric expression and field_x is a grouped independent numeric expression.
+regr_slope(field_y, field_x) uses simple linear regression to calculate the trend line. The input fields (field_y,
+field_x) must contain at least two pairs of non-null values. This function works with simple grouped values but not with cogroups.
+Example - Calculate the Relationship Between Number of Activities and Deal Amount
+Suppose that you have a dataset that includes the number of activities (such as meetings) and the won opportunity amount.
+86
+SAQL Reference
+Aggregate Functions
+How much bigger will the deal size be for each extra activity? regr_slope performs a linear analysis on your data then calculates
+the slope (that is, the increased amount you win for each extra activity).
+q = load "data/sales";
+q = group q by all;
+--trunc() truncates the result to two decimal places
+q = foreach q generate trunc(regr_slope('Amount', 'NumActivities'),2) as 'Gain per Activity';
+Based on your existing data, every extra activity that you have tends to increase the deal size by $1.45 million, on average.
+SEE ALSO:
+regr_intercept()
+Calculate the Slope of the Regression Line
+regr_r2()
+data.
+Uses two numerical fields to calculate R-squared, or goodness of fit. Use regr_r2() to understand how well the trend line fits your
+regr_r2(field_y, field_x)
+field_y is a grouped dependent numeric expression and field_x is a grouped independent numeric expression.
+regr_r2(field_y, field_x) uses simple linear regression to calculate a trend line, then calculates R-squared. If the returned
+value is small, then functions like regr_slope() and regr_intercept() are likely to return accurate results.
+The input fields (field_y, field_x) must contain at least two pairs of non-null values. This function works with simple grouped
+values but not with cogroups.
+87
+SAQL Reference
+Aggregate Functions
+Example - How Well Does the Calculated Trend Line Fit My Data
+Suppose that you have a dataset that includes the number of activities (such as meetings) and the won opportunity amount.
+You want to check the calculated trend line for 'goodness of fit' to see how accurate the results from other statistical functions are.
+q = load "regression";
+q = group q by all;
+q = foreach q generate trunc(regr_r2('Amount', 'NumActivities'),2) as 'R Squared';
+The value of R squared is 0.95.
+grouping()
+Returns 1 if null dimension values are due to higher-level aggregates (which usually means the row is a subtotal or grand total), otherwise
+returns 0.
+The grouping() function is most useful when paired with the rollup modifier on the group statement. Invoking grouping()
+lets work with subtotaled data.
+Example - Label Subtotaled Data
+Suppose that you have a dataset of opportunity information with amounts totaled by lead source and type. Calculate totals with rollup.
+Then use grouping() with a case statement to check whether a row is a total and if it is then label it as "all" values.
+q = load "opportunityData";
+--Modify the group statement with rollup to calculate subtotals of grouped measures
+q = group q by rollup('Type', 'LeadSource');
+q = order q by ('Type', 'LeadSource');
+88
+SAQL Reference
+Date Functions
+--Determine which rows are totals with grouping(), which returns 1 if a row is a total
+q = foreach q generate
+(case
+when grouping('Type') == 1 then "All Types"
+else 'Type'
+end) as 'Type',
+(case
+when grouping('LeadSource') == 1 then "All Lead Sources"
+else 'LeadSource'
+end) as 'LeadSource',
+sum('Amount') as 'sum_Amount';
+Date Functions
+Use SAQL date functions to perform time-based analysis.
+Understanding How Date Information is Uploaded to Analytics
+When you upload a date field to Analytics, it creates dimension and measure fields to contain the date and time information. You can
+use SAQL date functions to convert the dimensions and measures to dates. You can then use the dates to sort, filter, and group data in
+your SAQL queries.
+For example, suppose that you upload a dataset that contains the CloseDate date field.
+89
+SAQL Reference
+Date Functions
+During the dataflow processing, Analytics creates these fields. All the fields are dimensions, except for the epoch fields, which are
+measures.
+Field
+Description
+CloseDate
+CloseDate (Day)
+CloseDate (Hour)
+CloseDate (Minute)
+CloseDate (Month)
+CloseDate(Quarter)
+CloseDate (Second)
+CloseDate (Week)
+CloseDate_day_epoch
+CloseDate_sec_epoch
+A dimension containing the date and time. For example, 2018-02-25T00:00:03.000Z. You can’t use this
+string in a date filter. Instead, ‘cast’ it to a date type using toDate().
+Dimension containing the day in the month, for example 30.
+Dimension containing the hour, for example, 11. If the original date did not contain the hour, this field
+contains 00.
+Dimension containing the minute, for example, 59. If the original date did not contain the minute, this
+field contains 00
+Dimension containing the month, for example, 12.
+Dimension containing the quarter, for example, 4.
+Dimension containing the second, for example, 59. If the original date did not contain the second, this
+field contains 00.
+Dimension containing the week, for example, 52.
+Measure containing the UNIX epoch time, which is the number of days that have elapsed since 00:00:00,
+Thursday, 1 January 1970.
+Measure containing the Unix epoch time in seconds. Seconds epoch time is the number of seconds
+that have elapsed since 00:00:00, Thursday, 1 January 1970.
+90
+SAQL Reference
+Date Functions
+Analytics creates fields ending in _Fiscal for dates associated with a custom fiscal year. Querying dates with this field works the
+same way as it does for standard fiscal years.
+daysBetween()
+date_diff()
+Returns the number of days between two dates. This function is only valid in a foreach statement.
+Returns the amount of time between two dates. This function is only valid in a foreach statement.
+now()
+Returns the current datetime in UTC. This function is only valid in a foreach statement.
+date()
+Returns a date that can be used in a filter. This function takes a year, a month, and a day dimension as input.
+toDate()
+Converts a string or Unix epoch seconds to a date. Returns a date that can be used in another function such as daysBetween(
+). The returned date cannot be used in a filter.
+date_to_epoch()
+Converts a date to Unix epoch seconds.
+date_to_string()
+Converts a date to a string.
+toString()
+Converts a date to a string.
+Time-Based Filtering
+SAQL gives you many ways to specify the range of dates that you want to look at, such as "all ops from the last fiscal quarter" or "all
+cases from the last seven days".
+Day in the Week, Month, Quarter, or Year
+Returns the day in the specified time period for a given date. These functions answer questions like "do we close more deals at the
+beginning or end of a quarter?".
+First Day in the Week, Month, Quarter, or Year
+Returns the date of the first day in the specified week, month, quarter, or year.
+Last Day in the Week, Month, Quarter, or Year
+Returns the date of the last day in the specified week, month, quarter, or year.
+Number of Days in the Month, Quarter, or Year
+Returns the number of days in the month, quarter, or year for the specified date.
+Date Formats
+For Date fields, specify the format of the date by using one of the following supported formats. Dates must match the format exactly
+and can't have any extra text.
+SEE ALSO:
+Analyze Your Data Over Time
+daysBetween()
+Returns the number of days between two dates. This function is only valid in a foreach statement.
+91
+SAQL Reference
+Date Functions
+Syntax
+daysBetween(date1, date2)
+date1 specifies the start date.
+date2 specifies the end date.
+Usage
+If date1 is after date2, the number of days returned is a negative number.
+You must use daysBetween() in a foreach() statement. You cannot use this function in group by, order by, or filter
+statements.
+Example
+How many days did it take to close each opportunity? Use daysBetween().
+q = load "DTC_Opportunity";
+q = foreach q generate daysBetween(toDate(CreatedDate_sec_epoch), toDate(CloseDate_sec_epoch)
+) as 'Days to Close';
+q = order q by 'Days to Close';
+Example
+How long has each opportunity been open for, in days? Use daysBetween() and now().
+q = load "DTC_Opportunity";
+q = filter q by 'Closed' == "false";
+q = foreach q generate daysBetween(toDate(CreatedDate_sec_epoch), now() ) as 'Days to
+Close';
+q = order q by 'Days to Close';
+SEE ALSO:
+date_diff()
+Calculate How Long Activities Take
+daysBetween(date1, date2)
+date_diff()
+Returns the amount of time between two dates. This function is only valid in a foreach statement.
+Syntax
+date_diff(datepart,startdate,enddate)
+datepart specifies how you want to measure the time interval:
+• year
+• month
+• quarter
+92
+SAQL Reference
+Date Functions
+• day
+• week
+• hour
+• minute
+• second
+startdate specifies the start date.
+enddate specifies the end date.
+Usage
+Returns the time difference between two dates in years, months, or days. For example,
+date_diff("year", toDate("31-12-2015", "dd-MM-yyyy"), toDate("1-1-2016", "dd-MM-yyyy"))
+returns 1.
+If startdate is after enddate, the difference is returned as a negative number.
+You must use date_diff() in a foreach() statement. You cannot use this function in group by, order by, or filter
+statements.
+The maximum amount of time returned is 9,223,372,036,854,775,807 nanoseconds. This maximum amount of time can be measured
+in any supported datepart value (nanoseconds aren't supported). For example, in days, the maximum amount of time returned is
+106,751.99 days (excluding leap seconds).
+Example - How Many Weeks Did Each Opportunity Take to Close?
+Use date_diff() with datepart = week to calculate how long, in weeks, it took to close each opportunity.
+q = load "DTC_Opportunity";
+q = foreach q generate date_diff("week", toDate(CreatedDate_sec_epoch),
+toDate(CloseDate_sec_epoch) ) as 'Weeks to Close';
+q = order q by 'Weeks to Close';
+Example - How Long Ago Was an Opportunity Closed?
+Use date_diff() with datepart = month to calculate how many months have passed since each opportunity closed. Use
+now() as the end date.
+q = load "DTC_Opportunity";
+q = foreach q generate date_diff("month", toDate(CloseDate_sec_epoch), now() ) as 'Months
+Since Close';
+q = order q by 'Months Since Close';
+SEE ALSO:
+daysBetween()
+now()
+Calculate How Long Activities Take
+date_diff(datepart, startdate, enddate)
+93
+SAQL Reference
+Date Functions
+now()
+Returns the current datetime in UTC. This function is only valid in a foreach statement.
+Syntax
+now()
+Usage
+This function is commonly used with daysBetween(), date_diff(), and date_to_string().
+Example
+How long ago was each opportunity created, in weeks? Use date_diff(), datepart = week, and now().
+q = load "DTC_Opportunity";
+q = foreach q generate date_diff("week", toDate(CreatedDate_sec_epoch), now() ) as 'Weeks
+to Close';
+q = order q by 'Weeks to Close';
+Example
+What is the date today? Use now() inside date_to_string().
+q = load "DTC_Opportunity";
+-- Notice how the ' character is escaped with the \ character in 'Today\'s
+q = foreach q generate date_to_string(now(), "yyyy-MM-dd") as 'Today\'s Date';
+SEE ALSO:
+date_diff()
+now()
+date()
+Returns a date that can be used in a filter. This function takes a year, a month, and a day dimension as input.
+Syntax
+date(year, month, day)
+Usage
+Specify the year, month, and day. Each input value must be a date dimension type.
+date('OrderDate_Year', 'OrderDate_Month', 'OrderDate_Day')
+94
+SAQL Reference
+Date Functions
+Example
+Which opportunities have your reps closed in the past 30 days? Use date() to select records with a close date in the past 30 days.
+q = load "DTC_Opportunity";
+-- use date() to create a date that you can use in a filter
+-- 'CloseDate_Year', 'CloseDate_Month', and 'CloseDate_Day' are date fields in the
+DTC_Opportunity data set
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["30 days
+ago".."current day"];
+q = group q by 'Account_Owner';
+q = foreach q generate 'Account_Owner' as 'Account_Owner', sum('Amount') as 'sum_Amount';
+q = order q by 'Account_Owner' asc;
+SEE ALSO:
+toDate()
+Time-Based Filtering
+toDate()
+Converts a string or Unix epoch seconds to a date. Returns a date that can be used in another function such as daysBetween().
+The returned date cannot be used in a filter.
+Syntax
+toDate(string, [”format"])
+If a format argument isn’t provided, the function uses the format yyyy-MM-dd HH:mm:ss. format is only valid for converting
+date string values.
+For the allowed formats, see Date Formats.
+toDate(epoch_seconds)
+The format argument is not valid for converting epoch_seconds numerical values.
+Note: Be sure to use the sec_epoch field and not the day_epoch field.
+Example: Display the Exact Date an Opportunity Opened
+Suppose that you want to see the exact day that an opportunity opened. Use toDate() with CreatedDate_Year,
+CreatedDate_Month, CreatedDate_Day, and an accepted date format. This query will resemble the example below:
+q = load "oppty";
+q = foreach q generate toDate(CreatedDate_Year + "/" + CreatedDate_Month + "/" +
+CreatedDate_Day, "yyyy/MM/dd") as CreatedDate;
+q = order q by 'CreatedDate';
+Example: Display the Number of Days Since an Opportunity Opened
+Suppose that you have an opportunity dataset with the account name and the epoch seconds fields:
+95
+SAQL Reference
+Date Functions
+You want to see how many days ago an opportunity was opened. Use daysBetween() and now(). Use toDate() to convert
+the order date epoch seconds to a date format that can be passed to daysBetween().
+q = load "OpsDates1";
+q = foreach q generate Account, daysBetween(toDate(OrderDate_sec_epoch), now()) as
+'daysOpened';
+The resulting data stream displays the number of days since the opportunity was opened.
+Note: Because dates are sorted lexicographically, changing the date format also changes the sort order.
+SEE ALSO:
+date()
+date_to_epoch()
+Converts a date to Unix epoch seconds.
+Syntax
+date_to_epoch(date)
+Usage
+This function must take a toDate() or now() function as its first argument.
+Example
+q = foreach q generate date_to_epoch(toDate(”yyyy-mm-dd hh:mm:ss”)) as ds1;
+date_to_string()
+Converts a date to a string.
+96
+SAQL Reference
+Date Functions
+Syntax
+date_to_string(date, formatString)
+For the allowed formats, see Date Formats.
+Note: This function is identical to toString().
+Usage
+This function must take a toDate() or now() function as its first argument.
+Example
+q = foreach q generate date_to_string(now(), "yyyy-MM-dd HH:mm:ss") as ds1;
+toString()
+Converts a date to a string.
+Syntax
+toString(date, formatString)
+For the allowed formats, see Date Formats.
+Note: This function is identical to date_to_string().
+Usage
+This function must take a toDate() or now() function as its first argument.
+Example
+q = foreach q generate toString(now(), "yyyy-MM-dd HH:mm:ss") as ds1;
+Time-Based Filtering
+SAQL gives you many ways to specify the range of dates that you want to look at, such as "all ops from the last fiscal quarter" or "all cases
+from the last seven days".
+Using Date Ranges in Filters
+Use these filters to specify the date range you want to look at:
+• Fixed date range, for example between August 1, 2018 and June 2, 2017
+• Relative date range, for example between two years ago and last month
+• Open-ended ranges, for example before 04/2/2018
+• Add and subtract dates, for example all records from three months before yesterday
+97
+SAQL Reference
+Date Functions
+Example: Display Opportunities Closed This Month
+Suppose that you want to see which opportunities closed this month. Your data includes the account name, the close date fields, and
+the epoch seconds field.
+Use date() to generate the close date in date format. Then use relative date ranges to filter opportunities closed in the current month.
+q = load "OpsDates1";
+q = filter q by date(’CloseDate_Year’, ‘CloseDate_Month’, ‘CloseDate_Day’) in ["current
+month" .. "current month"];
+q = foreach q generate Account;
+If the query is run in May 2018, the resulting data stream contains one entry:
+To add the close date in a readable format, use toDate().
+q = load "OpsDates1";
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["current
+month" .. "current month"];
+q = foreach q generate Account, toDate('CloseDate_sec_epoch') as 'Close Date';
+The resulting data stream includes the full date and time of the close date.
+You can also display just the month and day of the close date.
+q = load "OpsDates1";
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["current
+month" .. "current month"];
+q = foreach q generate Account, 'CloseDate_Month' + "/" + 'CloseDate_Day' as 'Close Date';
+The resulting data stream contains the month and day of the close date.
+98
+SAQL Reference
+Date Functions
+Fixed Date Ranges
+Use dateRange() to specify a fixed range of dates in a filter:
+dateRange(startArray_y_m_d, endArray_y_m_d)
+startArray_y_m_d is an array that specifies the start date
+endArray_y_m_d is an array that specifies the end date
+For example, return all records between October 2, 2014 and August 16, 2016:
+q = filter q by date('CreatedDate_Year', 'CreatedDate_Month', 'CreatedDate_Day') in
+[dateRange([2014,10,2], [2016,8,16])];
+Relative Date Ranges
+Use relative date ranges to answer questions such as "how many opportunities did each rep close in the past fiscal quarter"? To specify
+a relative date range, use the in operator on an array with relative date keywords:
+in ["relative_date_keyword_1".."relative_date_keyword_2"]
+For example, return all records from one year ago up to and including the current year.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["1 year
+ago".."current year"];
+Return all records from two quarters ago, up to and including two quarters from now.
+q = filter q ago".."2 quarters ahead"];
+by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["2 quarters
+Return all records from the last two fiscal years, up to and including today.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["2
+fiscal_years ago".."current day"];
+Use these relative date keywords:
+• current day
+• n day(s) ago
+• n day(s) ahead
+• current week
+• n week(s) ago
+• n week(s) ahead
+• current month
+• n month(s) ago
+• n month(s) ahead
+• current quarter
+• n quarter(s) ago
+• n quarter(s) ahead
+• current fiscal_quarter
+• n fiscal_quarter(s) ago
+99
+SAQL Reference
+Date Functions
+• n fiscal_quarter(s) ahead
+• current year
+• n year(s) ago
+• n year(s) ahead
+• current fiscal_year
+• n fiscal_year(s) ago
+• n fiscal_year(s) ahead
+Note: Only standard fiscal periods are supported. See "About Fiscal Years" in Salesforce Help.
+Open-Ended Date Ranges
+Use open-ended date ranges for queries such as "List all opportunities closed after 12/23/2014". To specify an open-ended date range,
+use the in operator on an array with a relative date keyword and a notation for up to or including:
+• in [.."relative_date_keyword"] (up to)
+• in ["relative_date_keyword"..] (up to and including)
+For example, return all records up to and including the current month.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in [.."1 year
+ago"];
+You can also specify a closed relative date range. For example, return all records from up to and including one year ago.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["3 years
+ago"..];
+Add and Subtract Dates
+You can add and subtract dates using the relative date keywords. To specify the date range, use the in operator on an array with a
+relative date keyword, a notation for up to, including, or a range, and the addition or subtraction operators with a time period:
+• in [.."relative_date_keyword +/- time_period"] (up to)
+• in ["relative_date_keyword +/- time_period"..] (up to and including)
+• in ["relative_date_keyword_1".."relative_date_keyword_2 +/- time_period"] (range)
+For example, return all records from one year ago, up to and including today.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["current
+day - 1 year"..];
+Return all records from today up to two years and three months from now.
+q = filter q by date('CloseDate_Year', 'CloseDate_Month', 'CloseDate_Day') in ["current
+day".."2 years ahead + 3 months"];
+SEE ALSO:
+date()
+Display the Opportunities Closed This Month
+100
+SAQL Reference
+Date Functions
+Day in the Week, Month, Quarter, or Year
+Returns the day in the specified time period for a given date. These functions answer questions like "do we close more deals at the
+beginning or end of a quarter?".
+Example
+Suppose that you want to see on which day of the week most deals are closed. Use day_in_week(date).
+q = load "Data";
+q = foreach q generate day_in_week(toDate('CloseDate_sec_epoch')) as 'Day In Week Closed';
+q = group q by 'Day In Week Closed';
+q = foreach q generate 'Day In Week Closed' as 'Day In Week Closed', count() as 'count';
+q = order q by 'count' desc;
+The resulting data displays the number of opportunities closed, grouped by the day of the week that the opportunities were closed on.
+It looks like most opportunities are closed on Thursday (day 5).
+day_in_week(date)
+Returns an integer representing the day of the week for a specific date, where 1 = Sunday, 2 = Monday, etc.
+q = foreach q generate day_in_week(toDate('CloseDate_sec_epoch')) as 'Day In Week Closed';
+day_in_month(date)
+Returns an integer representing the day of the month for a specific date.
+q = foreach q generate day_in_month(toDate('CloseDate_sec_epoch')) as 'Day in Month Closed';
+101
+SAQL Reference
+Date Functions
+day_in_quarter(date)
+Returns an integer representing the day of the quarter for a specific date.
+q = foreach q generate day_in_quarter(toDate('CloseDate_sec_epoch')) as 'Day in Quarter
+Closed';
+day_in_year(date)
+Returns an integer representing the day of the year for a specific date.
+q = foreach q generate day_in_year(toDate('CloseDate_sec_epoch')) as 'Day in Year Closed';
+First Day in the Week, Month, Quarter, or Year
+Returns the date of the first day in the specified week, month, quarter, or year.
+Usage
+Use these functions in a foreach() statement. You cannot use them in group by, order by, or filter statements.
+Use the functions whose names begin with week, month, quarter, and year with standard calendar year dates. Use the functions
+whose names begin with fiscal with fiscal year dates.
+Note: You can't use fiscal date functions in recipes and dataflow transformations.
+week_first_day(date)
+Returns the date of the first day of the week for the specified date.
+q = foreach q generate week_first_day(toDate('CloseDate_sec_epoch')) as 'Week First Day';
+Note: This function always counts the firstDayOfWeek as 0 (Sunday). It overrides the firstDayOfWeek parameter
+for sfdcDigestTransformation and CSV uploads.
+fiscal_week_first_day(date)
+Returns the fiscal date of the first day of the week for the specified date.
+q = foreach q generate fiscal_week_first_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Week First Day';
+Note: This function respects the firstDayOfWeek parameter for sfdcDigestTransformation and CSV uploads.
+The default value is 0 (Sunday).
+month_first_day(date)
+Returns the date of the first day of the month for the specified date.
+q = foreach q generate month_first_day(toDate('CloseDate_sec_epoch')) as 'Month First Day';
+102
+SAQL Reference
+Date Functions
+fiscal_month_first_day(date)
+Returns the fiscal date of the first day of the month for the specified date.
+q = foreach q generate fiscal_month_first_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Month First Day';
+quarter_first_day(date)
+Returns the date of the first day of the quarter for the specified date.
+q = foreach q generate quarter_first_day(toDate('CloseDate_sec_epoch')) as 'Quarter First
+Day';
+fiscal_quarter_first_day(date)
+Returns the fiscal date of the first day of the quarter for the specified date.
+q = foreach q generate fiscal_quarter_first_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Quarter First Day';
+year_first_day(date)
+Returns the date of the first day of the year for the specified date.
+q = foreach q generate year_first_day(toDate('CloseDate_sec_epoch')) as 'Year First day';
+Note: This function always returns 1st January.
+fiscal_year_first_day(date)
+Returns the fiscal date of the first day of the year for the specified date.
+q = foreach q generate fiscal_year_first_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Year First Day';
+SEE ALSO:
+https://help.salesforce.com/s/articleView?id=bi_integrate_date_formats_and_fiscal_dates.htm
+Last Day in the Week, Month, Quarter, or Year
+Returns the date of the last day in the specified week, month, quarter, or year.
+Usage
+Use these functions in a foreach() statement. You cannot use them in group by, order by, or filter statements.
+Use the functions whose names begin with week, month, quarter, and year with standard calendar year dates. Use the functions
+whose names begin with fiscal with fiscal year dates.
+Note: You can't use fiscal date functions in recipes and dataflow transformations.
+103
+SAQL Reference
+Date Functions
+week_last_day(date)
+Returns the date of the last day of the week for the specified date.
+Note: This function always counts the firstDayOfWeek as 0 (Sunday). It overrides the firstDayOfWeek parameter
+for sfdcDigestTransformation and CSV uploads.
+q = foreach q generate week_last_day(toDate('CloseDate_sec_epoch')) as 'Week Last Day';
+fiscal_week_last_day(date)
+Returns the fiscal date of the last day of the week for the specified date.
+Note: This function respects the firstDayOfWeek parameter for sfdcDigestTransformation and CSV uploads.
+The default value is 0 (Sunday).
+q = foreach q generate fiscal_week_last_day(toDate('CloseDate_sec_epoch')) as 'Fiscal Week
+Last Day';
+month_last_day(date)
+Returns the date of the last day of the month for the specified date.
+q = foreach q generate month_last_day(toDate('CloseDate_sec_epoch')) as 'Month Last Day';
+fiscal_month_last_day(date)
+Returns the fiscal date of the last day of the month for the specified date.
+q = foreach q generate fiscal_month_last_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Month Last Day';
+quarter_last_day(date)
+Returns the date of the last day of the quarter for the specified date.
+q = foreach q generate quarter_last_day(toDate('CloseDate_sec_epoch')) as 'Quarter Last
+Day';
+fiscal_quarter_last_day(date)
+Returns the fiscal date of the last day of the quarter for the specified date.
+q = foreach q generate fiscal_quarter_last_day(toDate('CloseDate_sec_epoch')) as 'Fiscal
+Quarter Last Day';
+year_last_day(date)
+Returns the date of the last day of the year for the specified date.
+q = foreach q generate year_last_day(toDate('CloseDate_sec_epoch')) as 'Year Last Day';
+Note: This function always returns 31st December. You can use it to find the number of days to the year end.
+104
+SAQL Reference
+Date Functions
+fiscal_year_last_day(date)
+Returns the fiscal date of the last day of the year for the specified date.
+q = foreach q generate fiscal_year_last_day(toDate('CloseDate_sec_epoch')) as 'Fiscal Year
+Last Day';
+SEE ALSO:
+https://help.salesforce.com/s/articleView?id=bi_integrate_date_formats_and_fiscal_dates.htm
+Number of Days in the Month, Quarter, or Year
+Returns the number of days in the month, quarter, or year for the specified date.
+month_days(date)
+Returns the number of days in the month for the specified date.
+q = foreach q generate month_days(toDate('CloseDate_sec_epoch')) as 'Billing Days In Month';
+quarter_days(date)
+Returns the number of days in the quarter for the specified date.
+q = foreach q generate quarter_days(toDate('CloseDate_sec_epoch')) as 'Billing Days In
+Quarter;
+year_days(date)
+Returns the number of days in the year for the specified date.
+q = foreach q generate year_days(toDate('CloseDate_sec_epoch')) as 'Billing Days In Year;
+Date Formats
+For Date fields, specify the format of the date by using one of the following supported formats. Dates must match the format exactly
+and can't have any extra text.
+Note: h:m:s date parts will fail.
+The timestamp part of each date format is optional.
+The Quarter date format isn’t supported.
+The date formats listed here are the two-digit versions for date fields that use leading zeros; for example, 03/06/14 09:01:06
+AM. If a date field doesn't have leading zeros, use the one-digit version of the format. For example, use the format M/d/yy
+a for date values such as 3/6/14 9:1:26 AM. If you use a two-digit format for a field, rows containing values with one-digit
+Format
+Sample Value
+yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+yy-MM-dd'T'HH:mm:ss.SSS'Z'
+2014-04-29T16:53:34.000Z
+14-04-29T16:53:34.000Z
+105
+SAQL Reference
+Date Functions
+Format
+Sample Value
+yyyy-MM-dd'T'HH:mm:ss'Z'
+yy-MM-dd'T'HH:mm:ss'Z'
+yyyy-MM-dd HH:mm:ss
+yy-MM-dd HH:mm:ss
+dd.MM.yyyy HH:mm:ss
+dd.MM.yy HH:mm:ss
+dd/MM/yyyy HH:mm:ss
+dd/MM/yy HH:mm:ss
+dd/MM/yyyy hh:mm:ss a
+dd/MM/yy hh:mm:ss a
+dd-MM-yyyy HH:mm:ss
+dd-MM-yy HH:mm:ss
+dd-MM-yyyy hh:mm:ss a
+dd-MM-yy hh:mm:ss a
+MM/dd/yyyy hh:mm:ss a
+MM/dd/yy hh:mm:ss a
+MM-dd-yyyy hh:mm:ss a
+MM-dd-yy hh:mm:ss a
+HH:mm:ss dd/MM/yyyy
+HH:mm:ss dd/MM/yy
+2014-04-29T16:53:34Z
+14-04-29T16:53:34Z
+2014-06-03 11:31:45
+14-06-03 11:31:45
+03.06.2014 11:31:45
+03.06.14 11:31:45
+03/06/2014 11:31:45
+03/06/14 11:31:45
+03/06/2014 11:31:45 AM
+03/06/14 11:31:45 AM
+03-06-2014 11:31:45
+03-06-14 11:31:45
+03-06-2014 11:31:45 AM
+03-06-14 11:31:45 AM
+06/03/2014 11:31:45 AM
+06/03/14 11:31:45 AM
+06-03-2014 11:31:45 AM
+06-03-14 11:31:45 AM
+11:31:45 03/06/2014
+11:31:45 03/06/14
+These formats use the following symbols:
+Symbol
+Meaning
+yyyy or yy
+MM
+M
+dd
+d
+'T'
+HH
+Four-digit year (yyyy) or two-digit year (yy)
+Two-digit month (01–12)
+One-digit month when month less than 10 (1–12)
+Two-digit day (01–31)
+One-digit day when day less than 10 (1–31)
+A separator that indicates that time of day follows
+Two-digit hour (00–23)
+106
+SAQL Reference
+Time Zone Date Functions
+Symbol
+Meaning
+H
+mm
+m
+ss
+s
+SSS
+'Z'
+One-digit hour when hour less than 10 (0–23)
+Two-digit minute (00–59)
+One-digit minute when minute less than 10 (0–59)
+Two-digit second (00–59)
+One-digit second when second less than 10 (0–59)
+Optional three-digit milliseconds (000–999)
+The reference UTC time zone
+Time Zone Date Functions
+When you enable the time zone feature, you can use the fields of the DateTime and DateOnly type to access date information
+in the specified time zone. For example, if a user in New York runs a SAQL query, they see date information displayed in Eastern Standard
+time.
+Note: In SAQL, the DateOnly type displays the date with an empty timestamp, for example, “2014-12-31 00:00:00.” The
+inclusion of the timestamp is a limitation of the beta release.
+Use Time Zone-Enabled Dates in SAQL Projections
+You can project an exact date such as 2017-3-31 23:59:59 or part of a date such as year, month, or day.
+Access Date Functions with Time Zone Enabled
+Use these functions to get the day, week, year, and other parts of DateTime or DateOnly fields. The return values are numbers.
+Group By Date
+You can group the result of your SAQL query by DateTime and DateOnly fields.
+Order By Date
+You can order the result of your SAQL queries by DateTime or DateOnly.
+Filter By Date
+You can filter results by DateTime and DateOnly fields. Filters can include exact dates, specific date ranges, or relative date
+ranges.
+Calculate the Time Between Two Dates
+Use date_diff() and daysBetween() to calculate the time between two dates.
+Convert Dates to and from Strings
+You can convert dates to strings.
+Handle Null Dates
+Use is not null to filter out null dates.
+Determine the Day in the Week, Month, Quarter, or Year
+These functions return the day of the week, month, quarter, or year, the date of the last day of the week, month, quarter, or year,
+and the number of days in the quarter or year.
+107
+SAQL Reference
+Time Zone Date Functions
+Use Time Zone-Enabled Dates in SAQL Projections
+You can project an exact date such as 2017-3-31 23:59:59 or part of a date such as year, month, or day.
+Project the entire CloseDate field to see the CloseDate field for a record. CloseDate can be a DateTime or DateOnly
+type.
+q = foreach q generate CloseDate as 'Close Date';
+Project the year, month, day, and epoch date for a record.
+q = foreach q generate year('CloseDate') as 'Year', month('CloseDate') as 'Month',
+day('CloseDate') as 'Day', epochSecond('CloseDate') as 'Seconds Epoch';
+Access Date Functions with Time Zone Enabled
+Use these functions to get the day, week, year, and other parts of DateTime or DateOnly fields. The return values are numbers.
+To enable Time Zone for your org, follow the directions in Enable Custom Time Zones.
+For the allowed formats, see Date Formats.
+• year (DateTime | DateOnly)
+• quarter (DateTime | DateOnly)
+• month (DateTime | DateOnly)
+• week (DateTime | DateOnly)
+• day (DateTime | DateOnly)
+• hour (DateTime)
+• minute (DateTime)
+• second (DateTime)
+• fiscalYear (DateTime | DateOnly)
+• fiscalQuarter (DateTime | DateOnly)
+• fiscalMonth (DateTime | DateOnly)
+• fiscalWeek (DateTime | DateOnly)
+• epochDay (DateTime | DateOnly)
+• epochSecond( DateTime | DateOnly)
+Examples
+DateOnly type.
+Use year(), month(), and day() to project the year, month, and day for each record. CloseDate can be a DateTime or
+q = foreach q generate year('CloseDate') as "Year", month('CloseDate') as "Month",
+day('CloseDate') as "Day";
+Use month() to find results that closed in December.
+q = filter q by month('CloseDate') == 12;
+108
+SAQL Reference
+Time Zone Date Functions
+Use month() to order opportunities by month of close date.
+q = order q by month('CloseDate');
+For even more granularity, add hour(), minute(), and second() to project the time for each record. These functions can only
+be used with a DateTime type.
+q = foreach q generate year('CloseDate') as "Year", month('CloseDate') as "Month",
+day('CloseDate') as "Day",
+hour('CloseDate') as "Hour", minute('CloseDate') as "Minute", second('CloseDate')
+as "Second";
+Use hour() to order opportunities by hour of close date.
+q = order q by hour('CloseDate');
+Group By Date
+You can group the result of your SAQL query by DateTime and DateOnly fields.
+q = group q by 'CloseDate';
+CloseDate can be DateTime or DateOnly. You can also group by date parts. For example, you can group orders by year and
+then month.
+q = group q by year('OrderDate'), month('OrderDate');
+You can use the DateTime or DateOnly field to cogroup two datasets. For example, you can group two datasets by year.
+a = load dataset1;
+b = load dataset2;
+c = group a by year('CloseDate'), b by year('CloseDate');
+e = foreach c generate year(a.'CloseDate') as 'CloseDate A', year(b.'CloseDate') as
+'Close Date B', sum(a.Amount) as 'Sum of Amount';
+Order By Date
+You can order the result of your SAQL queries by DateTime or DateOnly.
+Use the date part to order by date before the projection. For example, you can order results by the year that they closed.
+q = order q by year('CloseDate');
+To order by date after the projection, use the field you created by projecting a date part. For example, you can order results by the year
+that they closed.
+q = foreach q generate year('CloseDate') as "Year Closed";
+q = order q by 'Year Closed';
+Filter By Date
+You can filter results by DateTime and DateOnly fields. Filters can include exact dates, specific date ranges, or relative date ranges.
+Type of Filter
+Example
+exact date range
+q = filter q by year('CloseDate')=='2018';
+109
+SAQL Reference
+Time Zone Date Functions
+Type of Filter
+Example
+specific date range
+relative date range
+q = filter q by year('CloseDate') in
+[2017..2018];
+See the examples below.
+Examples of relative date range filters:
+q = filter q by CloseDate in ["last 2 years"];
+q = filter CloseDate in ["current fiscal_year".."current day"];
+q = filter CloseDate in ["2 fiscal_years ago".."current day"];
+Note: Filter with binary comparison operators ==
+, !=, <, >, <=, and >= only after your query’s foreach statement,
+post-projection. For example, include the filter q = filter q by CloseDate >= "2014-01-01" post-projection.
+If you include it pre-projection, the query throws an error. The inability to include filters that use these comparison operators
+pre-projection is a limitation of the beta release.
+You can filter pre- and post-projection with the IN comparison operator. The like and matches operators are not supported
+for time zone-enabled DateTime and DateOnly fields.
+You can use these relative date keywords:
+• current day
+• n day(s) ago
+• n day(s) ahead
+• current week
+• n week(s) ago
+• n week(s) ahead
+• current month
+• n month(s) ago
+• n month(s) ahead
+• current quarter
+• n quarter(s) ago
+• n quarter(s) ahead
+• current fiscal_quarter
+• n fiscal_quarter(s) ago
+• n fiscal_quarter(s) ahead
+• current year
+• n year(s) ago
+• n year(s) ahead
+• current fiscal_year
+• n fiscal_year(s) ago
+110
+SAQL Reference
+Time Zone Date Functions
+• n fiscal_year(s) ago
+SEE ALSO:
+filter
+Comparison Operators
+Calculate the Time Between Two Dates
+Use date_diff() and daysBetween() to calculate the time between two dates.
+Use now() to get the current time. You can use these functions with DateTime, DateOnly, or Date types.
+date_diff(datepart, startdate, enddate)
+Returns an integer representing the interval that has elapsed between two dates.
+daysBetween(date1, date2)
+Returns the number of days between two dates as an integer.
+now()
+Returns current datetime in the specified time zone. This function is valid only in a foreach statement.
+date_diff(datepart, startdate, enddate)
+Returns an integer representing the interval that has elapsed between two dates.
+datepart
+The part of the date to use when calculating the difference. Allowed
+values are:
+• year
+• month
+• quarter
+• day
+• week
+• hour
+• minute
+• second
+startdate
+enddate
+The start date of the interval.
+The end date of the interval.
+The difference between two dates is calculated based on the difference in the indicated date parts. For example, the year difference
+between two dates is calculated by subtracting the year part of startdate from the year part of enddate.
+Suppose OrderDate and ShipDate are DateOnly types. The order date is 31-1-2017 and the ship date is 1-2-2018.
+The year difference between the order date and ship date is 1.
+date_diff("year", 'OrderDate' 'ShipDate');
+111
+SAQL Reference
+Time Zone Date Functions
+The month difference between the order date and ship date is 2.
+date_diff("month", 'OrderDate' 'ShipDate');
+If startdate is after enddate, the result is a negative integer.
+SEE ALSO:
+date_diff()
+daysBetween(date1, date2)
+Returns the number of days between two dates as an integer.
+For example, display the number of days to close a deal. OpenDate and CloseDate fields can be DateTime or DateOnly.
+q = foreach q generate daysBetween('OpenDate','CloseDate') as "Days to Close";
+SEE ALSO:
+daysBetween()
+now()
+Returns current datetime in the specified time zone. This function is valid only in a foreach statement.
+Display the number of days an account is opened.
+q = foreach q generate Account, daysBetween('OrderDate', now()) as "daysOpened";
+SEE ALSO:
+now()
+Convert Dates to and from Strings
+You can convert dates to strings.
+date_to_string(DateTime | DateOnly, format)
+Converts a date to a string.
+toDateTime(epoch)
+Converts an epoch day to a DateTime type.
+toDateTime(string, format)
+Converts a date in string format to a DateTime type. “format” specifies the date format and can be any valid date format.
+toDateOnly(epoch)
+Converts an epoch to a DateOnly type.
+toDateOnly(string, format)
+Converts a date in string format to a DateOnly type. format specifies the date format and can be any valid date format.
+112
+SAQL Reference
+Time Zone Date Functions
+date_to_string(DateTime | DateOnly, format)
+Converts a date to a string.
+This function takes a DateTime, DateOnly, or now() as its first argument. For the allowed formats, see the Date Formats section
+in Date Formats.
+Use date_to_string() to display the close date for your opportunities in the format yyyy-MM-dd.. CloseDate must be
+a DateTime or DateOnly type.
+q = foreach q generate date_to_string('CloseDate', "yyyy-MM-dd") as 'Close Date';
+If CloseDate is a Date type, convert it to a DateOnly type with toDate().
+q = foreach q generate date_to_string(toDate('CloseDate', "yyyy-MM-dd"), "yyyy-MM-dd") as
+'Close Date';
+toDateTime(epoch)
+Converts an epoch day to a DateTime type.
+Note: function.
+You can only use this function when the time zone feature is enabled. If the time zone feature is disabled, use the toDate()
+q = foreach q generate toDateTime(epoch) as "DateTime";
+The format argument isn’t valid for converting epoch numerical values. It’s only valid for converting date string values.
+toDateTime(string, format)
+Converts a date in string format to a DateTime type. “format” specifies the date format and can be any valid date format.
+q = foreach q generate toDateTime('CloseDate',"yyyy/MM/dd") as DateTime;
+For the allowed formats, see Date Formats.
+If a format argument isn’t provided, the function uses the format yyyy-MM-dd HH:mm:ss. format is only valid for converting
+date string values. It isn’t valid for converting epoch numerical values.
+toDateOnly(epoch)
+Converts an epoch to a DateOnly type.
+q = foreach q generate toDateOnly(epoch) as "DateTime";
+toDateOnly(string, format)
+Converts a date in string format to a DateOnly type. format specifies the date format and can be any valid date format.
+Note: function.
+You can only use this function when the time zone feature is enabled. If the time zone feature is disabled, use the toDate()
+q = foreach q generate toDateOnly('CloseDate',"yyyy/MM/dd") as DateTime;
+113
+SAQL Reference
+Time Zone Date Functions
+Handle Null Dates
+Use is not null to filter out null dates.
+q = filter q by 'CloseDate' is not null;
+q = foreach q generate 'CloseDate';
+Projecting null values does not cause an error. For example, this Date Closed field is empty, but no error occurs.
+q = filter q by year('CloseDate') is null;
+q = foreach q generate year('CloseDate') as "Date Closed";
+Determine the Day in the Week, Month, Quarter, or Year
+These functions return the day of the week, month, quarter, or year, the date of the last day of the week, month, quarter, or year, and
+the number of days in the quarter or year.
+day_in_week(date)
+Returns an integer representing the day of the week for a specific date. 1 = Sunday, 2 = Monday and so on.
+day_in_month(date)
+Returns an integer representing the day of the month for a specific date.
+day_in_quarter(date)
+Returns an integer representing the day of the quarter for a specific date.
+day_in_year(date)
+Returns an integer representing the day of the year for a specific date.
+week_last_day(date)
+Returns the date of the last day of the week for a specific date.
+year_last_day(date)
+Returns the date of the last day of the year for a specific date.
+quarter_last_day(date)
+Returns the date of the last day of the quarter for a specific date.
+month_days(date)
+Returns the number of days in the month for a specific date.
+quarter_days(date)
+Returns the number of days in the quarter for a specific date.
+year_days(date)
+Returns the number of days in the year for a specific date.
+day_in_week(date)
+Returns an integer representing the day of the week for a specific date. 1 = Sunday, 2 = Monday and so on.
+q = foreach q generate day_in_week('OrderDate') as "Day in Week";
+114
+SAQL Reference
+Time Zone Date Functions
+day_in_month(date)
+Returns an integer representing the day of the month for a specific date.
+q = foreach q generate day_in_month('OrderDate') as "Day in Month";
+day_in_quarter(date)
+Returns an integer representing the day of the quarter for a specific date.
+q = foreach q generate day_in_quarter('OrderDate') as "Day in Quarter";
+day_in_year(date)
+Returns an integer representing the day of the year for a specific date.
+q = foreach q generate day_in_year('OrderDate') as "Day in Year";
+week_last_day(date)
+Returns the date of the last day of the week for a specific date.
+q = foreach q generate week_last_day('BillDate') as "Week Last Day";
+year_last_day(date)
+Returns the date of the last day of the year for a specific date.
+q = foreach q generate year_last_day('BillDate') as "Year Last Day";
+Note: for use in a specific locale.
+This function always returns December 31. It’s included for uses such as finding the number of days to the year end and
+quarter_last_day(date)
+Returns the date of the last day of the quarter for a specific date.
+q = foreach q generate quarter_last_day('BillDate') as "Quarter Last Day";
+month_days(date)
+Returns the number of days in the month for a specific date.
+q = foreach q generate month_days(BillDate) as "Days in Billing Month";
+quarter_days(date)
+Returns the number of days in the quarter for a specific date.
+q = foreach q generate quarter_days(BillDate) as "Days in Billing Quarter";
+115
+SAQL Reference
+Work with Custom Fiscal Year Data
+year_days(date)
+Returns the number of days in the year for a specific date.
+q = foreach q generate year_days(BillDate) as "Days in Billing Year";
+Work with Custom Fiscal Year Data
+After inheriting custom fiscal years, SAQL queries support custom fiscal year data.
+Analytics supports custom fiscal year data by generating new fields that describe the custom fiscal year. Each of these new fields is
+named with the _Fiscal suffix. By working with these fields, SAQL supports custom fiscal year data.
+Make sure that a dataset’s dataflow has run after inheriting custom fiscal years and before writing SAQL based on custom fiscal year data.
+Each of the queries in the examples is based off the following dataset. These examples presume that Analytics inherited custom fiscal
+years that begin on February 1 and end on January 31. Custom fiscal years are defined from 2017 until 2022.
+Note: You can’t use custom fiscal year data with the fill or timeseries statements.
+Opportunity Name
+Created Date
+Amount
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+2/15/2017
+1/25/2018
+3/30/2018
+3/30/2019
+3/30/2020
+3/30/2021
+3/30/2022
+100
+200
+100
+100
+100
+100
+100
+Group by a Custom Fiscal Year
+Here’s how to group by a custom fiscal year.
+Filter by a Custom Fiscal Year
+Here’s how to filter by a custom fiscal year date.
+Dates Outside Ranges Defined by Custom Fiscal Year
+If your query includes a date that falls outside of a range defined by an inherited fiscal year, SAQL does not return data for that date.
+SEE ALSO:
+https://help.salesforce.com/s/articleView?id=bi_integrate_date_formats_and_fiscal_dates.htm
+Group by a Custom Fiscal Year
+Here’s how to group by a custom fiscal year.
+116
+SAQL Reference
+Work with Custom Fiscal Year Data
+Example:
+q = load "opportunities";
+q = group q by 'CreatedDate_Year_Fiscal';
+q = foreach q generate
+'CreatedDate_Year_Fiscal' as 'Fiscal Year',
+count() as 'count';
+q = order q by 'CreatedDate_Year_Fiscal' asc;
+q = limit q 2000;
+The query returns:
+Fiscal Year
+Count
+2017
+2018
+2019
+2020
+2021
+2022
+2
+1
+1
+1
+1
+1
+Filter by a Custom Fiscal Year
+Here’s how to filter by a custom fiscal year date.
+Example:
+q = load "opportunities";
+q = filter q by date('CreatedDate_Year', 'CreatedDate_Month', 'CreatedDate_Day') in
+["current fiscal_year".."current_fiscal_year"];
+q = group q by 'CreatedDate_Year_Fiscal';
+q = foreach q generate
+'CreatedDate_Year_Fiscal' as 'Fiscal Year',
+count() as 'count';
+q = order q by 'CreatedDate_Year_Fiscal' asc;
+q = limit q 2000;
+Here’s the query output.
+Fiscal Year
+Count
+2020
+1
+Dates Outside Ranges Defined by Custom Fiscal Year
+If your query includes a date that falls outside of a range defined by an inherited fiscal year, SAQL does not return data for that date.
+117
+SAQL Reference
+Work with Custom Fiscal Year Data
+If a date falls outside of a range defined by an inherited custom fiscal year from Salesforce, then SAQL returns null for that date. When
+grouping by a date field that includes dates outside a range defined by an inherited custom fiscal year, no group is returned for undefined
+dates. If you group data based on non-fiscal periods, dates that aren’t included in a custom fiscal year return data as expected.
+Example: If your fiscal year ends in March 2021, and a date field, CreatedDate, is in April 2021, grouping by
+CreatedDate_Month_Fiscal returns null or no group for April 2021. Grouping by CreatedDate_Month returns
+data as expected.
+Consider this example dataset.
+Opportunity Name
+Created Date
+Amount
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+Widgets
+2/1/2017
+2/1/2018
+2/1/2019
+2/1/2020
+2/1/2021
+2/1/2022
+2/1/2023
+100
+100
+100
+100
+100
+100
+100
+In Salesforce, you have custom fiscal years defined as January 1 to December 31 for each year from 2018 through 2022. Inherit them in
+Analytics by using the Start Date setting.
+When running a query like this:
+q = load "opportunities";
+q = foreach q generate 'CreatedDate' as 'Created Date', CreatedDate_Year_Fiscal as 'Fiscal
+Year';
+q = limit q 2000;
+SAQL returns these results:
+Created Date
+Fiscal Year
+2/1/2017
+2/1/2018
+2/1/2019
+2/1/2020
+2/1/2021
+2/1/2022
+2/1/2023
+-
+2018
+2019
+2020
+2021
+2022
+-
+Because a custom fiscal year definition doesn’t include 2/1/2017 or 2/1/2023, SAQL returns null.
+118
+SAQL Reference
+String Functions
+Now, let’s group the dataset.
+q = load "opportunities";
+q = group q by 'CreatedDate_Year_Fiscal';
+q = foreach q generate 'CreatedDate_Year_Fiscal' as 'Fiscal Year', count() as 'Count';
+q = order q by 'CreatedDate_Year_Fiscal';
+q = limit q 2000;
+SAQL returns these results:
+Fiscal Year
+Count
+2018
+2019
+2020
+2021
+2022
+1
+1
+1
+1
+1
+Since the custom fiscal year definition doesn’t include 2/1/2017 or 2/1/2023, the query excludes these dates from the results.
+String Functions
+Use SAQL string functions to format your measure and dimension fields.
+ascii()
+Returns the UTF-8 code value of a character n.
+chr()
+Returns the UTF-8 character of integer n.
+ends_with()
+Returns true if the string ends with the specified characters.
+index_of()
+Returns the location (index) of the specified characters.
+len()
+Returns the number of characters in the string.
+lower()
+ltrim()
+Returns a copy of the string with all characters in lower case.
+Removes the specified characters from the beginning of a string.
+mv_to_string()
+Converts multivalue fields to string fields.
+number_to_string
+Converts a number literal to a string literal.
+119
+SAQL Reference
+String Functions
+replace()
+Replaces a substring with the specified characters.
+rtrim()
+Removes the specified characters from the end of a string.
+starts_with()
+Returns true if the string starts with the specified characters.
+string_to_number
+Converts a string literal to a number literal.
+substr()
+Returns a substring that starts at the specified position. You can also specify the length of the substring to return.
+trim()
+Removes the specified substring from the beginning and the end of a string.
+upper()
+Returns a copy of the string with all characters in upper case.
+ascii()
+Returns the UTF-8 code value of a character n.
+Syntax
+ascii(n)
+Usage
+Returns null if n is null. The null character (0) is not allowed.
+Example
+q = foreach q generate ascii("a") as int_value;
+- -int_value == 97
+chr()
+Returns the UTF-8 character of integer n.
+Syntax
+chr(n)
+Usage
+Returns null if n is null.
+120
+SAQL Reference
+String Functions
+Example
+q = foreach q generate chr(97) as char_value;
+- -char_value == a
+ends_with()
+Returns true if the string ends with the specified characters.
+Syntax
+ends_with(string, suffix)
+Usage
+Returns true if ends with suffix, otherwise returns false. String comparison is case-sensitive. If any of the parameters are null,
+then the function returns null. If suffix is an empty string, then the function returns null.
+Example
+ends_with("FIT", "T") == true
+ends_with("FIT", "BIT") == false
+index_of()
+Returns the location (index) of the specified characters.
+Syntax
+index_of(string, searchStr [,position [, occurence]])
+Usage
+This function returns the index of searchStr in string, beginning at the specified position. The function returns 0 if
+searchStr is not found. This function is case-sensitive. If any of the parameters are null, then the function returns null.
+The default value of position is 1, which means that the function begins searching at the first character of string. An error results
+if position is negative or zero.
+occurrence is an optional integer, with a default value of 1 . You can use this parameter to specify which occurrence of searchStr
+to search for. For example, if there is more than one occurrence of searchStr, and occurence is 2, the index of the second
+occurrence is returned.
+Constant values are supported for position and occurrence, not arbitrary expressions.
+If searchStr is an empty string, then the function returns null.
+Example
+q = load "Opportunity Details";
+q = group q by all;
+121
+SAQL Reference
+String Functions
+-- return the first occurrence of "a", starting at the beginning.
+-- The result is 2.
+q = foreach q generate index_of("Hawaii", "a") as 'Index';
+-- return the second occurrence of "a", starting at the beginning
+-- the result is 4
+q = foreach q generate index_of("Hawaii", "a",1, 2) as 'Index';
+-- return the first occurrence of "a", starting at the third position
+-- the result is 4
+q = foreach q generate index_of("Hawaii", "a",3) as 'Index';
+len()
+Returns the number of characters in the string.
+Syntax
+len(string)
+Usage
+Leading and trailing whitespace characters are included in the length returned. Returns null if string is null.
+Example
+len("starfox") == 7
+len(" rocket ") == 8
+len("") == 1
+len("") == 0
+lower()
+Returns a copy of the string with all characters in lower case.
+Syntax
+lower(string)
+Usage
+Returns null if string is null.
+Example
+lower("JAVA") == "java"
+122
+SAQL Reference
+String Functions
+ltrim()
+Removes the specified characters from the beginning of a string.
+Syntax
+ltrim(string,substr)
+Usage
+Removes every instance of each character in substr from the beginning of string. This function is case-sensitive. To remove
+leading spaces, do not specify a value for substr.
+Example
+This example shows that ltrim removes the specified characters from the beginning of a string. This function is case-sensitive.
+q = load "test";
+q = foreach q generate 'Company' as 'Company', ltrim('Company',"abc") as 'ltrim abc',
+ltrim('Company',"cba") as 'ltrim cba', ltrim('Company',"ab") as 'ltrim ab',
+ltrim('Company',"bc") as 'ltrim bc';
+mv_to_string()
+Converts multivalue fields to string fields.
+Syntax
+mv_to_string(multivalue_column_name, delimeter)
+Parameter
+Description
+multivalue_column_name
+delimiter
+Name of the multivalue field to be converted to a string.
+Optional. The characters used to delimit values in the converted string. Maximum length is 2
+characters.
+Usage
+space (, ).
+Returns an alphabetically-sorted, delimited string representation of a multivalue field. The default delimiter is a comma followed by a
+mv_to_string() applies to non-grouped streams only. You can run filtering or grouping on a multivalue field post-projection.
+123
+SAQL Reference
+String Functions
+To enable multivalue fields, you must select the Enable indexing of multivalue fields in Analytics preference in Setup. If you run
+mv_to_string() without the preference selected, the function returns the first value in the first field only.
+1. From Setup, enter Analytics in the Quick Find box.
+2. 3. Select Settings from the list of Analytics options.
+In Settings, click the checkbox for Enable indexing of multivalue fields in CRM Analytics.
+Example
+This query returns values of the Accounts Team as a string delimited by a comma and space, in alphabetical order.
+q = load "account;
+q = foreach q generate 'Name' as 'Account', mv_to_string('Account_Team') as 'Account Team';
+Account
+Account Team
+Acme
+DTC Electronics
+Salesforce
+Fred Williamson, Hank Chen, Sarah Vasquez
+Brian Alison, Tessa McNaley
+Nadia Smith
+Example
+This query returns the values of Accounts Team as a string delimited by two semicolons (;;) in alphabetical order.
+q = load "account";
+q = foreach q generate 'Name' as 'Account', mv_to_string('Account_Team', ";;") as 'Account
+Team';
+Account
+Account Team
+Acme
+DTC Electronics
+Salesforce
+Fred Williamson;;Hank Chen;;Sarah Vasquez
+Brian Alison;;Tessa McNaley
+Nadia Smith
+SEE ALSO:
+Multivalue Field
+number_to_string
+Converts a number literal to a string literal.
+Syntax
+number_to_string(number, number_format)
+124
+SAQL Reference
+String Functions
+Usage
+Returns the string representation of number. Use number_format to specify the format of the string, for example as currency or
+with two decimal places. number_format can specify seperate formats for positive and negative numbers:
+• number_to_string(number, number_format)
+The format specified by number_format is used for both positive and negative numbers.
+• number_to_string(number, <POSITIVE>;<NEGATIVE>)
+If number is positive, the number format specified by <POSITIVE> is used. If number is negative, the number format specified
+by <NEGATIVE> is used. Note the semicolon separating the two specified formats.
+You can specify the format with these characters:
+• 0, #, decimal point (.)
+• Thousands separator (,)
+• Percentage (%)
+• Leading and trailing characters: $, +, -, (, ), :, !, ^,&,’,~,{,}
+Example
+Display the number amount as a string, formatted as currency:
+q = foreach q generate 'Amount' as 'Amount', number_to_string('Amount',"$#,###.00") as
+'NumberAmount';
+Example
+Suppose that you have a measure field with the format shown in Number You Start With. Use the format shown in number_format
+to display this number as a shown in Resulting String.
+Initial Number
+number_format
+Resulting String
+1234.56
+8.9
+.631
+12
+1234.568
+12000
+12000
+12200000
+12
+####.#
+#.000
+0.#
+#.0#
+#.0#
+#,###
+#,
+0.0,,
+00000
+1234.6
+8.900
+0.6
+12.0
+1234.57
+12,000
+12
+12.2
+00012
+125
+SAQL Reference
+String Functions
+Initial Number
+number_format
+Resulting String
+0.03457
+12.3
+-12.3
+32
+-32
+#.00%
+$#.00;($#.00)
+$#.00;($#.00)
++;-
++;-
+3.46%
+$12.30
+($12.30)
++
+-
+replace()
+Replaces a substring with the specified characters.
+Syntax
+replace(string, searchStr, replaceStr)
+Usage
+This function replaces searchStr with replaceStr, then returns the modified string. If any of the parameters are null, then
+the function returns null. If searchStr is an empty string, the function returns null. This function is case-sensitive.
+Example
+replace("Watson, come quickly.", "quickly", "slowly") == "Watson, come slowly."
+replace("Watson, come quickly.", "o", "a") == "Watsan, came quickly."
+replace("Watson, come quickly.", "", "Mr.") == null
+rtrim()
+Removes the specified characters from the end of a string.
+Syntax
+rtrim(string,substr)
+Usage
+Removes every instance of each character in substr from the end of string. This function is case-sensitive. To remove trailing
+spaces, do not specify a value for substr.
+Example
+This example shows that rtrim removes the specified characters from the end of a string. This function is case-sensitive.
+q = load "test";
+q = foreach q generate 'Company' as 'Company', rtrim('Company',"abc") as 'rtrim abc',
+126
+SAQL Reference
+String Functions
+rtrim('Company',"cba") as 'rtrim cba', rtrim('Company',"ab") as 'rtrim ab',
+rtrim('Company',"ac") as 'rtrim ac';
+starts_with()
+Returns true if the string starts with the specified characters.
+Syntax
+starts_with(string, prefix)
+Usage
+Returns true if string starts with prefix, otherwise returns false. String comparison is case-sensitive. If any of the parameters
+are null, then the function returns null. If prefix is an empty string, then the function returns null.
+Example
+statement.
+Suppose that you want to count the opportunities where the owner role starts with "Sales". Use starts_with() in a case
+q = load "DTC_Opportunity";
+-- Select rows where the owner roles starts with "Sales"
+q = foreach q generate count() as 'count', (case
+when starts_with('Owner_Role', "Sales") then 'Owner_Role'
+end) as 'Owner_Role';
+q = group q by 'Owner_Role';
+q = foreach q generate count() as 'count', 'Owner_Role' as 'Owner_Role';
+The resulting chart shows the number of opportunities where the owner role starts with "Sales", grouped by owner role.
+string_to_number
+Converts a string literal to a number literal.
+127
+SAQL Reference
+String Functions
+Syntax
+string_to_number(string)
+Usage
+If the string can't be parsed as a number or contains a separator, such as a comma, the query fails.
+Example
+-- creates a field called "Number" that contains the number 12345
+q = foreach q generate string_to_number("12345") as 'Number';
+substr()
+Returns a substring that starts at the specified position. You can also specify the length of the substring to return.
+Syntax
+substr(string,position[, length])
+Usage
+substr returns the characters in string, starting at position position. If you specify length, this function returns length
+number of characters. If any of the parameters are null, then the function returns null. length is optional.
+The first character in string is at position 1. If position is negative then the position is relative to the end of the string. So a
+position of -1 denotes the last character.
+If length is negative, then the function returns null. If position > len (string) or position < -len(string) or
+position = 0, then the empty string is returned.
+Example
+-- we want a substring that is one character long, starting at position 1.
+-- The character "C" is returned.
+substr("CRM", 1, 1)
+-- we want a substring that is 2 characters long, starting at position 1
+-- The string "CR" is returned
+substr("CRM", 1, 2) == "CR"
+-- we want a substring that is two characters long, starting from the *end* of the string
+-- The string "RM" is returned
+substr("CRM", -2, 2) == "RM"
+-- we want to get the first 10 characters from this string
+-- the string "2018-03-16" is returned
+substr("2018-03-16T00:00:03.000Z",10)
+128
+SAQL Reference
+Math Functions
+Example
+Suppose that you want to display the current time, but not the current date. Use substr() to return the last 11 characters from
+date_to_string() .
+q = foreach q generate substr(date_to_string(now(), "yyyy-MM-dd HH:mm:ss"), -11) as 'Time
+Now';
+trim()
+Removes the specified substring from the beginning and the end of a string.
+Syntax
+trim(string,substr)
+Usage
+This function removes substr from the beginning and end of string, then returns the result. To remove leading and trailing spaces,
+do not specify a value for substr.
+Example
+–- the resulting string in both cases is 'MyString';
+q = foreach q generate trim("abcMyStringabc","abc") as 'Trimmed String';
+q = foreach q generate trim(" MyString ") as 'Trimmed String';
+upper()
+Returns a copy of the string with all characters in upper case.
+Syntax
+upper(string)
+Usage
+Returns null if string is null.
+Example
+upper("java") == "JAVA"
+Math Functions
+To perform numeric operations in a SAQL query, use math functions.
+You can use SAQL math functions in foreach statements and in the filter by clause after a foreach statement.
+129

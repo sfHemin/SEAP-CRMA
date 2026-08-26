@@ -1,0 +1,92 @@
+Auto-Install Request Resources
+Auto-Install requests are used to create, update, and delete Analytics embedded apps. Analytics embedded apps are run-time implementations of Analytics templates and instead of user interaction, they’re managed via auto-install requests.
+Available resources:
+Resource	Description	Supported HTTP Method	Resource URL
+Auto-Install Requests List Resource	Returns a collection of auto-install requests for Analytics embedded apps, creates an auto-install request, or deletes groups of auto-install requests by a Analytics folder ID or a template API name.	GET POST DELETE	/wave​/auto-install-requests
+Auto-Install Request Resource	Returns an auto-install request for an Analytics embedded app, updates, and deletes an auto-install request.	GET PATCH DELETE	/wave​/auto-install-requests​/<autoInstallRequestId>
+Auto-Install Requests List Resource
+Returns a collection of auto-install requests for Analytics embedded apps, creates an auto-install request, or deletes groups of auto-install requests by an Analytics folder ID or a template API name.
+Auto-Install Request Resource
+Returns an auto-install request for an Analytics embedded app, updates, and deletes an auto-install request.
+Auto-Install Requests List Resource
+Returns a collection of auto-install requests for Analytics embedded apps, creates an auto-install request, or deletes groups of auto-install requests by an Analytics folder ID or a template API name.
+Resource URL
+/wave/auto-install-requests
+Formats
+JSON
+Available Version
+50.0
+HTTP Methods
+GET POST DELETE
+Request parameters for GET
+Parameter Name	Type	Description	Required or Optional	Available Version
+folder​Id	ID	Filters the results to include only the contents of a specific folder. The id can be the requesting user’s ID for items in the user’s private folder.	Optional	50.0
+folder​Label	String	Filters the results to include only the contents of a specific folder by label.	Optional	50.0
+page​Size	Integer	The number of items to be returned in a single page. Minimum is 1, maximum is 200, and default is 25.	Optional	50.0
+request​Name	String	Filters the results to include only the contents with a specific auto-install request name.	Optional	50.0
+request​Statuses	Auto​Install​Request​Status​Enum[]	Filters the results to include only the contents with a specific auto-install request status. Valid values include:
+App​In​Progress
+Cancelled
+Enqueued
+Failed
+In​Progress
+New
+Skipped
+Success
+Optional	50.0
+request​Types	Auto​Install​Request​Type​Enum[]	Filters the results to include only the contents with a specific auto-install request type. Valid values include:
+Org​Compatibility​Check
+Start​Dataflow
+Wave​App​Auto​Update
+Wave​App​Create
+Wave​App​Delete
+Wave​App​Update
+Wave​Enable
+Optional	50.0
+search​Options	Auto​Install​Request​Search​Option​Enum[]	Filters the results to include only the contents with specific search options. Valid values include:
+Exclude​Non​Existing​Apps
+Most​Recent​Only​By​Template​And​Folder
+Non​Existing​Apps​Only
+Optional	50.0
+sort​Options	Auto​Install​Request​Sort​Option​Enum[]	Sorts the results according to the given sort option. Valid values include:
+Created​Date​Ascending
+Created​Date​Descending
+Folder​Id​Ascending
+Folder​Id​Descending
+Folder​Label​Ascending
+Folder​Label​Descending
+Last​Modified​Date​Ascending
+Last​Modified​DateD​escending
+Request​Name​Ascending
+Request​Name​Descending
+Request​Status​Ascending
+Request​Status​Descending
+Request​Type​Ascending
+Request​Type​Descending
+Template​Api​Name​Ascending
+Template​Api​Name​Descending
+Optional	50.0
+template​Api​Name	String	Filters the results to include only the contents created from a specific application template.	Optional	50.0
+The following REST URL shows how to use the request parameters to filter and sort in the GET request.
+
+/wave/auto-install-requests?searchOptions=ExcludeNonExistingApps&sortOptions=RequestStatusAscending
+Response body for GET
+Auto-Install Request Collection
+Request body for POST
+Auto-Install Request Insert Input
+Response body for POST
+Auto-Install Request
+Auto-Install Request Resource
+Returns an auto-install request for an Analytics embedded app, updates, and deletes an auto-install request.
+Resource URL
+/wave/auto-install-requests/<autoInstallRequestId>
+Formats
+JSON
+Available Version
+50.0
+HTTP Methods
+GET PATCH DELETE
+Response body for GET and PATCH
+Auto-Install Request
+Request body for PATCH
+Auto-Install Request Update Input

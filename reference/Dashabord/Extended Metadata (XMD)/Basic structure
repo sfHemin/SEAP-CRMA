@@ -1,0 +1,17 @@
+Basic Structure of the XMD JSON File
+The XMD file is in JSON format. It contains a block of parameters for each dataset field. This design makes it easier to debug specific field behavior and maintain consistent syntax usage, and it streamlines the generation process. XMD doesn’t support empty strings.
+The file uses this structure.
+
+{
+  "dataset": {},
+  "dates": [],
+  "dimensions": [],
+  "derivedDimensions": [],
+  "measures": [],
+  "derivedMeasures": [],
+  "organizations": [],
+  "showDetailsDefaultFields": []
+}
+The dataset field specifies the dataset to which the XMD applies. CRM Analytics sets and maintains this parameter internally. Do not modify it.
+
+For descriptions of the fields, see Extended Metadata (XMD) Reference. To learn how to structure and format the XMD parameters for different purposes, see the use cases.

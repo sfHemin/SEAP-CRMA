@@ -1,0 +1,20 @@
+Actions Resource
+Returns the Salesforce actions available for the user in Analytics. The entityId is the user id.
+Resource URL
+/wave/actions/<entityId>
+Formats
+JSON
+
+Available Version
+40.0
+
+Available in Postman
+To view and test a working example of this resource, see getActionCollection in Postman. For information about how to authenticate your org with Postman, see the CRM Analytics Rest API Quick Start.
+
+Available Components
+LWC — lightning/analyticsWaveApi getActions()
+HTTP Methods
+GET
+
+Response body for GET
+Action Collection

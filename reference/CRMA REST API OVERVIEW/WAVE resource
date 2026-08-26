@@ -1,0 +1,12 @@
+Wave Resource
+Lists the top-level resources available for Analytics.
+Resource URL
+/wave
+Formats
+JSON
+Available Version
+36.0
+HTTP Methods
+GET
+Response body for GET
+Directory Item Collection

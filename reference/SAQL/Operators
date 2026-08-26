@@ -1,0 +1,16 @@
+SAQL Operators
+Use operators to perform mathematical calculations or comparisons.
+Arithmetic Operators
+Use arithmetic operators to perform addition, subtraction, multiplication, division, and modulo operations.
+Comparison Operators
+Use comparison operators to compare values of the same type. For example, you can compare strings with strings and numbers with numbers.
+String Operators
+To concatenate strings, use the plus sign (+).
+Logical Operators
+Use logical operators to perform AND, OR, and NOT operations.
+Simple case Operator
+Use case in a foreach statement to assign different field values in different situations. case supports two syntax forms: searched case and simple case. This section explains simple case.
+Searched case Operator
+Use case in a foreach statement to assign different field values in different situations. case supports two syntax forms: searched case and simple case. This section shows searched case.
+Null Operators
+Use is null and is not null to check whether a value is or is not null. is null returns True when a value is null. is not null returns True when a value is not null.

@@ -1,0 +1,193 @@
+Format Measures
+You can apply letters or symbols before or after the numeric value, such as for currency, perform decimal rounding, and add grouping and decimal separators.
+Note
+
+XMD doesn't update formatting for user input or context-driven fields. Formatting can only be applied to a static or preset value.
+
+Formatting a Measure
+In this example lens, the values in the Sales column don’t include decimals or currency symbols.
+
+The values table shows the Sales field values without any formatting.
+To relabel the Sales field and format its values, modify the XMD as indicated in the bold text.
+"measures" : [
+    {
+      "field": "Sales",
+      "format": {
+        "customFormat": "[\"$#,###,###.##\",1]"
+      }, 
+      "label": "Sales (USD)",
+      "showInExplorer": true
+    }
+],
+The field now has the label “Sales (USD)” and its values include a currency symbol and two decimal places.
+
+The values table shows the Sales field with the new label and formatted values.
+Formatting a Derived Measure
+The following SAQL query contains a derived measure that calculates the average revenue per employee. As shown, the values in this derived field aren’t formatted.
+
+The values table shows the RevPerEmployee derived field values with no formatting.
+To relabel the RevPerEmployee field and format its values, modify the XMD as indicated in the bold text.
+
+"derivedMeasures": [
+  {
+    "field": "RevPerEmployee",
+    "format": {
+      "customFormat": "[\"$#,###.##\",1]"
+    },
+    "label": "Revenue Per Employee",
+    "showInExplorer": true
+  }
+],
+The field now has the label “Revenue Per Employee” and its values include a currency symbol and a grouping separator.
+
+The values table shows the RevPerEmployee field with the new label and formatted values.
+More Formatting Examples
+Check out these examples that illustrate how to use symbols to format measures and derived measures.
+
+For information about using symbols in the customFormat field, see Measures and Derived Measures in XMD.
+
+Goal	XMD
+Display 500000 as $500,000
+
+(prefix with "$")
+
+See Example 1 below
+
+Display 500000 as $500,000
+
+(prefix with "$", include grouping separator)
+
+See Example 2 below
+
+Display 500000 as $500,000.00
+
+(prefix with "$", include grouping separator, apply 2 decimal places)
+
+See Example 3 below
+
+Display 500000 as –$500,000.00USD
+
+(prefix with "–$", include grouping separator, apply 2 decimal places, suffix with "USD")
+
+See Example 4 below
+
+Display Canadian currency code as a suffix
+
+(include grouping separator, apply 2 decimal places, suffix with "CAD")
+
+See Example 5 below
+
+Display -1,234.56 as –$1,234.56
+
+(use a semi-colon delimiter for negatives, pos;neg)
+
+See Example 6 below
+
+Display -1,234.56 as ($1,234.56)
+
+(Optional. Use a semi-colon delimiter, parenthesis for negatives, pos;(neg))
+
+See Example 7 below
+
+Example 1: Display 500000 as $500,000 (prefix with "$")
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$###0\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 2: Display 500000 as $500,000 (prefix with "$", include grouping separator)
+"derivedMeasures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$###,#00\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 3: Display 500000 as $500,000.00 (prefix with "$", include grouping separator, apply 2 decimal places)
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$###,#00.00\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 4: Display 500000 as -$500,000.00USD (prefix with "-$", include grouping separator, apply 2 decimal places, suffix with "USD")
+"measures": [
+  {
+  "description" : "Negative dollar amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"-$###,#00.00USD\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 5: Display Canadian currency code as a suffix (include grouping separator, apply 2 decimal places, suffix with "CAD")
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"#,##0.00CAD\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 6: Display -1,234.56 as -$1,234.56
+(Use a semi-colon delimiter for negatives, pos;neg)
+
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$#,###.##;-$#,###.##\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 7: Display -1,234.56 as ($1,234.56)
+(Optional. Use a semi-colon delimiter, parenthesis for negatives, pos;(neg))
+
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$#,###.##;($#,###.##)\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],
+Example 8: Display -1,234.56 as $1,234.56-
+(Optional. Use a semi-colon delimiter, '-' after the second delimiter, pos;neg;zero)
+
+"measures": [
+  {
+  "description" : "Amount",
+  "field" : "Amount",
+  "format" : {
+  "customFormat": "[\"$#,###.##;$#,###.##;-\",1]"
+  },
+  "label" : "Amount",
+  "showInExplorer" : true
+  }
+  ],

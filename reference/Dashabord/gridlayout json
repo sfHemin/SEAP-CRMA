@@ -1,0 +1,239 @@
+# `gridLayouts` JSON
+
+The `gridLayouts` section defines all layouts built for the dashboard.
+
+For more information about layouts for CRM Analytics dashboards, see [Generate Unique Dashboard Layouts for Different Devices](https://help.salesforce.com/apex/HTViewHelpDoc?id=bi_dashboard_layout_select_flex.htm). .
+
+## Example
+
+```nolang
+"gridLayouts": [
+    {
+        "name": "Default",
+        "numColumns": 9,
+        "pages": [
+            {
+                "label": "Page 1",
+                "name": "41f040d6-48a6-4dc7-9166-eb985df7e9d8",
+                "widgets": [
+                    {
+                        "colspan": 9,
+                        "column": 0,
+                        "name": "filterpanel_1",
+                        "row": 0,
+                        "rowspan": 3,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    },
+                    {
+                        "colspan": 9,
+                        "column": 0,
+                        "name": "chart_1",
+                        "row": 3,
+                        "rowspan": 5,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    },
+                    {
+                        "colspan": 2,
+                        "column": 0,
+                        "name": "link_1",
+                        "row": 8,
+                        "rowspan": 1,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Page 2",
+                "name": "ac750443-1729-47fb-8d60-a35703076bf7",
+                "widgets": [
+                    {
+                        "colspan": 9,
+                        "column": 0,
+                        "name": "filterpanel_1",
+                        "row": 0,
+                        "rowspan": 3,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    },
+                    {
+                        "colspan": 9,
+                        "column": 0,
+                        "name": "table_1",
+                        "row": 3,
+                        "rowspan": 7,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    }
+                ]
+            }
+        ],
+        "rowHeight": "normal",
+        "selectors": [],
+        "style": {
+            "alignmentX": "left",
+            "alignmentY": "top",
+            "backgroundColor": "#44A2F5",
+            "cellSpacingX": 4,
+            "cellSpacingY": 4,
+            "fit": "original",
+            "gutterColor": "#A3B8CC"
+        },
+        "version": 1
+    },
+    {
+        "name": "Mobile",
+        "numColumns": 2,
+        "pages": [
+            {
+                "label": "Page 1",
+                "name": "41f040d6-48a6-4dc7-9166-eb985df7e9d8",
+                "widgets": [
+                    {
+                        "colspan": 2,
+                        "column": 0,
+                        "name": "filterpanel_1",
+                        "row": 0,
+                        "rowspan": 2,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    },
+                    {
+                        "colspan": 2,
+                        "column": 0,
+                        "name": "chart_1",
+                        "row": 2,
+                        "rowspan": 10,
+                        "widgetStyle": {
+                            "borderEdges": []
+                        }
+                    }
+                ]
+            }
+        ],
+        "rowHeight": "normal",
+        "selectors": [
+            "maxWidth(599)"
+        ],
+        "style": {
+            "alignmentX": "left",
+            "alignmentY": "top",
+            "backgroundColor": "#2EC2BA",
+            "cellSpacingX": 4,
+            "cellSpacingY": 4,
+            "fit": "original",
+            "gutterColor": "#091A3E"
+        },
+        "version": 1
+    }
+]
+```
+
+- **[gridLayouts Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayoutproperties.md)**
+
+  The `gridLayouts` key defines all layouts for the dashboard. It contains a separate node for each layout. Each layout has properties that provide information about the devices that can use the layout and the placement of each widget in the layout. It also contains dashboard properties, like cell spacing in the grid and the dashboard's background color or image.
+# `gridLayouts` Properties
+
+The `gridLayouts` key defines all layouts for the dashboard. It contains a separate node for each layout. Each layout has properties that provide information about the devices that can use the layout and the placement of each widget in the layout. It also contains dashboard properties, like cell spacing in the grid and the dashboard's background color or image.
+
+| Property Name | Type    | Details                                                                                                                                                                                    |
+| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`        | String  | Name of the layout. Included in the Dashboard Designer's user interface.                                                                                                                   |
+| `maxWidth`    |         | Maximum width (in pixels) that the dashboard can use. If needed, CRM Analytics rearranges the existing dashboard widgets based on this setting in the layout.                              |
+| `numColumns`  | Integer | The number of columns in the designer grid for this layout. Included in the Dashboard Designer's user interface.                                                                           |
+| `pages`       | Array   | Contains properties that specify the name and ID of the page, and determine the placement of each widget in the dashboard layout. Not included in the Dashboard Designer's user interface. |
+| `rowHeight`   | String  | The height of each row in the designer grid for this layout. Valid values are `fine` and `normal` (default). Included in the Dashboard Designer's user interface.                          |
+| `selectors`   | Array   | Device requirements that help CRM Analytics choose the optimal layout for the device accessing the dashboard. Included in the Dashboard Designer's user interface.                         |
+| `style`       | Array   | Properties about the designer grid, including columns, rows, cell spacing, and background. Included in the Dashboard Designer's user interface.                                            |
+
+- **[pages Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayout-widgets-pages-properties.md)**
+
+  The `pages` key contains properties that determine the placement of each widget in the dashboard layout. Currently, the Dashboard Designer supports only one page for each layout.
+
+- **[selectors Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayout-widgets-selector-properties.md)**
+
+  The `selectors` key contains layout properties that specify the layout name, designer grid settings, background settings, and requirements for devices that can use this layout.
+
+- **[style Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayout-widgets-style-properties.md)**
+
+  The `style` key contains the dashboard properties, like cell spacing in the grid, as well as the dashboard's background color or image.
+# `pages` Properties
+
+The `pages` key contains properties that determine the placement of each widget in the dashboard layout. Currently, the Dashboard Designer supports only one page for each layout.
+
+| Property Name | Type   | Details                                                                                                                                                                         |
+| ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`       | String | Label of the page in the dashboard layout. Included in the Dashboard Designer's user interface.                                                                                 |
+| `name`        | String | ID of the page in the dashboard layout. Not included in the Dashboard Designer's user interface.                                                                                |
+| `widgets`     | Array  | Contains properties that determine the height and width of each widget, and where it's placed on the dashboard layout. Not included in the Dashboard Designer's user interface. |
+
+- **[widgets Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayout-widgets-properties.md)**
+
+  The `widgets` key contains properties that determine the height and width of each widget, and where it's placed on the dashboard layout. Because the Dashboard Designer uses a grid, you specify the properties in terms of rows and columns. For example, you specify the number of columns to determine the width of a widget.
+# `widgets` Properties
+
+The `widgets` key contains properties that determine the height and width of each widget, and where it's placed on the dashboard layout. Because the Dashboard Designer uses a grid, you specify the properties in terms of rows and columns. For example, you specify the number of columns to determine the width of a widget.
+
+<sfdocstbl><table><col /><col /><col /><thead><tr><th>Property Name</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td><code>name</code></td><td>String</td><td><p>Internal name of the widget. This name is used to reference the widget in the dashboard JSON. Not included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>column</code></td><td>Integer</td><td><p>The column number where the widget starts. <code>Column</code> and <code>row</code> specify the top left corner of the widget.</p> <p>If this widget is included in a container, these properties are relative to the container widget.</p> <p>Included in the Dashboard Designer's user interface. Value is determined based on the widget's placement.</p></td></tr><tr><td><code>row</code></td><td>Integer</td><td><p>The row number where the widget starts. <code>Column</code> and <code>row</code> specify the top left corner of the widget.</p> <p>Included in the Dashboard Designer's user interface. Value is determined based on the widget's placement.</p></td></tr><tr><td>colspan</td><td>Integer</td><td>The number of columns that a widget spans—the width of the widget. If the dashboard doesn't have enough columns to accommodate the specified width, then columns are added to the dashboard. Included in the Dashboard Designer's user interface. Value is determined based on the widget's placement.</td></tr><tr><td>rowspan</td><td>Integer</td><td>The number of rows that a widget spans—the height of the widget. If the dashboard doesn't have enough rows to accomodate the specified height, then rows are added. Included in the Dashboard Designer's user interface. Value is determined based on the widget's placement.</td></tr><tr><td><code>widgetStyle</code></td><td>Array</td><td><p>Contains properties that set the border type, border color, and background color. Available for all widgets. Not included in the Dashboard Designer's user interface.</p></td></tr></tbody></table></sfdocstbl>
+
+- **[widgetStyle Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-gridlayout-widgets-pages-widgetstyle-properties.md)**
+
+  The `widgetStyle` key contains properties that set the border type, border color, and background color of the widget. You can specify these attributes at two levels. To set the default for all dashboard widgets, use the `widgetStyle` field under `gridLayouts`. To set a specific widget, use the `widgetStyle` field under `widgets`. This setting overrides the default settings for all widgets.
+# `widgetStyle` Properties
+
+The `widgetStyle` key contains properties that set the border type, border color, and background color of the widget. You can specify these attributes at two levels. To set the default for all dashboard widgets, use the `widgetStyle` field under `gridLayouts`. To set a specific widget, use the `widgetStyle` field under `widgets`. This setting overrides the default settings for all widgets.
+
+| Property Name     | Type    | Details                                                                                                                                                                                                         |
+| ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `backgroundColor` | String  | Background color of the widget. The default is `#FFFFFF`. Included in the Dashboard Designer's user interface.                                                                                                  |
+| `borderColor`     | String  | Color of the widget's border. The default is `#FFFFFF`. Included in the Dashboard Designer's user interface.                                                                                                    |
+| `borderEdges`     | List    | A list of values that specify which edges of the widget have a border. Valid values are `left`, `right`, `top`, `bottom`, and `all`. Default is no border. Included in the Dashboard Designer's user interface. |
+| `borderRadius`    | Integer | The roundness of the border corners.Valid values are: `0` (not rounded, default), `4`, `8`, and `16`. The higher the value, the more rounded the corner.Included in the Dashboard Designer's user interface.    |
+| `borderWidth`     | Integer | Width of the widget's border. Valid values are `1`, `2` (default), `4`, and `8`. Included in the Dashboard Designer's user interface.                                                                           |
+# `selectors` Properties
+
+The `selectors` key contains layout properties that specify the layout name, designer grid settings, background settings, and requirements for devices that can use this layout.
+
+| Property Name                 | Type    | Details                                                                                                                                                                                                                               |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `minWidth(<width>)`           | Integer | Minimum width (in pixels) of the devices supported by this layout. Included in the Dashboard Designer's user interface.                                                                                                               |
+| `maxWidth(<width>)`           | Integer | Maximum width (in pixels) of the devices supported by this layout. Included in the Dashboard Designer's user interface.                                                                                                               |
+| `orientation( <orientation>)` | String  | Orientation of the devices supported by this layout. Valid values are: ```portrait`or`landscape`. If this property is not specified, then the layout supports both orientations. Included in the Dashboard Designer's user interface. |
+| `platform(<platform>)`        | String  | Platform of the devices supported by this layout. Valid values are: `iOS` or `Android`. If this property is not specified, the layout supports both platforms. Included in the Dashboard Designer's user interface.                   |
+# `style` Properties
+
+The `style` key contains the dashboard properties, like cell spacing in the grid, as well as the dashboard's background color or image.
+
+<sfdocstbl><table><col /><col /><col /><thead><tr><th>Property Name</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td><code>alignmentX</code></td><td>String</td><td><p>The horizontal alignment of the background image applied to the dashboard.</p> <p>Valid values are: <code>left</code> (default), <code>center</code>, and <code>right</code>.</p> <p>Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>alignmentY</code></td><td>String</td><td><p>The vertical alignment of the background image applied to the dashboard.</p> <p>Valid values are: <code>top</code> (default), <code>center</code>, and <code>bottom</code>.</p> <p>Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>backgroundColor</code></td><td>String</td><td><p>Background color of the dashboard, specified in hex color code. The default is <code>#FFFFFF</code>. Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>cellSpacingX</code></td><td>Integer</td><td><p>Horizontal spacing (in pixels) between cells in the dashboard grid.</p> <p>Valid values are <code>0</code>, <code>4</code>, <code>8</code> (default), and <code>16</code>.</p> <p>Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>cellSpacingY</code></td><td>Integer</td><td><p>Vertical spacing (in pixels) between cells in the dashboard grid.</p> <p>Valid values are <code>0</code>, <code>4</code>, <code>8</code> (default), and <code>16</code>.</p> <p>Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>documentId</code></td><td>String</td><td>The 15-character document ID of the image to apply as the dashboard's background. To ensure security, upload the image file to Salesforce as a document, and select the <strong>Externally Available Image</strong> option. If this option is not selected or the referenced document is not an image, the image doesn't show up. Included in the Dashboard Designer's user interface.</td></tr><tr><td><code>fit</code></td><td>String</td><td>Indicates how to scale the image.<p>Valid values are: <code>original</code> (default), <code>stretch</code>, <code>tile</code>, <code>fitwidth</code>, and <code>fitheight</code>.</p><p>Included in the Dashboard Designer's user interface.</p></td></tr><tr><td><code>image</code></td><td>Array</td><td><p>Identifies the image using the following properties.</p> <ul><li><p><strong>name</strong>: Name of the image.</p></li><li><p><strong>namespace</strong>: Optional. Namespace of the image. Default is null.</p></li></ul> <p>Included in the Dashboard Designer's user interface.</p></td></tr></tbody></table></sfdocstbl>
+
+## `image` Example
+
+```nolang
+"image": {
+    "name": "My_Corporate_Logo",
+    "namespace": ""
+}
+```
+# `widgetStyle` JSON and Properties
+
+The `widgetStyle` key contains the default widget properties that can be applied to each widget.
+
+:::note
+You can specify these attributes at two levels. To set the default for all dashboard widgets, use the `widgetStyle` field under `gridLayouts`. To set a specific widget, use the `widgetStyle` field under `widgets`. Settings at the widget level override the default settings for all widgets.
+:::
+
+| Property Name     | Type    | Details                                                                                                                                                                                                         |
+| ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `backgroundColor` | String  | Color of the widget's background, specified in hex color code. The default is `#FFFFFF`. Included in the Dashboard Designer's user interface.                                                                   |
+| `borderColor`     | String  | Color of the widget's border, specified in hex color code. The default is `#FFFFFF`. If no border is specified, the widget has no border. Included in the Dashboard Designer's user interface.                  |
+| `borderEdges`     | List    | A list of values that specify which edges of the widget have a border. Valid values are `left`, `right`, `top`, `bottom`, and `all`. Default is no border. Included in the Dashboard Designer's user interface. |
+| `borderRadius`    | Integer | Roundness of the border corners.Valid values are: `0`(not rounded, default), `4`, `8`, and `16`. The higher the value, the more rounded the corner.Included in the Dashboard Designer's user interface.         |
+| `borderWidth`     | Integer | Thickness of the border.Valid values are: `1`, `2` (default), `4`, and `8`. The higher the value, the thicker the border.Included in the Dashboard Designer's user interface.                                   |

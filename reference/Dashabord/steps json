@@ -1,0 +1,1887 @@
+# `steps` JSON
+
+The `steps` key defines all steps available in a CRM Analytics dashboard. It contains a separate node for each step. Each step node has properties that define the query or list of static values. It also contains properties that control the behavior of the step, like whether to facet the step. The properties and JSON syntax vary based on the step type and whether the step is in compact form or SAQL form.
+
+- **[aggregateflex Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-aggregateflex.md)**
+
+  Use the `aggregateflex` step type to perform aggregate queries on a Analytics dataset. An aggregate query summarizes rows, like returning one row per grouping. For example, this step type can return the total amount per sales rep.
+
+- **[apex Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-apex.md)**
+
+  Use to include custom Apex functionality in a dashboard to access Salesforce platform features that aren’t inherently supported in Analytics. For example, pull in data using any API, manipulate data using your Apex classes, or apply simple case statements or complex machine learning. You can even harness AppExchange for things like integrating Twitter with Analytics—all in a way that is familiar.
+
+- **[columns Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-columns.md)**
+
+  Use the `columns` property to add a column to a step query source in Compact form 2.0.
+
+- **[grain Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-grain.md)**
+
+  Use the `grain` step type for a values table. Values tables have no groupings, just a list of dataset fields to display as columns in the table.
+
+- **[saql Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-saql.md)**
+
+  Use the `saql` step type for special cases when querying a Analytics dataset. With this step type, you can write a custom SAQL query to create derived fields in a values table. You can specify dimensions without groupings. Also, you can bind the dataset name or entire query. For example, you can bind this step type to a static step that provides different SAQL queries or datasets based on a selection.
+
+- **[soql Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-soql.md)**
+
+  Use to directly query Salesforce objects—both standard and custom—to get Salesforce data that’s not available in datasets. You can also query external objects created with an OData adapter for Salesforce Connect. To view the results in the dashboard, the user viewing the dashboard must have access to the object and fields queried by the `soql` step. The SOQL query returns only records to which the user has access.
+
+- **[source Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-sources.md)**
+
+  Use the `sources` property to add `columns`, `groups`, `filters`, and formulas to a step query.
+
+- **[staticflex Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-staticflex.md)**
+
+  Use the `staticflex` step type to manually define your own set of data. For example, you can use this step to populate a list of static values in a toggle or list widget. It can also be used to provide values to a binding. For example, it can provide possible filters, groups, measures, sort order, and limits.
+
+- **[visualizationParameters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-visualizationparameters-properties.md)**
+
+  The `visualizationParameters` key contains chart properties defined for the step. When you associate the step with a widget, the widget properties override these settings.
+
+- **[filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md)**
+
+  Use the `filters` property to add a filter to a step query. Although you can create filters for query steps in the user interface, you have to manually define filters for static steps in the dashboard JSON.
+# `aggregateflex` Step Type Properties
+
+Use the `aggregateflex` step type to perform aggregate queries on a Analytics dataset. An aggregate query summarizes rows, like returning one row per grouping. For example, this step type can return the total amount per sales rep.
+
+| Field Name                | Description                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `datasets`                | An array of datasets used by this step. Specify the alias of each dataset. If the `pigql` attribute references a dataset that's not specified here, the dashboard doesn't render.                                                                                                                                                                                                                                                   |
+| `broadcastFacet`          | Controls whether the step's selections are broadcasted as facets. Faceting is when a selection in a widget filters other steps in the dashboard. Default is `true`.                                                                                                                                                                                                                                                                 |
+| `receiveFacetSource`      | Controls whether the step in the receiving query listens for broadcasted facets and applies them as filters. The mode can be "`all`", "`none`", "`include`", or "`exclude`". Use `steps` to list which steps to include or exclude. Default is `all`.                                                                                                                                                                               |
+| `isGlobal`                | This applies to global filters created before Winter '18 only. Newer global filters, those created in the global filter panel widget, don't require a step. Default is false. You can apply this property only on steps that are connected to a global filter widget—all other steps ignore this property. A global filter filters other steps in the dashboard that have `useGlobal` set to `true` and reference the same dataset. |
+| `label`                   | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                                                                                                                                                                           |
+| `query`                   | The query used to retrieve results from a dataset. It must contain at least one grouping and can be in SAQL or compact form. Use a query in SAQL form to customize the query in a way that can't be done using compact form.                                                                                                                                                                                                        |
+| `selectMode`              | Determines the selection interaction. The options for charts, tables, lists, and toggle selectors are: `none`, `single`, `singlerequired`, `multi` and `multirequired`. `selectMode` doesn't apply to number, values table, date, range, and global filter widgets.                                                                                                                                                                 |
+| `start`                   | The initial selections that are applied to the step when the dashboard first opens.                                                                                                                                                                                                                                                                                                                                                 |
+| `type`                    | Step type. Set to `aggregateflex`. If you bind a step property for an `aggregateflex` step, you must use the correct bindings syntax. For more information about bindings, see the [Analytics Bindings Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_bindings.meta/bi_dev_guide_bindings/bi_dbjson_bindings.htm).                                                                                 |
+| `visualizationParameters` | Visualization details about the step. For more information, see [visualizationParameters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-visualizationparameters-properties.md).                                                                                                                                                                                                                                |
+| `useGlobal`               | Indicates whether to apply global filters to this step (`true`) or not (`false`). If the step is in SAQL form, you must also set `autoFilter` to `true` to apply the global filters. By default, the global filter widget filters compact-form steps only.                                                                                                                                                                          |
+
+## Compact Form 2.0 Query Properties
+
+The `query` can contain the following properties.
+
+- `sources` — The array of sources where data comes from. For more information, see [sources Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-sources.md).
+- `sourceFilters` — The filters applied to `sources`. When you use this object, the `sources` name is the `steps` key. the For more information, see [filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md).
+- `aggregateFilters` — The array of filters applied on aggregate columns, which are fields where an aggregate function, such as average or sum, is applied to a measure column. Aggregate columns are defined in `columns` under `sources`. For more information, see [filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md)
+- `orders` — The array of sort orders applied to data in a pivot table. An order can contain the following properties:
+  - `name` — The column or group name used to apply the sort order.
+  - `ascending`: The sort order applied to the data. Indicates whether to order the data in ascending order (`true`) or not (`false`).
+  - `filters` — The filters used to sort a measure column in a pivot table and is applied on a dimension value in the pivoted group. For more information about sorting data in a pivot table, see [Organize and Summarize Data in a Pivot Table](https://help.salesforce.com/articleView?id=analytics.bi_explorer_pivot_table.htm\&type=5).
+  - `nulls` — The sort order applied to null values in the data. To sort null values last, set `nulls` to `last`. To sort null values first, set `nulls` to `first`.
+- `rowTotals` — The array of dimension groups to which the values of each row are rolled up. To calculate `rowTotals`, you must also include `columnGroups` for the data.
+- `columnTotals` — The array of dimension groups to which the values of each column are rolled up. If the query is a grain query, that is, all the columns are non-aggregate columns, or if the query is not grouped by any dimension columns, to calculate totals, set `columnTotals` to `all`.
+- `columnGroups` — The pivoted dimension group, which is the last-defined group. If the defined group is a compound date, such as Year-Month for order date, then include each date grain in `columnGroups`. For example, `["OrderDate_Year", "OrderDate_Month"]`.
+- `limit` — The maximum number of results that the step can return. When you create an `aggregateflex` step, by default, CRM Analytics sets `limit` to 2,000. To return more results, set the `limit` attribute accordingly. The higher you increase the limit, the longer the query takes. When a limit isn't set, Analytics returns up to 10,000 results. For more information, see [filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md).
+
+Compact Form 2.0 Query Example:
+
+```nolang
+"query": {
+  "sources": [
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"],
+            "name": "A"
+          }
+        ],
+        "groups": [
+            "Product_Container",
+            "Order_priority"
+        ],
+        "filters": [
+          [
+            "Profit",
+            [16000],
+            "<",
+         ]
+        ],
+        "name": "SuperStoreSales"
+    },
+    {
+        "columns": [
+          {
+            "formula": "A*2",
+            "name": "B"
+          }
+        ],
+        "groups": [],
+        "filters": []
+      ]
+    },
+  ],
+  "sourceFilters": {
+    "SuperStoreSales" {
+        "filters": [
+          [
+            "Sales",
+            [
+              1,
+              100000
+            ],
+            ">=<="
+          ],
+          [
+            "Customer_Segment",
+            [
+              "Consumer",
+              "Corporate",
+            ],
+            "in"
+          ]
+        ]
+    }
+  },
+  "aggregateFilters": [
+    [
+        "A",
+        [10],
+        ">"
+    ]
+  ],
+  "orders": [
+    {
+        "name": "Product_Container",
+        "ascending": true,
+        "filters": [],
+        "nulls": "last"
+    },
+    {
+        "name": "Order_Priority",
+        "ascending": true,
+        "filters": [],
+        "nulls": "last"
+    }
+  ],
+  "rowTotals": ["Product_Container"],
+  "columnTotals": [
+    "Product_Container",
+    "Order_Priority"
+  ],
+  "columnGroups": ["Order_Priority"],
+  "limit": 2000
+}
+```
+
+## Compact Form 1.0 Query Properties
+
+The `query` can contain the following properties.
+
+- `filters` — The filters to apply to the data. For more information, see [filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md).
+- `groups` — The dimension to group by.
+- `limit` — The maximum number of results that the step can return. When you create an `aggregateflex` step, by default, CRM Analytics sets `limit` to 2,000. To return more results, set the `limit` attribute accordingly. The higher you increase the limit, the longer the query takes. When a limit isn't set, Analytics returns up to 10,000 results. Limit only impacts the number of records returned for display. The limit doesn't impact calculations across all records in the dataset. For instance, a query groups by Account Name and there are one million Account Names in a dataset. When the limit is 20, Analytics returns 20 records for display. But the summary row provides a total for the one million records.
+- `measures` — The measures returned by the query. If you provide an aggregate function for a measure, then the measure value must be a string, not an array.
+- `order` — Sort order (ascending or descending) of the first specified measure. To order the results in ascending order, set `ascending` to `true`. To order the results in descending order, set `ascending` to `false`. If you don't want to impose a specific order, remove the entire `"order"` parameter.
+- Compact-form (1.0) Query Example:
+
+  ```nolang
+  "query": {
+    "filters": [
+      [
+        "Account.Industry",
+        [
+          "Agriculture",
+          "Apparel",
+          "Banking",
+          "Biotechnology",
+          "Consulting",
+          "Education",
+          "Electronics",
+          "Energy",
+          "Engineering",
+          "Finance",
+          "Healthcare",
+          "Insurance",
+          "Manufacturing",
+          "Media",
+          "Retail",
+          "Technology",
+          "Telecommunications",
+          "Transportation",
+          "Utilities"
+        ],
+        "in"
+      ]
+    ],
+    "groups": [ "Account.Industry" ],
+    "measures": [
+      [
+        "avg",
+        "Amount"
+      ]
+    ],
+    "order": [
+      [
+        -1,
+        { "ascending": false }
+      ]
+    ]
+  }
+  ```
+
+## SAQL Form Query Properties
+
+The `query` can contain these properties:
+
+- `pigql` — Specify the SAQL query to retrieve data from a dataset. When you specify a SAQL query, you must specify the filters, limits, and ordering inside the `pigql` attribute. CRM Analytics ignores the following attributes if they are set under the `query` attribute: `filters`, `limit`, and `order`.
+
+- `measures` — Defines the fields included as measures. When using a SAQL-form query, you must include each measure in this parameter and in the `pigql` parameter. You can change the UI label of a measure by setting the `display` option.
+
+  ```nolang
+   "count", "*", null, {
+      "display": "% of total flights"
+  }
+  ```
+
+- `groups` — Defines the dimension fields to group by. When using a SAQL-form query, you must specify the group-by dimension in this parameter and in the `group` property in the `pigql` parameter.
+
+- SAQL-form Query Example:
+
+  ```nolang
+  "query": {
+    "pigql": "q = load \"ServiceOpportunity3\";\n
+              q = filter q by 'Account.Industry' in
+                  [\"Agriculture\", \"Apparel\", \"Banking\", \"Biotechnology\",
+                   \"Consulting\", \"Education\", \"Electronics\", \"Energy\",
+                   \"Engineering\", \"Finance\", \"Healthcare\", \"Insurance\",
+                   \"Manufacturing\", \"Media\", \"Retail\", \"Technology\",
+                   \"Telecommunications\", \"Transportation\", \"Utilities\"];\n
+              q = group q by 'Account.Industry';\n
+              q = foreach q generate 'Account.Industry' as 'Account.Industry',
+                                     count() as 'count';\n
+              q = order q by 'count' desc;\n
+              q = limit q 1000;",
+    "measures": [
+      [
+        "count",
+        "*",
+        "count"
+      ]
+    ],
+    "groups": [ "Account.Industry" ],
+    "measuresMap": {}
+  }
+  ```
+
+For more information about SAQL queries, see the [Analytics SAQL Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_saql.meta/bi_dev_guide_saql/bi_saql_intro.htm).
+
+## Example
+
+### `aggregateflex` Step
+
+```nolang
+"steps": {
+            "Account_Owner_1": {
+                "type": "aggregateflex",
+                "query": {
+                    "measures": [
+                        [
+                            "avg",
+                            "Amount"
+                        ]
+                    ],
+                    "groups": [
+                        "Account_Owner"
+                    ],
+                    "order": [
+                        [
+                            "avg_Amount",
+                            {
+                                "ascending": false
+                            }
+                        ]
+                    ]
+                },
+                "visualizationParameters": {
+                    "options": {},
+                    "type": "chart",
+                    "parameters": {
+                        "visualizationType": "hbar",
+                        "autoFitMode": "keepLabels",
+                        "theme": "wave",
+                        "title": {
+                            "label": "",
+                            "fontSize": 14,
+                            "subtitleLabel": "",
+                            "subtitleFontSize": 11,
+                            "align": "center"
+                        },
+                        "showValues": true,
+                        "axisMode": "multi",
+                        "binValues": false,
+                        "bins": {
+                            "breakpoints": {
+                                "low": 0,
+                                "high": 100
+                            },
+                            "bands": {
+                                "low": {
+                                    "label": "",
+                                    "color": "#B22222"
+                                },
+                                "medium": {
+                                    "label": "",
+                                    "color": "#ffa500"
+                                },
+                                "high": {
+                                    "label": "",
+                                    "color": "#008000"
+                                }
+                            }
+                        },
+                        "dimensionAxis": {
+                            "showAxis": true,
+                            "showTitle": true,
+                            "title": "",
+                            "customSize": "auto",
+                            "icons": {
+                                "useIcons": false,
+                                "iconProps": {
+                                    "column": "",
+                                    "fit": "cover",
+                                    "type": "round"
+                                }
+                            }
+                        },
+                        "measureAxis1": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "measureAxis2": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "legend": {
+                            "show": true,
+                            "showHeader": true,
+                            "inside": false,
+                            "descOrder": false,
+                            "position": "right-top",
+                            "customSize": "auto"
+                        },
+                        "tooltip": {
+                            "customizeTooltip": false,
+                            "showDimensions": true,
+                            "dimensions": "",
+                            "showMeasures": true,
+                            "measures": "",
+                            "showPercentage": true,
+                            "showNullValues": true,
+                            "showBinLabel": true
+                        },
+                        "trellis": {
+                            "enable": false,
+                            "showGridLines": true,
+                            "flipLabels": false,
+                            "type": "x",
+                            "chartsPerLine": 4,
+                            "size": [
+                                100,
+                                100
+                            ]
+                        },
+                        "applyConditionalFormatting": true,
+                        "showActionMenu": true,
+                        "columnMap": {
+                            "trellis": [],
+                            "plots": [
+                                "avg_Amount"
+                            ],
+                            "dimensionAxis": [
+                                "Account_Owner"
+                            ]
+                        }
+                    }
+                },
+                "datasets": [
+                    {
+                        "id": "0FbB00000000xHDKAY",
+                        "name": "DTC_Opportunity_SAMPLE",
+                        "label": "DTC Opportunity",
+                        "url": "/services/data/v48.0/wave/datasets/0FbB00000000xHDKAY"
+                    }
+                ],
+                "useGlobal": true,
+                "isGlobal": false,
+                "label": "Account_Owner_1",
+                "broadcastFacet": true,
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single"
+            }
+        }
+```
+
+- **[steps Properties for Compact Form and SAQL Form](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-form.md)**
+
+  The properties and JSON syntax in the `query` node of an `aggregateflex` step type vary based on whether the step is in compact form or SAQL form.
+# `steps` Properties for Compact Form and SAQL Form
+
+The properties and JSON syntax in the `query` node of an `aggregateflex` step type vary based on whether the step is in compact form or SAQL form.
+
+These examples display the `aggregateflex`step type in compact form and in SAQL form. For an explanation of the `aggregateflex` step type and its properties, see [aggregateflex Step Type Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-types-aggregateflex.md)
+
+## Example: Compact-Form `aggregateflex` Step
+
+```nolang
+        "steps": {
+            "all_Amount_1": {
+                "type": "aggregateflex",
+                "query": {
+                    "measures": [
+                        [
+                            "avg",
+                            "Amount"
+                        ]
+                    ],
+                    "groups": [
+                        "Account_Name"
+                    ],
+                    "order": [
+                        [
+                            "avg_Amount",
+                            {
+                                "ascending": false
+                            }
+                        ]
+                    ]
+                },
+                "visualizationParameters": {
+                    "options": {},
+                    "type": "chart",
+                    "parameters": {
+                        "visualizationType": "hbar",
+                        "autoFitMode": "keepLabels",
+                        "theme": "wave",
+                        "title": {
+                            "label": "",
+                            "fontSize": 14,
+                            "subtitleLabel": "",
+                            "subtitleFontSize": 11,
+                            "align": "center"
+                        },
+                        "showValues": true,
+                        "axisMode": "multi",
+                        "binValues": false,
+                        "bins": {
+                            "breakpoints": {
+                                "low": 0,
+                                "high": 100
+                            },
+                            "bands": {
+                                "low": {
+                                    "label": "",
+                                    "color": "#B22222"
+                                },
+                                "medium": {
+                                    "label": "",
+                                    "color": "#ffa500"
+                                },
+                                "high": {
+                                    "label": "",
+                                    "color": "#008000"
+                                }
+                            }
+                        },
+                        "dimensionAxis": {
+                            "showAxis": true,
+                            "showTitle": true,
+                            "title": "",
+                            "customSize": "auto",
+                            "icons": {
+                                "useIcons": false,
+                                "iconProps": {
+                                    "column": "",
+                                    "fit": "cover",
+                                    "type": "round"
+                                }
+                            }
+                        },
+                        "measureAxis1": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "measureAxis2": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "legend": {
+                            "show": true,
+                            "showHeader": true,
+                            "inside": false,
+                            "descOrder": false,
+                            "position": "right-top",
+                            "customSize": "auto"
+                        },
+                        "tooltip": {
+                            "customizeTooltip": false,
+                            "showDimensions": true,
+                            "dimensions": "",
+                            "showMeasures": true,
+                            "measures": "",
+                            "showPercentage": true,
+                            "showNullValues": true,
+                            "showBinLabel": true
+                        },
+                        "trellis": {
+                            "enable": false,
+                            "showGridLines": true,
+                            "flipLabels": false,
+                            "type": "x",
+                            "chartsPerLine": 4,
+                            "size": [
+                                100,
+                                100
+                            ]
+                        },
+                        "applyConditionalFormatting": true,
+                        "showActionMenu": true,
+                        "columnMap": {
+                            "trellis": [],
+                            "plots": [
+                                "avg_Amount"
+                            ],
+                            "dimensionAxis": [
+                                "Account_Name"
+                            ]
+                        }
+                    }
+                },
+                "datasets": [
+                    {
+                        "id": "0Fb6g000000HTE1CAO",
+                        "name": "DTC_Opportunity_SAMPLE",
+                        "label": "DTC Opportunity",
+                        "url": "/services/data/v48.0/wave/datasets/0Fb6g000000HTE1CAO"
+                    }
+                ],
+                "useGlobal": true,
+                "isGlobal": false,
+                "label": "all_Amount_1",
+                "broadcastFacet": true,
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single"
+            },
+
+```
+
+## Example: SAQL-Form `aggregateflex` Step
+
+When the step is in SAQL form, notice how each group and measure are defined in the `groups` and `measures` properties, respectively, and also in the `pigql` property. Other parts of the query—like filters, limits, and order—only need to be defined one time in the `pigql` property. You specify the compact form elements of `"groups"` and `"measures"` so that the associated chart widget can render the correct projections.
+
+In the following sample step, notice that the `'sum_Amount'` and `'sum_quantity'` projections in the `pigql` property are referenced in `"measures"` as `[[ "count", "*", "sum_Amount" ], [ "count", "*", "sum_quantity" ]]`. Measure projections in the `pigql` property always include the aggregation, underscore (`_`), and the name of the measure (`'sum_Amount'`) so that they can be referenced in the compact form.
+
+```nolang
+"steps": {
+    "Product_StageName_2": {
+        "type": "aggregateflex",
+        "visualizationParameters": {
+            "options": {}
+        },
+        "query": {
+            "pigql": "q = load \"Flexy_Sales\";\n
+                      q = group q by ('Product', 'StageName');\n
+                      q = foreach q generate 'Product' as 'Product',
+                                             'StageName' as 'StageName',
+                                             sum('Amount') as 'sum_Amount',
+                                             sum('quantity') as 'sum_quantity';\n
+                      q = filter q by 'sum_Amount' >= 14550720 && 'sum_Amount' <= 58807698;\n
+                      q = order q by 'sum_Amount' desc;\nq = limit q 10000;",
+            "measures": [
+                [
+                    "count",
+                    "*",
+                    "sum_Amount"
+                ],
+                [
+                    "count",
+                    "*",
+                    "sum_quantity"
+                ]
+            ],
+            "groups": [
+                "Product",
+                "StageName"
+            ]
+        },
+        "broadcastFacet": true,
+        "receiveFacetSource": {
+            "mode": "all",
+            "steps": []
+        },
+        "useGlobal": true,
+        "isGlobal": false,
+        "datasets": [{
+            "name": "Flexy_Sales",
+            "url": "/services/data/v38.0/wave/datasets/0FbB00000000q5gKAA",
+            "id": "0FbB00000000q5gKAA"
+        }]
+    }
+}
+```
+# `apex` Step Type Properties
+
+Use to include custom Apex functionality in a dashboard to access Salesforce platform features that aren’t inherently supported in Analytics. For example, pull in data using any API, manipulate data using your Apex classes, or apply simple case statements or complex machine learning. You can even harness AppExchange for things like integrating Twitter with Analytics—all in a way that is familiar.
+
+To set up an `apex` step, create an Apex class that returns data in a shape that Analytics can consume. And then define the step with the `apex` step type in the dashboard JSON. The step calls the Apex REST endpoint to return the data from the Apex controller class.
+
+Like a `soql` step, the Apex controller can return tabular data. Unlike `saql` and `soql` step types, the `apex` step type doesn’t define the `"strings"`, `"numbers"`, and `"groups"` arrays. The Apex class response must declare these column types.
+
+When you define an `apex` step, you can use a selection or results binding on the `body` parameter in the step JSON. You can also reference this step type in a results binding. This step type doesn’t support faceting. If you run a Analytics REST API query using an `apex` step, the query runs as the logged-in user. Each REST API query counts against the org’s API limits.
+
+Note the following limitations with `apex` steps:
+
+- If you include dashboards in a package, `apex` steps aren’t included. You must migrate the Apex classes separately.
+- The Android mobile app doesn’t support this type of step.
+
+| Field Name | Description                                                                                                                                                                                                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`     | Step type. Set to `apex`.                                                                                                                                                                                                                                                     |
+| `label`    | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                     |
+| `query`    | Query that returns the results. Can consist of the these parameters:<ul><li>`body` — Optional. Blob containing the input parameters needed by the Apex controller class.</li><li>`path` — Required. Specifies the class path and name of the Apex controller class.</li></ul> |
+
+## Example: `apex` Step
+
+```nolang
+"GetStockData": {
+    "query": {
+        "body": {
+            "symbol": "CRM"
+        },
+        "path": "stocks"
+    },
+    "type": "apex"
+}
+```
+
+## Example: Display Real-Time Stock Data
+
+You want to display real-time stock data from a website in your dashboard. You want to fetch the data from an external API and add logic to determine the time of day for each stock price. Here’s the goal for this dashboard.
+
+![The toggle in the dashboard allows you to choose a company, which filters the results in the table and chart, and changes the displayed stock symbol.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_stock_data_dashboard.png)
+
+To create this dashboard, complete the following steps:
+
+1. Create the Apex controller class that gets the data from the stock website.
+2. Add the stock website to the allowed sites in Salesforce.
+3. Create the `apex` step in addition to the other dashboard widgets.
+
+## Create the Apex Class
+
+Define the Apex controller class and methods that return the stock price for different companies over time.
+
+1. From setup, enter `Apex Classes` in the Quick Find box, and select **Apex Classes**.
+
+2. Click **New**.
+
+   ![You can create new Apex classes from this page.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_apex_classes_new.png)
+
+3. Add the following code.
+
+   ```nolang
+   @RestResource(urlMapping='/stocks')
+   global with sharing class StocksRestController {
+
+       @HttpPost
+       global static String stocks() {
+           ApexStepRequest stepRequest = new ApexStepRequest(new ApexStepRequest.Parameter[]{
+               new ApexStepRequest.Parameter('symbol', ApexStepRequest.ParameterType.STRING_PARAM)
+           });
+
+           // fetch some stock data
+           HttpRequest request = new HttpRequest();
+           Http http = new Http();
+           // make sure this domain is whitelisted in the proxy
+           request.setEndpoint('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&interval=5min&apikey=1QRP8ATD7134OVMA&symbol='
+               // default to CRM
+               + stepRequest.getStringParam('symbol', 'CRM')
+           );
+           request.setMethod('GET');
+
+           try {
+               HTTPResponse response = http.send(request);
+               JSONParser parser = JSON.createParser(response.getBody());
+
+               List<Map<String, Object>> returnItems = new List<Map<String, Object>>();
+               while (parser.nextToken() != null) {
+                   if (parser.getCurrentToken() == JSONToken.START_OBJECT && parser.getCurrentName() != null && parser.getCurrentName().startsWith('20')) {
+                       String dateLabel = parser.getCurrentName();
+                       parser.nextToken();
+                       parser.nextToken();
+                       System.debug(parser.getText());
+
+                       Map<String, Object> curRow = new Map<String, Object>();
+                       curRow.put('date', dateLabel);
+                       curRow.put('value', Double.valueOf(parser.getText()));
+                       returnItems.add(curRow);
+                   }
+               }
+
+               return JSON.serialize(new ApexStepResponse(returnItems));
+           } catch(Exception exp) {
+               System.debug('exception '+exp);
+           }
+
+
+           return '';
+       }
+
+   }
+
+   ```
+
+4. Add two more Apex classes for `ApexStepRequest` and `ApexStepResponse` to support the Apex stocks class.
+
+   The code for these classes, along with the stock step code, can be found in this public [`AnalyticsApexSteps`](https://github.com/forcedotcom/AnalyticsApexSteps) GitHub repo, in the `/force-app/main/apex/common` directory. This GitHub repo also contains other Apex step examples.
+
+5. Click **Save**.
+
+   ![The StocksRestControl apex class appears.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_apex_class_StocksRestController.png)
+
+## Allow the External Website
+
+To enable Apex to query external REST endpoints, allow the website in Salesforce.
+
+1. From setup, enter `Remote` in the Quick Find box, and select **Remote Site Settings**.
+
+2. Click **New Remote Site**.
+
+   ![The page shows all sites that are allowed.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_apex_remote_site_settings.png)
+
+3. Enter the remote site name and URL.
+
+   ![The page shows the remote site name, URL, and description.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_apex_remote_site_add.png)
+
+4. Click **Save**.
+
+## Create the Apex Step
+
+Manually define the `apex` step in the dashboard JSON to get the stock results from the Apex class that you previously created.
+
+In the dashboard JSON, add the following `apex` step.
+
+```nolang
+"StockData": {
+    "query": {
+        "body": {
+            "symbol": "{{cell(CompaniesList_1.selection, 0, \"value\").asString()}}"
+        },
+        "path": "stocks"
+    },
+    "type": "apex"
+}
+```
+
+The `apex` step query contains the these parameters.
+
+- `body` — The binding retrieves the stock symbol when a company is selected in the toggle widget.
+
+  ![The Salesforce option is selected in the toggle widget, which filters the table and chart widgets and displays the stock symbol in the text widget.](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboards_apex_example_toggle_widget.png)
+
+- `path` — Specifies the REST API resource path to the Apex controller, as specified in the `urlMapping` of the `RestResource` annotation on the Apex controller.
+
+The dashboard shows four widgets. The toggle widget is based on a static step that maps predefined company names to stock symbols. The table widget and line chart use the `apex` step to retrieve the results. The text widget uses a binding to concatenate “Selected symbol:” and the stock symbol of the selected company in the toggle widget.
+
+Here’s the final dashboard JSON.
+
+```nolang
+{
+    "label": "Stock Quotes",
+    "mobileDisabled": false,
+    "state": {
+        "dataSourceLinks": [],
+        "filters": [],
+        "gridLayouts": [
+            {
+                "name": "Default",
+                "numColumns": 12,
+                "pages": [
+                    {
+                        "label": "Untitled",
+                        "name": "b177a6e6-8ab6-4914-af36-09c7fa23e0c8",
+                        "widgets": [
+                            {
+                                "colspan": 6,
+                                "column": 0,
+                                "name": "pillbox_1",
+                                "row": 0,
+                                "rowspan": 1,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 5,
+                                "column": 7,
+                                "name": "text_1",
+                                "row": 0,
+                                "rowspan": 1,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 6,
+                                "column": 0,
+                                "name": "table_1",
+                                "row": 1,
+                                "rowspan": 7,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            },
+                            {
+                                "colspan": 6,
+                                "column": 6,
+                                "name": "chart_1",
+                                "row": 1,
+                                "rowspan": 7,
+                                "widgetStyle": {
+                                    "borderEdges": []
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "rowHeight": "normal",
+                "selectors": [],
+                "style": {
+                    "alignmentX": "left",
+                    "alignmentY": "top",
+                    "backgroundColor": "#F2F6FA",
+                    "cellSpacingX": 8,
+                    "cellSpacingY": 8,
+                    "fit": "original",
+                    "gutterColor": "#C5D3E0"
+                },
+                "version": 1
+            }
+        ],
+        "layouts": [],
+        "steps": {
+            "CompaniesList_1": {
+                "datasets": [],
+                "dimensions": [],
+                "groups": [],
+                "label": "CompaniesList",
+                "numbers": [],
+                "selectMode": "singlerequired",
+                "strings": [],
+                "type": "staticflex",
+                "values": [
+                    {
+                        "display": "Salesforce",
+                        "value": "CRM"
+                    },
+                    {
+                        "display": "Apple",
+                        "value": "AAPL"
+                    },
+                    {
+                        "display": "Oracle",
+                        "value": "ORCL"
+                    },
+                    {
+                        "display": "Twitter",
+                        "value": "TWTR"
+                    },
+                    {
+                        "display": "Facebook",
+                        "value": "FB"
+                    }
+                ],
+                "broadcastFacet": true
+            },
+            "StockData": {
+                "query": {
+                    "body": {
+                        "symbol": "{{cell(CompaniesList_1.selection, 0, \"value\").asString()}}"
+                    },
+                    "path": "stocks"
+                },
+                "type": "apex"
+            }
+        },
+        "widgetStyle": {
+            "backgroundColor": "#FFFFFF",
+            "borderColor": "#E6ECF2",
+            "borderEdges": [],
+            "borderRadius": 0,
+            "borderWidth": 1
+        },
+        "widgets": {
+            "table_1": {
+                "parameters": {
+                    "borderColor": "#e0e5ee",
+                    "borderWidth": 1,
+                    "cell": {
+                        "backgroundColor": "#ffffff",
+                        "fontColor": "#16325c",
+                        "fontSize": 12
+                    },
+                    "columns": [],
+                    "customBulkActions": [],
+                    "exploreLink": false,
+                    "header": {
+                        "backgroundColor": "#f4f6f9",
+                        "fontColor": "#16325c",
+                        "fontSize": 12
+                    },
+                    "innerMajorBorderColor": "#a8b7c7",
+                    "innerMinorBorderColor": "#e0e5ee",
+                    "mode": "fittocontainer",
+                    "numberOfLines": 1,
+                    "step": "StockData",
+                    "verticalPadding": 8,
+                    "evenRowColor": null,
+                    "oddRowColor": null
+                },
+                "type": "table"
+            },
+            "pillbox_1": {
+                "parameters": {
+                    "compact": false,
+                    "exploreLink": false,
+                    "step": "CompaniesList_1"
+                },
+                "type": "pillbox"
+            },
+            "text_1": {
+                "parameters": {
+                    "fontSize": 20,
+                    "text": "Selected symbol: {{ cell(CompaniesList_1.selection, 0, \"value\").asString() }}",
+                    "textAlignment": "center",
+                    "textColor": "#091A3E"
+                },
+                "type": "text"
+            },
+            "chart_1": {
+                "parameters": {
+                    "autoFitMode": "keepLabels",
+                    "showPoints": false,
+                    "legend": {
+                        "showHeader": true,
+                        "show": true,
+                        "customSize": "auto",
+                        "position": "right-top",
+                        "inside": false
+                    },
+                    "axisMode": "multi",
+                    "tooltip": {
+                        "showBinLabel": true,
+                        "measures": "",
+                        "showPercentage": false,
+                        "showDimensions": true,
+                        "showMeasures": true,
+                        "customizeTooltip": false,
+                        "dimensions": ""
+                    },
+                    "visualizationType": "line",
+                    "dashLine": {
+                        "measures": "",
+                        "showDashLine": false
+                    },
+                    "exploreLink": false,
+                    "title": {
+                        "fontSize": 14,
+                        "subtitleFontSize": 11,
+                        "label": "",
+                        "align": "center",
+                        "subtitleLabel": ""
+                    },
+                    "trellis": {
+                        "flipLabels": false,
+                        "showGridLines": true,
+                        "size": [
+                            100,
+                            100
+                        ],
+                        "enable": false,
+                        "type": "x",
+                        "chartsPerLine": 4
+                    },
+                    "fillArea": true,
+                    "showZero": true,
+                    "measureAxis2": {
+                        "sqrtScale": false,
+                        "showTitle": true,
+                        "showAxis": true,
+                        "title": "",
+                        "customDomain": {
+                            "showDomain": false
+                        }
+                    },
+                    "measureAxis1": {
+                        "sqrtScale": false,
+                        "showTitle": true,
+                        "showAxis": true,
+                        "title": "",
+                        "customDomain": {
+                            "showDomain": false
+                        }
+                    },
+                    "theme": "wave",
+                    "step": "StockData",
+                    "dimensionAxis": {
+                        "showTitle": true,
+                        "customSize": "auto",
+                        "showAxis": true,
+                        "title": "",
+                        "icons": {
+                            "useIcons": false,
+                            "iconProps": {
+                                "fit": "cover",
+                                "column": "",
+                                "type": "round"
+                            }
+                        }
+                    },
+                    "drawArea": {
+                        "measure": "",
+                        "showDrawArea": false,
+                        "bounding1": "",
+                        "bounding2": ""
+                    }
+                },
+                "type": "chart"
+            }
+        }
+    },
+    "datasets": []
+}
+```
+# `columns` Properties
+
+Use the `columns` property to add a column to a step query source in Compact form 2.0.
+
+## Example: Aggregate measure column defined in Compact form 2.0
+
+```nolang
+"columns": [
+    {
+        "field": [
+            "sum",
+            "Amount"
+        ]
+    }
+]
+
+```
+
+## Example: Non-aggregate columns defined in Compact form 2.0
+
+```nolang
+"columns": [
+    {
+        "field": "Customer_Name",
+        "name": "Customer_Name"
+    },
+    {
+        "field": "Product_Name",
+        "name": "Product_Name"
+    },
+    {
+        "field": "Profit",
+        "name": "Profit"
+    }
+]
+
+```
+
+## Example: Formula column defined in Compact form 2.0
+
+```nolang
+"columns": [
+    {
+        "formula": "A*2",
+        "name": "B"
+    }
+]
+
+```
+# `grain` Step Type Properties
+
+Use the `grain` step type for a values table. Values tables have no groupings, just a list of dataset fields to display as columns in the table.
+
+| Field Name                | Description                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `datasets`                | An array of datasets used by this step. Specify the alias of each dataset. If the `pigql` attribute references a dataset that's not specified here, the dashboard doesn't render. A `grain` step can only have one dataset.                                                                                                                                                                                                         |
+| `isFacet`                 | Enables this step to facet and be faceted by other steps. Faceting is when a selection in a widget filters other steps in the dashboard.                                                                                                                                                                                                                                                                                            |
+| `isGlobal`                | This applies to global filters created before Winter '18 only. Newer global filters, those created in the global filter panel widget, don't require a step. Default is false. You can apply this property only on steps that are connected to a global filter widget—all other steps ignore this property. A global filter filters other steps in the dashboard that have `useGlobal` set to `true` and reference the same dataset. |
+| `label`                   | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                                                                                                                                                                           |
+| `query`                   | The query used to retrieve results from a dataset. The query can be in compact form only.                                                                                                                                                                                                                                                                                                                                           |
+| `type`                    | Step type. Set to `grain`.                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `useGlobal`               | Indicates whether to apply global filters to this step (`true`) or not (`false`).                                                                                                                                                                                                                                                                                                                                                   |
+| `visualizationParameters` | Visualization details about the step. For more information, see [visualizationParameters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-visualizationparameters-properties.md).                                                                                                                                                                                                                                |
+
+The `query` can contain the following properties:
+
+- `filters` — The filter conditions to apply to the data.
+- `values` — List of dataset fields to show as table columns.
+- `limit` — The maximum number of results that the step can return. When you create a `grain` step, by default, Analytics sets `limit` to 100. To return more results, set the `limit` attribute accordingly. The higher you increase the limit, the longer the query takes. When a limit isn't set, CRM Analytics returns up to 10,000 results. Limit only impacts the number of records returned for display. The limit doesn't impact calculations across all records in the dataset. For instance, a query groups by Account Name and there are one million Account Names in a dataset. When the limit is 20, CRM Analytics returns 20 records for display. But the summary row provides a total for the one million records.
+
+Example `query`:
+
+```nolang
+"steps": {
+    "lens_1": {
+        "type": "grain",
+        "visualizationParameters": {
+            "visualizationType": "valuestable",
+            "options": {}
+        },
+        "query": {
+            "values": [
+                "Case.IsEscalated",
+                "AccountId",
+                "StageName",
+                "ForecastCategory",
+                "IsClosed",
+                "Amount"
+            ],
+            "limit": 500
+        },
+        "isFacet": true,
+        "useGlobal": true,
+        "isGlobal": false,
+        "label": "",
+        "datasets": [
+            {
+                "name": "ServiceOpportunity16",
+                "url": "/services/data/v39.0/wave/datasets/0FbB00000000kOSKAY",
+                "id": "0FbB00000000kOSKAY"
+            }
+        ]
+    }
+},
+```
+
+For more information SAQL queries, see the [Analytics SAQL Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_saql.meta/bi_dev_guide_saql/bi_saql_intro.htm).
+
+## Example: `grain` Step
+
+```nolang
+"lens_1": {
+  "type": "grain",
+  "visualizationParameters": {
+    "visualizationType": "valuestable",
+    "options": {
+      "totals": true
+    }
+  },
+  "query": {
+    "filters": [
+      [
+        "Amount",
+          [[
+            1000000,
+            7780844
+          ]],
+       ">=<="
+      ]
+    ],
+    "values": [
+      "AccountId",
+      "ForecastCategory",
+      "CloseDate",
+      "Amount",
+      "Account.Name",
+      "StageName"
+    ]
+  },
+  "isFacet": true,
+  "useGlobal": true,
+  "isGlobal": false,
+  "label": "",
+  "datasets": [
+    {
+      "name": "ServiceOpportunity3",
+      "url": "/services/data/v39.0/wave/datasets/0FbR0000000012uKAA",
+      "id": "0FbR0000000012uKAA"
+    }
+  ]
+}
+```
+# `saql` Step Type Properties
+
+Use the `saql` step type for special cases when querying a Analytics dataset. With this step type, you can write a custom SAQL query to create derived fields in a values table. You can specify dimensions without groupings. Also, you can bind the dataset name or entire query. For example, you can bind this step type to a static step that provides different SAQL queries or datasets based on a selection.
+
+| Field Name           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`               | Step type. Set to `saql`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `label`              | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `query`              | The SAQL query used to retrieve results. For more information about SAQL queries, see [Analytics SAQL Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_saql.meta/bi_dev_guide_saql/bi_saql_intro.htm). When you create a `saql`-type step, by default, no `limit` is set in the query. When a limit isn't set, a step can return up to 10,000 results. To return more results, set the `limit` attribute accordingly. The higher you increase the limit, the longer the query takes. Limit only impacts the number of records returned for display. The limit doesn't impact calculations across all records in the dataset. For instance, a query groups by Account Name and there are one million Account Names in a dataset. When the limit is 20, Analytics returns 20 records for display. But the summary row provides a total for the one million records. You can bind a `saql` step type to dynamically set the dataset used in the query or change the entire query based on a selection in another step. For example, you can create a toggle based on a static step that allows the dashboard viewer to select a query. Each toggle option contains a valid SAQL query. Each query can be based on different datasets. (See the JSON example at the end of this section.) |
+| `broadcastFacet`     | Controls whether the step's selections are broadcasted as facets. Faceting is when a selection in a widget filters other steps in the dashboard. Default is `true`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `receiveFacetSource` | Controls whether the step in the receiving query listens for broadcasted facets and applies them as filters. The mode can be "`all`", "`none`", "`include`", or "`exclude`". Use `steps` to list which steps to include or exclude. Default is `all`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `useGlobal`          | Indicates whether to apply global filters to this step (`true`) or not (`false`). If the step is in SAQL form, you must also set `autoFilter` to `true` to apply the global filters. By default, the global filter widget filters compact-form steps only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `selectMode`         | Determines the selection interaction. The options for charts are: `none`, `single`, and `singlerequired`. The options for list, range, and toggle selectors are: `single`, `singlerequired`, `multi`, and `multirequired`. `selectMode` doesn't apply to number, values table, compare table, date, and global filter widgets.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `start`              | The initial selections that are applied to the step when the dashboard first opens. A widget with a `saql`-type step can return up to 10,000 results, by default. If Analytics doesn't find the initial value in those results, it ignores this setting.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `strings`            | Flags the specified fields as non-grouping dimensions. For example, you can flag a field as a dimension for a values table in which no groupings are allowed. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `numbers`            | Flags the specified fields as measures. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `groups`             | Flags the specified fields as groupings. For example, you can flag a field as a grouping for a pivot table or chart. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+
+Single-selection example `start`:
+
+```nolang
+"start": [ "06 - Proposal/Price Quote" ]
+```
+
+Multi-selection example `start`:
+
+```nolang
+"start": [
+    "06 - Proposal/Price Quote",
+    "01 - Prospecting"
+]
+```
+
+## Example: `saql` Step
+
+```nolang
+       "steps": {
+            "Amount_1": {
+                "type": "saql",
+                "query": "q = load \"DTC_Opportunity_SAMPLE\";\nq = group q by 'Account_Name';\nq = foreach q generate 'Account_Name' as 'Account_Name', count() as 'count';\nq = order q by 'Account_Name' desc;\nq = limit q 1000;",
+                "useGlobal": true,
+                "numbers": [],
+                "groups": [],
+                "strings": [],
+                "visualizationParameters": {
+                    "type": "chart",
+                    "parameters": {
+                        "visualizationType": "hbar",
+                        "autoFitMode": "keepLabels",
+                        "theme": "wave",
+                        "title": {
+                            "label": "",
+                            "fontSize": 14,
+                            "subtitleLabel": "",
+                            "subtitleFontSize": 11,
+                            "align": "center"
+                        },
+                        "showValues": true,
+                        "axisMode": "multi",
+                        "binValues": false,
+                        "bins": {
+                            "breakpoints": {
+                                "low": 0,
+                                "high": 100
+                            },
+                            "bands": {
+                                "low": {
+                                    "label": "",
+                                    "color": "#B22222"
+                                },
+                                "medium": {
+                                    "label": "",
+                                    "color": "#ffa500"
+                                },
+                                "high": {
+                                    "label": "",
+                                    "color": "#008000"
+                                }
+                            }
+                        },
+                        "dimensionAxis": {
+                            "showAxis": true,
+                            "showTitle": true,
+                            "title": "",
+                            "customSize": "auto",
+                            "icons": {
+                                "useIcons": false,
+                                "iconProps": {
+                                    "column": "",
+                                    "fit": "cover",
+                                    "type": "round"
+                                }
+                            }
+                        },
+                        "measureAxis1": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "measureAxis2": {
+                            "sqrtScale": false,
+                            "showAxis": true,
+                            "customDomain": {
+                                "showDomain": false
+                            },
+                            "showTitle": true,
+                            "title": ""
+                        },
+                        "legend": {
+                            "show": true,
+                            "showHeader": true,
+                            "inside": false,
+                            "descOrder": false,
+                            "position": "right-top",
+                            "customSize": "auto"
+                        },
+                        "tooltip": {
+                            "customizeTooltip": false,
+                            "showDimensions": true,
+                            "dimensions": "",
+                            "showMeasures": true,
+                            "measures": "",
+                            "showPercentage": true,
+                            "showNullValues": true,
+                            "showBinLabel": true
+                        },
+                        "trellis": {
+                            "enable": false,
+                            "showGridLines": true,
+                            "flipLabels": false,
+                            "type": "x",
+                            "chartsPerLine": 4,
+                            "size": [
+                                100,
+                                100
+                            ]
+                        },
+                        "applyConditionalFormatting": true,
+                        "showActionMenu": true
+                    }
+                },
+                "label": "Amount_1",
+                "selectMode": "single",
+                "broadcastFacet": true,
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                }
+            }
+        },
+```
+
+## Example: `saql` Step with a Bound Query
+
+```nolang
+"query": "{{cell(static_1.selection, 0, \"query\").asString()"
+
+```
+
+The `static_1` step looks like this:
+
+```nolang
+values: [
+{query: "q = load \"opp\"; ..."}
+{query: "q = load \"account\"; ..."}
+]
+```
+
+:::tip
+Every dataset referenced in a binding of a `saql` step must be referenced by another step in the dashboard. If not, Analytics removes the dataset from the `datasets` attribute in the dashboard JSON. As a result, widgets based on the `saql` step display an error because it can't find the dataset.
+:::
+# `soql` Step Type Properties
+
+Use to directly query Salesforce objects—both standard and custom—to get Salesforce data that’s not available in datasets. You can also query external objects created with an OData adapter for Salesforce Connect. To view the results in the dashboard, the user viewing the dashboard must have access to the object and fields queried by the `soql` step. The SOQL query returns only records to which the user has access.
+
+For more information about using Salesforce Connect to access external data, see the [Salesforce Connect](https://help.salesforce.com/articleView?id=platform_connect_about.htm) Salesforce Help.
+
+| Field Name | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`     | Step type. Set to `soql`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `label`    | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `query`    | The SOQL query used to retrieve results from a Salesforce object. Because Salesforce—not Analytics—executes the query, the maximum number of returned results depends on the SOQL query limit. For more information about SOQL queries, see [SOQL and SOSL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm). Every field listed in your SOQL query must be listed in one of the metadata properties: `strings`, `numbers`, or `groups`. |
+| `strings`  | Flags the specified fields as non-grouping dimensions. For example, you can flag a field as a dimension for a values table in which no groupings are allowed. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                       |
+| `numbers`  | Flags the specified fields as measures. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `groups`   | Flags the specified fields as groupings. For example, you can flag a field as a grouping for a pivot table or chart. If you use a binding to determine the field, specify the binding here as well.                                                                                                                                                                                                                                                                                                                |
+
+:::note
+This step type doesn’t support faceting. If needed, you can use a binding to filter other steps based on a selection in a `soql` step.
+:::
+
+## Example: `soql` Step
+
+```nolang
+"soql": {
+  "type": "soql",
+  "query": "SELECT Name from ACCOUNT",
+  "strings": ["Name"],
+  "numbers": [],
+  "groups": [],
+  "selectMode": "single"
+}
+```
+
+## Example: Total Number of Active Salesforce Users
+
+The following query gets the total number of active users from the Salesforce User object. In this example, we name the count expression as “foo” and then reference it by name in the `numbers` parameter.
+
+```nolang
+"soql": {
+  "type": "soql",
+  "query": "SELECT count(id) foo FROM User u WHERE u.IsActive = true",
+  "strings": [],
+  "numbers": ["foo"],
+  "groups": [],
+  "selectMode": "single"
+}
+```
+
+If you don’t name the count expression, the query produces an "expr0" field that you can use in the `numbers` parameter.
+
+```nolang
+"soql": {
+  "type": "soql",
+  "query": "SELECT count(id) FROM User u WHERE u.IsActive = true",
+  "strings": [],
+  "numbers": [ "expr0" ],
+  "groups": [],
+  "selectMode": "single"
+}
+```
+# `source` Step Type Properties
+
+Use the `sources` property to add `columns`, `groups`, `filters`, and formulas to a step query.
+
+| Field Name    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `columns`     | The columns for the source. For more information, see [columns Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-columns.md).                                                                                                                                                                                                                                                                                                                                                                          |
+| `groups`      | The dimensions to group the data in the source.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `filters`     | The filters applied to the columns in the source. For more information, see [filters Properties](/docs/analytics/bi-dev-guide-json/guide/bi-dbjson-steps-filters.md)                                                                                                                                                                                                                                                                                                                                                     |
+| `name`        | The name of the data source. If the query has formula columns, they’re added as the last source without the `name` property.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `cogroupType` | When there are multiple data sources with different `name` properties, this parameter is used to define which records are included in the blended data for this query. Valid values for `cogroupType` are `left`, `right` `inner` `full`. For `left` and `right` blends, the initial dataset or blend is considered the left one. For more information on data blending, see [Explore Multiple Datasets with a Single Query](https://help.salesforce.com/articleView?id=analytics.bi_explorer_data_blending.htm&type=5). |
+
+## Example: Grain Query
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": "Customer_Name",
+            "name": "Customer_Name"
+          },
+          {
+            "field": "Customer_Segment",
+            "name": "Customer_Segment"
+          },
+          {
+            "field": "Product_Name",
+            "name": "Product_Name"
+          },
+          {
+            "field": "City",
+            "name": "City"
+          },
+          {
+            "field": "Order_ID",
+            "name": "Order_ID"
+          },
+        ],
+        "groups": [],
+        "filters": [],
+        "name": "SuperStoreSales"
+    }
+]
+
+```
+
+## Example: Query without groupings
+
+When a query isn’t grouped by a dimension, set `groups` to `["all"]`
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"]
+            "name": "A"
+          },
+        ],
+        "groups": ["all"],
+        "filters": [],
+        "name": "SuperStoreSales"
+    }
+]
+
+```
+
+## Example: Query with groupings
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"]
+            "name": "A"
+          },
+        ],
+        "groups": ["Customer_Segment", "Order_priority"],
+        "filters": [],
+        "name": "SuperStoreSales"
+    }
+]
+
+```
+
+## Example: Query with formula column
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"]
+            "name": "A"
+          },
+          {
+            "formula": "case \nwhen starts_with('Product_Container', \"Small|") then null\nelse count()\nend\n",
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "groups": [
+            "Order_Priority",
+            "Product_Container"
+        ],
+        "name": "SuperStoreSales"
+    }
+]
+
+```
+
+## Example: Query with columns referencing formulas
+
+Formula columns are defined in a separate source without a `name` property.
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"]
+            "name": "A"
+          }
+        ],
+        "groups": ["Customer_Segment", "Order_Priority"],
+        "filters": [],
+        "name": "SuperStoreSales"
+    },
+    {
+        "columns": [
+          {
+            "forumula": "A*2",
+            "name": "B"
+          },
+          {
+            "forumula": "B/100",",
+            "name": "C"
+           }
+         ]
+    }
+]
+
+```
+
+## Example: Query with multiple data sources
+
+```nolang
+"sources": [
+    {
+        "columns": [
+          {
+            "field": ["avg", "Profit"]
+            "name": "A"
+          }
+        ],
+        "groups": ["City"],
+        "filters": [],
+        "name": "SuperStoreSales",
+        "cogroupType": "left"
+    },
+    {
+        "columns": [
+          {
+            "field": ["sum", "Amount"],
+            "name": "B"
+          }
+        ],
+        "groups": ["City"],
+        "filters": [],
+        "name": "Opportunity"
+    }
+]
+
+```
+# `staticflex` Step Type Properties
+
+Use the `staticflex` step type to manually define your own set of data. For example, you can use this step to populate a list of static values in a toggle or list widget. It can also be used to provide values to a binding. For example, it can provide possible filters, groups, measures, sort order, and limits.
+
+| Field Name       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`           | Step type. Set to `staticflex`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `label`          | Step label, which is primarily used for display in the dashboard designer user interface.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `values`         | Values for the static step. You can have multiple fields for each static value, where each field provides different information about the value, like a label, measurement, or range. When the static step is associated with a widget, the widget uses the first specified field as the display label. You can use other fields to specify values or ranges that you can use to facet or bind steps. For more information about binding a static step to another step, see the [Analytics Bindings Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_bindings.meta/bi_dev_guide_bindings/bi_dbjson_bindings.htm). For more information about faceting a static step with another data source, see [Configure Cross-Dataset Faceting with Connected Data Sources](https://help.salesforce.com/articleView?id=bi_dashboard_data_source_connections.htm). If you use the static step wizard to create the step, the step contains the following default fields: `display` and `value`, as shown in the JSON example. You can change these arbitrary field names and add more fields. The values in each field must have the same datatype, like numbers, strings, or arrays. For instance, if a row has `"value": "123"`, another row can't have `"value": [123]`. |
+| `broadcastFacet` | Controls whether the step's selections are broadcasted as facets. Faceting is when a selection in a widget filters other steps in the dashboard. Default is `true`. To enable this step to broadcast facets, set this property to `true` and connect this step with another data source. This step type can't receive facets.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `isGlobal`       | Not applicable. You can only apply this property on steps that are connected to a global filter widget—all other steps ignore this property.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `useGlobal`      | Indicates whether to apply global filters to this step (`true`) or not (`false`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `selectMode`     | Determines the selection interaction. The options for charts are: `none`, `single`, and `singlerequired`. The options for list, range, and toggle selectors are: `single`, `singlerequired`, `multi`, and `multirequired`. `selectMode` doesn't apply to number, values table, compare table, date, and global filter widgets.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `start`          | The initial selections that are applied to the step when the dashboard first opens.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+Static example `start`:
+
+```nolang
+ "start": {
+    "display": [
+        "Atlanta"
+    ]
+}
+```
+
+Binding example `start`:
+
+```nolang
+"start": {
+"display" : "{{column(LoggedinUserInfo_1.result, [\"ManagerId\"]).asObject()}}"
+}
+```
+
+## Example: `staticflex` Step
+
+```nolang
+"my_opps_1": {
+    "numbers": [],
+    "strings": [],
+    "groups": [],
+    "broadcastFacet": true,
+    "selectMode": "single",
+    "datasets": [],
+    "dimensions": [],
+    "type": "staticflex",
+    "label": "my opps",
+    "values": [
+        {
+            "display": "All opps",
+            "value": "false"
+        },
+        {
+            "display": "My opps",
+            "value": "true"
+        }
+    ]
+}
+```
+# `visualizationParameters` Properties
+
+The `visualizationParameters` key contains chart properties defined for the step. When you associate the step with a widget, the widget properties override these settings.
+
+| Field Name          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`           | Specifies chart properties for steps added or clipped to the designer. CRM Analytics overrides these options when they are defined in the widget parameters. For more information about chart properties, see [Visualizing Data With Charts](https://help.salesforce.com/articleView?id=bi_visualize.htm).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `visualizationType` | Specifies the chart type. You can override the chart type at the widget level. Valid values for visualizationType are: <ul><li>`calheatmap`— calendar heat map</li><li>`choropleth` — choropleth (map)</li><li>`combo` — lines and bars to show multiple metrics</li><li>`flatgauge` — flat gauge</li><li>`funnel` — funnel</li><li>`hbar` — horizontal bar</li><li>`hdot` — horizontal dot plot</li><li>`heatmap`— heat map</li><li>`matrix`— matrix</li><li>`parallelcoords` — parallel coordinates</li><li>`pie` — donut</li><li>`pivottable` — pivot table</li><li>`polargauge` — polar gauge</li><li>`pyramid` — pyramid</li><li>`rating` — rating</li><li>`scatter` — scatter plot</li><li>`stackhbar` — stacked horizontal bar</li><li>`stackpyramid` — stacked pyramid</li><li>`stackvbar` — stacked vertical bar</li><li>`stackwaterfall` — stacked waterfall</li><li>`time` — timeline</li><li>`time-bar` — time bar</li><li>`time-combo` — time bar</li><li>`vbar` — vertical bar</li><li>`vdot` — vertical dot plot</li><li>`waterfall` — waterfall</li></ul> |
+# `filters` Properties
+
+Use the `filters` property to add a filter to a step query. Although you can create filters for query steps in the user interface, you have to manually define filters for static steps in the dashboard JSON.
+
+The syntax for a filter in the step definition varies based on whether the step is in compact or SAQL form. This section describes the filter syntax for compact-form steps, including a description and example of every operator. For information about the filters for SAQL-form steps, see the [Analytics SAQL Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_saql.meta/bi_dev_guide_saql/bi_saql_intro.htm).
+
+## Filter Syntax for Compact Form 2.0
+
+Filters defined in compact-form steps have the following syntax.
+
+```nolang
+"filters": [[
+    "field",
+    [value],
+    "operator"
+]]
+```
+
+## Example Filter
+
+For example, the following filter shows only records where `Sales` is between `1` and `100,000` and `Customer_Segment` is either `Consumer` or `Corporate`.
+
+```nolang
+"filters": [
+    [
+        "Sales",
+        [
+          1,
+          100000
+        ],
+        ">=<="
+    ],
+    [
+        "Customer_Segment",
+        [
+          "Consumer"
+          "Corporate"
+        ],
+        "in"
+    ]
+]]
+
+```
+
+## Dimension Filter Examples
+
+```nolang
+
+   "filters": [Region", ["East", "West"], "in"]
+   "filters": [Region", ["st"], "matches"]
+   "filters": [Region", [], "isnull"]
+   "filters": [["year", "OrderDate"], [2020, 2022], "in"]
+
+```
+
+## Measure Filter Examples
+
+```nolang
+
+   "filters": ["Profit", [], "isnull"]
+   "filters": ["Profit", [1], ">="]
+   "filters": ["Profit", [1, 100], ">=<="]
+
+```
+
+## Absolute Date Filter Examples
+
+```nolang
+
+   "filters": ["OrderDate", ["2019-10-12", "2019-10-22"], "between"
+   "filters": ["OrderDate", ["2019-10-12", null], "between"]
+   "filters": ["OrderDate", [null, "2019-10-22"], "between"]
+
+```
+
+## Relative Date Filter Examples
+
+```nolang
+
+   "filters": ["OrderDate", [[fiscal_year", -1], ["day", 0]], "between"]]"between"]
+
+```
+
+## Compound Filter and Compound Date Filter in a Time-zone Enabled Org Example
+
+```nolang
+"filters": [
+    [
+        [
+          "Type",
+          "LeadSource"
+        ],
+        [
+          "Existing Business",
+          "Advertisement"
+        ],
+        "in"
+    ]
+    [
+        [
+          ["year", "CloseDate"],
+          ["quarter", "CloseDate"]
+        ],
+        [
+          [2020, 2],
+          [2021, 3]
+        ],
+        "in"
+    ]
+]
+
+```
+
+## Filter Syntax for Compact Form 1.0
+
+Filters defined in compact-form steps have the following syntax.
+
+```nolang
+"filters": [[
+    "field",
+    [value],
+    "operator"
+]]
+```
+
+For example, the following filter shows only records with a “Customer” account type.
+
+```nolang
+"filters": [[
+    "Account_Type",
+    ["Customer"],
+    "in"
+]]
+```
+
+To compare against multiple values, include the values in an array, like this.
+
+```nolang
+"filters": [[
+    "field",
+    [[value1, value2, value3]],
+    "operator"
+]]
+```
+
+To specify an absolute date value for a date filter, specify the value in epoch format, where the value is the number of milliseconds since January 1, 1970 midnight UTC (1970-01-01 00:00:00). The following example shows dataset rows with a close date on or before January 1, 2016.
+
+```nolang
+"filters": [[
+    "Close Date",
+    [[
+        1451606400000,
+        null
+    ]],
+    ">="
+]]
+```
+
+## Operators
+
+You can use different operators in a filter. The supported operators depend on the field type. If you don’t specify the operator, Analytics applies the `==` operator.
+
+| Operator                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Compact-Form 2.0 Example                                                                                                                                                    | Compact-Form 1.0 Example                                                                                                                                                                                                |   |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | - |
+| `in`                                                            | Value of dataset field equals one of the specified values. Applies to dimensions only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `["Dimension",["Value1","Value2"],"in"]`                                                                                                                                    | `["Dimension",["Value1","Value2"],"in"]`                                                                                                                                                                                |   |
+| `not in`                                                        | Value of dataset field is not in the specified list of values. Applies to dimensions only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `["Dimension",["Value1","Value2"],"not in"]`                                                                                                                                | `["Dimension",["Value1","Value2"],"not in"]`                                                                                                                                                                            |   |
+| `matches`                                                       | Value of dataset field contains the specified value. This operator is not case-sensitive. Applies to dimensions only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `["Dimension",["Val"],"matches"]`                                                                                                                                           | `["Dimension",["Val"],"matches"]`                                                                                                                                                                                       |   |
+| `is null`                                                       | Value of dataset field is null. Applies to measures, dimensions and absolute dates in Compact form 2.0 and to measures only in Compact form 1.0.                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `["Measure",[],"isnull"]`                                                                                                                                                   | `["Measure",[[]],"isnull"]`                                                                                                                                                                                             |   |
+| `is not null`                                                   | Value of dataset field is not null. Applies to measures, dimensions and absolute dates in Compact form 2.0 and to measures only in Compact form 1.0.                                                                                                                                                                                                                                                                                                                                                                                                                                                | `["Measure",[],"isnotnull"]`                                                                                                                                                | `["Measure",[[]],"isnotnull"]`                                                                                                                                                                                          |   |
+| `==`                                                            | Value of dataset field equals the specified value. Applies to measures only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `["Measure",[1],"=="]`                                                                                                                                                      | `["Measure",[[1]],"=="]`                                                                                                                                                                                                |   |
+| `!=`                                                            | Value of dataset field does not equal the specified value. Applies to measures only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `["Measure",[1],"!="]`                                                                                                                                                      | `["Measure",[[1]],"!="]`                                                                                                                                                                                                |   |
+| `<`                                                             | Value of dataset field is less than the specified value. Applies to measures only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `["Measure",[10],"<"]`                                                                                                                                                      | `["Measure",[[10]],"<"]`                                                                                                                                                                                                |   |
+| `>`                                                             | Value of dataset field is greater than the specified value. Applies to measures only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `["Measure",[1],">"]`                                                                                                                                                       | `["Measure",[[1]],">"]`                                                                                                                                                                                                 |   |
+| `<=`                                                            | Value of dataset field is less than or equal to the specified value. Applies to measures only in Compact form 2.0 and to measures and absolute dates only in Compact form 1.0.                                                                                                                                                                                                                                                                                                                                                                                                                      | `["Measure",[10],"<="]`                                                                                                                                                     | <ul><li>`["Measure",[[10]],"<="]`</li><li>`["Date",[[1229040000000]],"<="]`</li></ul>                                                                                                                                   |   |
+| `>=`                                                            | Value of dataset field is greater than or equal to the specified value. Applies to measures only in Compact form 2.0 and to measures and absolute dates only in Compact form 1.0.                                                                                                                                                                                                                                                                                                                                                                                                                   | `["Measure",[1],">="]`                                                                                                                                                      | <ul><li>`["Measure",[[1]],">="]`</li><li>`["Date",[[-374457600000]],">="]`</li></ul>                                                                                                                                    |   |
+| `>=<=` or `between` with measures and dates in Compact form 1.0 | Value of dataset field is between the specified values, inclusive. For relative dates, you can specify the following time periods: "year", "quarter", "month", "week", and "day". Applies to measures only in Compact form 2.0 and measures and dates only in Compact form 1.0. You can also use these operators with measures in Compact form 2.0 and measures and dates in Compact form 1.0: <ul><li>>=< (Greater than or equal to one value, but less than another)</li><li>><= (Greater than one value, but less than or equal to another)</li><li>>< (Between two values, exclusive)</li></ul> | `["Measure",[1,10],">=<="]`                                                                                                                                                 | <ul><li>`["Measure",[[1,10]],">=<="]`</li><li>`["Date",[[-374457600000,1229040000000]],">=<="]`</li><li>`["Date",[[["month",-1],["month",1]]],">=<="]`</li><li>`["Close Date", [[null,1451606400000]],"<="]]`</li></ul> |   |
+| `between` with dates in Compact form 2.0                        | Value of dataset field is between the specified values, inclusive. For relative dates, you can specify the following time periods: "year", "quarter", "month", "week", and "day".                                                                                                                                                                                                                                                                                                                                                                                                                   | <ul><li>`["Date",[null, 1388448000000], "between"]`</li><li>`["Date",[1388448000000, null], "between"]`</li><li>`["Date",[["year", -1], ["year", 1]], "between"]`</li></ul> |                                                                                                                                                                                                                         |   |
+
+To view a complete example with a binding syntax, see the [Bind the Initial Filter Selection](https://developer.salesforce.com/docs/analytics/bi-dev-guide-bindings/guide/bi-dashboard-bindings-wave-designer-initial-selections.md) documentation.

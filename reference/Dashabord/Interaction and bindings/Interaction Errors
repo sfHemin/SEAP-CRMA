@@ -1,0 +1,21 @@
+# Interaction Errors
+
+If you create an invalid interaction in a dashboard, the widget that uses the interaction displays an error in the dashboard.
+
+Generally, there are two types of errors.
+
+## Validation Errors
+
+These errors occur when CRM Analytics is unable to parse the interaction due to the wrong syntax or illegal arguments used in your interactions. Another typical issue is that you didn’t escape double quotes when they’re inside other double quotes. For example, notice how the inner set of double quotes is escaped.
+
+```javascript
+    "numberColor": "{{cell(color_1.result, 0, \"color\").asString()}}"
+```
+
+## Execution Errors
+
+These errors occur when CRM Analytics executes the interaction and either the expected columns or rows are missing or the data is in the wrong shape. For example, the interaction received a row, when it expected a cell.
+
+Review error messages to understand how to resolve interaction issues. Here’s an example of an interaction error in a dashboard.
+
+![Binding error](https://a.sfdcstatic.com/developer-website/sfdocs/analytics/media/bi_dashboard_bindings_error.png)

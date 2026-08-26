@@ -1,0 +1,10 @@
+ShowDetailsDefaultFields in XMD
+Specify the default fields that appear in a Analytics values table. You can override the defaults and show other fields when you create a values table.
+The ShowDetailsDefaultFields section doesn’t have children parameters.
+Parameter	Description
+showDetailsDefaultFields	
+List of fields that display by default in a values table. If not specified, the first five dimensions and first five measures, alphabetically, appear.
+
+Example: "showDetailsDefaultFields":["Sales", "Profit", "Customer_Name", "Product_Category", "Product_Sub_Category"]
+
+See

@@ -1,0 +1,101 @@
+Dimensions and Derived Dimensions in XMD
+You can add an action menu to a dimension value in Analytics lens and dashboard charts and tables. Users can then open a record and perform record-level actions. The available XMD parameters are the same for dimensions and derived dimensions.
+This XMD snippet shows the parameters used with dimensions.
+
+"conditionalFormatting":{  
+            "chartColor":{  
+               "parameters":{  
+                  "values":[  
+                     {  
+                        "formatValue":"#E8963B",
+                        "value":"false"
+                     },
+                     {  
+                        "formatValue":"#3AE867",
+                        "value":"true"
+                     }
+                  ]
+               },
+               "referenceField":"Stage_IsAdvanced",
+               "type":"categories"
+            }
+The dimensions and derived dimensions sections can have the following parameters.
+
+description
+Description of the dataset field, up to 1,000 characters.
+
+Example: "description": "Region tracks where the sale was made."
+
+field
+Identifier for the dataset field (API name).
+
+label
+Display name for the dataset field, up to 40 characters.
+
+Example: "label": "Sales Manager"
+
+linkTemplateEnabled
+(Boolean) Indicates whether to display the link to open a Salesforce record or URL.
+
+linkTemplate
+URL to open when the user clicks the link in the actions menu. Overrides the default "/{{row.recordIdField}}".
+
+Example: "linkTemplate": "/{{row.dimensionNameId}}"
+
+linkTooltip
+Tooltip shown when hovering over the link in Analytics lens or dashboard.
+
+Example: "linkTooltip": "Click to open the record"
+
+members
+Array of display customizations for specific dimension values.
+
+"members": [
+  {
+    "member": "USA",
+    "label": "United States",
+    "color": "Blue"
+  },
+  {
+    "member": "MX",
+    "label": "Mexico",
+    "color": "Green"
+  }
+]
+recordIdField
+Dataset field containing the Salesforce record ID for record-level actions.
+
+recordOrganizationField
+Dataset field containing the org ID used for multi-org record-level actions.
+
+recordDisplayFields
+Array of dataset fields shown when multiple records match an action.
+
+"field": "AccountId.Name",
+"recordIdField": "AccountId.Id",
+"recordDisplayFields": ["Case_ID","Account_Name","Case_Owner"]
+salesforceActionsEnabled
+(Boolean) Indicates whether the Salesforce actions menu appears on the field.
+
+Example: "salesforceActionsEnabled": true
+
+salesforceActions
+Array of actions that appear in the action menu.
+
+"salesforceActions": [
+  {
+    "enabled": true,
+    "name": "FeedItem.TextPost"
+  },
+  {
+    "enabled": true,
+    "name": "FSL__LogACall"
+  }
+]
+For more information, see Perform Actions on a Salesforce Record from Analytics.
+
+showInExplorer
+(Boolean) Indicates whether the dataset field can be selected from dashboard designer or explorer when creating dashboards and lenses.
+
+Example: "showInExplorer": true
+

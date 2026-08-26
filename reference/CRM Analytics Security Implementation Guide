@@ -1,0 +1,72 @@
+CRM Analytics Security Implementation Guide
+CRM Analytics has different levels of security that your organization can implement to ensure that the right user has access to the right data.
+
+Image shows different points at which you can implement security on Salesforce data, dataset records, and datasets, lenses, and dashboards.
+The administrator can implement object-level and field-level security to control access to Salesforce data. For example, the administrator can restrict access to prevent the dataflow from loading sensitive Salesforce data into datasets. This document describes how CRM Analytics uses object-level and field-level security on Salesforce data and how to configure permissions on Salesforce objects and fields.
+Dataset owners can implement row-level security on each dataset that they create to restrict access to it’s records. If a dataset does not have row-level security, users who have access to the dataset can view all records. This document describes how to configure row-level security on datasets and provides some sample implementations based on datasets created from Salesforce data and external data.
+App owners, administrators, and users granted manager access to an app control access to datasets, lenses, and dashboards within apps. This document describes the different levels of access for apps and how to share datasets, lenses, dashboards in an app with other users.
+Note
+Note CRM Analytics supports security predicates, a robust row-level security feature that enables you to model many different types of access controls on datasets. Also, CRM Analytics supports sharing inheritance, to synchronize with sharing that’s configured in Salesforce, subject to certain limitations. If you use sharing inheritance, you must also set a security predicate to take over in situations when sharing settings can’t be honored.
+Salesforce Data Access in CRM Analytics
+CRM Analytics requires access to Salesforce data when extracting the data and also when the data is used as part of row-level security. CRM Analytics gains access to Salesforce data based on permissions of two internal CRM Analytics users: Integration User and Security User.
+
+CRM Analytics uses the permissions of the Integration User to extract data from Salesforce objects and fields when a dataflow job runs. Because the Integration User has View All Data access, consider restricting access to particular objects and fields that contain sensitive data. If the dataflow is configured to extract data from an object or field on which the Integration User does not have permission, the dataflow job fails.
+
+When you query a dataset that has row-level security based on the User object, CRM Analytics uses the permissions of the Security User to access the User object and its fields. The Security User must have at least read permission on each User object field included in a predicate. A predicate is a filter condition that defines row-level security for a dataset. By default, the Security User has read permission on all standard fields of the User object. If the predicate is based on a custom field, then grant the Security User read access on the field. If the Security User does not have read access on all User object fields included in a predicate expression, an error appears when you try to query the dataset using that predicate.
+
+Important
+Important Because CRM Analytics requires the Integration User and Security User to access Salesforce data, do not delete either of these users.
+Control Access to Salesforce Objects and Fields
+CRM Analytics requires access to Salesforce data when extracting the data and also when the data is used as part of row-level security. Configure the permissions of the Integration User on Salesforce objects and fields to control the dataflow’s access to Salesforce data. Configure the permissions of the Security User to enable row-level security based on custom fields of the User object.
+Control Access to Salesforce Objects and Fields
+CRM Analytics requires access to Salesforce data when extracting the data and also when the data is used as part of row-level security. Configure the permissions of the Integration User on Salesforce objects and fields to control the dataflow’s access to Salesforce data. Configure the permissions of the Security User to enable row-level security based on custom fields of the User object.
+
+Required Editions
+User Permissions
+Needed
+To clone a user profile:
+
+Manage Profiles and Permission Sets
+To edit object permissions:
+
+Manage Profiles and Permission Sets
+
+AND
+
+Customize Application
+
+When configuring permissions for the Integration User or Security User, edit a cloned version of the user profile.
+
+From Setup, enter Profiles in the Quick Find box, then select Profiles, and then select the user profile.
+For the Integration User, select the Analytics Cloud Integration User profile. For the Security User, select the Analytics Cloud Security User profile.
+Click Clone to clone the user profile.
+Name and save the cloned user profile.
+Click Object Settings.
+Click the name of the Salesforce object.
+Click Edit.
+To enable permission on the object, select Read in the Object Permissions section.
+To enable permission on a field of the object, select Read for the field in the Field Permissions section.
+Note
+Note You can’t change the permissions on standard fields of the User object.
+Save the object settings.
+Assign the cloned user profile to the Integration User or Security User.
+From Setup, enter Users in the Quick Find box, then select Users.
+Select the user to which you want to assign the user profile.
+Click Edit.
+In the Profile field, select the user profile.
+Click Save.
+Verify that the Integration User or Security User has the right permissions on fields of the objects.
+Set Up an Allowlist of Trusted Sites for Embedded CRM Analytics Dashboards
+Specify your trusted sites in the CRM Analytics allowlist, you can include embedded CRM Analytics dashboards in websites and apps outside of Salesforce servers.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+User Permissions Needed
+To modify settings:	Manage CRM Analytics
+To set up an Analytics allowlist, complete the following steps.
+
+From Setup, enter Allowlist in the Quick Find box, then select Allowlist under Analytics.
+On the Allowlist for Embedding Dashboards page, click New.
+On the Allowed Site Edit page, enter the information for the site you want to add to the CRM Analytics allowlist.
+Click Save.

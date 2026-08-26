@@ -1,0 +1,44 @@
+Measures and Derived Measures in XMD
+You can specify the format and multiplier for each measure. The XMD parameters are the same for measures and derived measures.
+This XMD snippet shows the parameters used with the measures XMD parameter.
+
+"measures": [
+  {
+    "description" : "Amount",
+    "field" : "Amount",
+    "format" : {
+      "customFormat": "[\"$###0\",1]",
+        "delimiters": "{}"
+    },
+    "label" : "Amount",
+    "showInExplorer" : true
+  }
+],
+The measures and derived measures sections can have the following parameters.
+
+Parameter	Description
+customFormat	Specifies the format and multiplier of the measure or derived measure. "customFormat": "[format,multiplier]" For more examples, see Format Dataset Fields and Field Values with XMD.
+delimiters	Allows custom delimiters to be specified for the decimal separator (.) and the thousands separator (,). Custom delimiters will replace the default delimiter values for the final formatted result. Custom delimiters are not honored in CSV downloads. Example: "delimiters": {"thousands": ".", "decimal": ","}
+description	Description of the dataset field, no more than 1,000 characters. Example: "description": "Total value for the opportunity."
+field	Identifier for the dataset field, which is the API name.
+format	Contains the customFormat and the delimiters parameters used to format the measure.
+label	Display name for the dataset field, up to 40 characters. Example: "label": "Sales Amount"
+showInExplorer	(Boolean) Indicates whether the dataset field can be selected from the dashboard designer or explorer when creating dashboards and lenses. Even if showInExplorer is false, you can still use the field for SAQL queries, manually adding it in JSON, and accessing it using the Analytics REST API. Example: "showInExplorer": true
+The customFormat parameter uses the following values.
+
+format
+Format of the measure or derived measure. You can add a prefix, suffix, grouping separator, decimal separator, and leading and trailing zeros. You can also configure the number of digits. You can include any characters in prefixes and suffixes, such as minus signs or currency symbols.
+
+Use the following symbols to specify the format.
+
+0—One digit. Use to add leading or trailing 0s. For example, when you apply the custom format #,###.00 to 56375, the result is 56,375.00.
+#—Adds zero or one digit. Use to show digits when applicable. For example, when you apply the custom format #,###.## to 56375.56, the result is 56,375.56.
+.—Decimal separator, like in the number 375.56. The default separator is the decimal symbol (.) A custom separator can be defined in delimiters using the decimal attribute. The custom separator replaces the (.) for the final formatted result.
+,—Grouping separator, like in 56,375. The default separator is the comma symbol (,). A custom separator can be defined in delimiters using the thousands attribute. The custom separator replaces the (,) for the final formatted result.
+Example: "customFormat": "[\"-$#,###.00$\",1]"
+
+multiplier
+Changes a field's values by the same factor—like multiplying by 100 to convert decimals to percents. The multiplier must be a positive number.
+
+Example: "customFormat": "[\"#,###\",100]"
+

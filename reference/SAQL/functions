@@ -1,0 +1,18 @@
+SAQL Functions
+Use functions to perform complex operations on your data.
+Aggregate Functions
+Aggregate functions perform computations across all values of a grouped field.
+Date Functions
+Use SAQL date functions to perform time-based analysis.
+Time Zone Date Functions
+When you enable the time zone feature, you can use the fields of the DateTime and DateOnly type to access date information in the specified time zone. For example, if a user in New York runs a SAQL query, they see date information displayed in Eastern Standard time.
+Work with Custom Fiscal Year Data
+After inheriting custom fiscal years, SAQL queries support custom fiscal year data.
+String Functions
+Use SAQL string functions to format your measure and dimension fields.
+Math Functions
+To perform numeric operations in a SAQL query, use math functions.
+Windowing Functions
+Use SAQL windowing functionality to calculate common business cases such as percent of grand total, moving average, year and quarter growth, and ranking.
+coalesce
+Use coalesce() to get the first non-null value from a list of parameters, or to replace nulls with a different value.
