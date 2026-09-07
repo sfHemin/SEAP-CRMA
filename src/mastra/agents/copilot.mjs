@@ -15,6 +15,8 @@ import { recipeTools } from "../tools/recipeTools.mjs";
 import { dashboardTools } from "../tools/dashboardTools.mjs";
 import { referenceTools } from "../tools/referenceTools.mjs";
 import { debuggerTools } from "../tools/debuggerTools.mjs";
+import { graphTools } from "../tools/graphTools.mjs";
+import { restTools } from "../tools/restTools.mjs";
 
 // Anchor the memory DB to an ABSOLUTE path next to this module. Both entry
 // points must share ONE store: the custom UI server (copilot.generate direct)
@@ -32,6 +34,9 @@ RECIPES: list, get (full R3 definition), edit/debug/transform (surgical node ope
 validate (dry-run against the org), create new, deploy (create OR update), and run.
 DASHBOARDS: list, get, edit, debug, answer questions about them, query their datasets, create new, and deploy.
 SALESFORCE DATA: describe any object (real field names + types), list custom objects, run SOQL queries.
+ORG-WIDE (READ-ONLY): build an asset dependency graph (build-asset-graph) to reason across all recipes/
+dashboards/datasets; and answer novel one-off questions via a GET-only REST call (wave-rest-get) when no
+specific tool fits. These are read-only — they never write to the org.
 
 ## Core rules — read these first
 
@@ -239,7 +244,7 @@ Primary sources, in order of trust:
 1. CRMA_BUILD_KNOWLEDGE.md — master doc: EVERY node type with EVERY variant + all enum values.
 2. Recipe node cheat-sheet — quick shapes, verified from deployed recipes.
 3. Org examples/recipes/*.json — real deployed recipes (Sales_Planning, Segmentation_Cluster).
-4. Org examples/Sample recipes/*.json — 86-node and 41-node deployed recipes.
+4. Org examples/Sample recipes/*.json — a library of real deployed recipes (R3, e.g. OpptyRecipe 54 nodes, CLVRecipe 33 nodes) plus a legacy dataflow (SalesAnalyticsDataflow, 201 nodes — legacy workflowDefinition format: mine it for SAQL/computeExpression patterns, do NOT copy its node format into an R3 recipe).
 
 Before authoring any node beyond load+save, search for the node type:
 - Join → search-reference "join node joinType" → CRMA_BUILD_KNOWLEDGE §1.2 lists ALL 7 join types (LOOKUP, LEFT_OUTER, INNER, RIGHT_OUTER, OUTER, CROSS, MULTI_VALUE_LOOKUP). Pick the RIGHT one for the relationship — do NOT default to one type. LOOKUP=enrich, LEFT_OUTER=keep-all-left, INNER=matched-only.
@@ -522,6 +527,32 @@ shapes, filter shapes, and interactions & bindings.
     widget interactions array — NEVER guess this shape from memory.
 Workflow: search-reference (get path + snippet) → read-reference (full doc) → then author. Cite the doc you used.
 If the library is unavailable (available:false), fall back to your built-in knowledge and say so briefly.
+
+## Org-wide reasoning + read-only improvisation (READ-ONLY tools)
+These widen what you can ANSWER without touching any write path. They never mutate the org.
+
+**build-asset-graph** — builds an in-memory dependency graph across ALL recipes/dashboards/datasets/objects
+(cached for the session). Reach for it on cross-asset / lineage / "which-or-what-breaks" questions:
+  - "Which dashboards break if I rename dataset field X?" / "what's the blast radius of changing recipe Y?"
+  - "Find every recipe that loads Opportunity." / "what feeds dataset Z and what consumes it?"
+  - "List orphaned datasets/dashboards."
+Build it once, then answer follow-ups from the cached graph instead of re-fetching. (Field-level impact and
+graph queries are its companion capabilities.)
+
+**wave-rest-get** — a single GET-only Salesforce/Wave REST call for NOVEL one-off questions that no specific
+tool covers. Use it as a last resort AFTER checking the purpose-built tools, e.g.:
+  - "How many datasets, and their sizes?" → /wave/datasets?pageSize=200
+  - "What dataspaces / apps / folders exist?" → /wave/dataspaces , /wave/folders
+  - "Dataflow job history / recent failures" → /wave/dataflowjobs?pageSize=50
+  - "Org limits" → /limits ; Tooling SOQL → /tooling/query?q=...
+Rules for using it:
+  - It is **READ-ONLY and cannot write** — GET only, path must be on the allowlist (/wave/*, /query,
+    /queryAll, /tooling/query, /limits). It will REJECT anything else; don't try to use it to deploy/patch.
+  - For plain SELECTs, prefer **run-soql**. For known asset reads, prefer the specific list-*/get-* tools
+    and **build-asset-graph** — only use wave-rest-get when those don't answer the question.
+  - Pass the bare path (no /services/data/vXX). Results are truncated to a limit with a note — raise the
+    limit argument (max 500) if you need more, and tell the user when a result was capped.
+  - If it returns ok:false, read the error message, pick an allowed path or a proper tool, and DON'T retry the same path.
 
 ## Dataset existence check — MANDATORY before building any dashboard
 
@@ -1015,5 +1046,5 @@ export const copilot = new Agent({
   model: opus(),
   memory,
   maxSteps: 100,
-  tools: { ...recipeTools, ...dashboardTools, ...referenceTools, ...debuggerTools },
+  tools: { ...recipeTools, ...dashboardTools, ...referenceTools, ...debuggerTools, ...graphTools, ...restTools },
 });

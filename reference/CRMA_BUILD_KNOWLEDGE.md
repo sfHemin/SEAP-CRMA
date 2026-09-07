@@ -1,6 +1,6 @@
 # CRMA BUILD KNOWLEDGE — Master reference for recipe + dashboard authoring
 
-> Ground truth harvested from deployed storm-org recipes/dashboards + the two Sample recipes
+> Ground truth harvested from deployed storm-org recipes/dashboards + the Org examples/Sample recipes library
 > + the Salesforce Recipe REST API doc. Every shape here appears in something that ACTUALLY
 > DEPLOYED AND RAN. When a value here disagrees with the API schema doc's casing, THIS wins —
 > the schema doc lists title-case enum names that the runtime rejects.

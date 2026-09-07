@@ -289,7 +289,7 @@ Pattern: `search-reference` (get path + snippet) → `read-reference` (full doc)
 - **`Recipe node cheat-sheet`** — quick recipe node shapes, verified from deployed recipes.
 - **`Org examples/recipes/*.json`** — real deployed recipes (Sales_Planning, Segmentation_Cluster). Read to mirror an exact working shape.
 - **`Org examples/dashboards/*.json`** — real deployed dashboards (SegmentCluster, Summary, LeadPerf).
-- **`Org examples/Sample recipes/*.json`** — 86-node and 41-node deployed recipes.
+- **`Org examples/Sample recipes/*.json`** — library of real deployed recipes (R3: OpptyRecipe 54 nodes, CLVRecipe 33 nodes, Sample 1/2, etc.) + a legacy dataflow (SalesAnalyticsDataflow, 201 nodes, `workflowDefinition` format — reference for SAQL/computeExpression only, not R3 node shapes).
 - `Recipe reference` — Full Salesforce Data Prep REST API guide. Trust for WHICH properties exist; DISTRUST its enum casing (Sum/Lookup/Standard) — runtime wants UPPERCASE_SNAKE. **Auto-chunked into 31 searchable chunks.**
 - Dashboard docs — Widget json, steps json, gridlayout json, interaction bindings, SAQL.
 
