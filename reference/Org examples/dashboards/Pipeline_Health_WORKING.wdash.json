@@ -1,0 +1,1149 @@
+{
+ "_note": "ORG-VERIFIED WORKING full dashboard (7 listselector filters + 4 KPI + 2 chart + 2 table). listselector measureField=count matches step count* alias. Built by incremental bisection from a designer-made filter. Renders in Analytics Studio 2026-09-06.",
+ "label": "Pipeline Health",
+ "state": {
+  "dataSourceLinksInfo": {
+   "enableAutomaticLinking": true,
+   "excludeRelationships": [],
+   "links": []
+  },
+  "filters": [],
+  "gridLayouts": [
+   {
+    "name": "Default",
+    "numColumns": 12,
+    "pages": [
+     {
+      "label": "Untitled",
+      "name": "81b89cb3-caed-4ad9-9413-f33e4be606c2",
+      "navigationHidden": false,
+      "widgets": [
+       {
+        "colspan": 3,
+        "column": 0,
+        "name": "chart_1",
+        "row": 2,
+        "rowspan": 3,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 2,
+        "column": 0,
+        "name": "listselector_1",
+        "row": 0,
+        "rowspan": 1,
+        "widgetStyle": {
+         "backgroundColor": "#FFFFFF",
+         "borderColor": "#747474",
+         "borderEdges": [
+          "all"
+         ],
+         "borderRadius": 4,
+         "borderWidth": 1
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 3,
+        "name": "ls_Status_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 6,
+        "name": "ls_Region_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 9,
+        "name": "ls_Owner_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 12,
+        "name": "ls_Mgr_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 15,
+        "name": "ls_Year_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 18,
+        "name": "ls_Qtr_1",
+        "row": 0,
+        "rowspan": 2,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 0,
+        "name": "w_kpi",
+        "row": 3,
+        "rowspan": 3,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 4,
+        "column": 0,
+        "name": "w_table",
+        "row": 6,
+        "rowspan": 6,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 6,
+        "column": 0,
+        "name": "w_qtr",
+        "row": 13,
+        "rowspan": 5,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 12,
+        "column": 0,
+        "name": "w_lead",
+        "row": 18,
+        "rowspan": 6,
+        "widgetStyle": {
+         "borderEdges": []
+        }
+       },
+       {
+        "colspan": 3,
+        "column": 3,
+        "name": "w_kpi_weighted",
+        "row": 3,
+        "rowspan": 3
+       },
+       {
+        "colspan": 3,
+        "column": 6,
+        "name": "w_kpi_atrisk",
+        "row": 3,
+        "rowspan": 3
+       },
+       {
+        "colspan": 3,
+        "column": 9,
+        "name": "w_kpi_won",
+        "row": 3,
+        "rowspan": 3
+       }
+      ]
+     }
+    ],
+    "rowHeight": "normal",
+    "selectors": [],
+    "style": {
+     "alignmentX": "left",
+     "alignmentY": "top",
+     "backgroundColor": "#F2F6FA",
+     "cellSpacingX": 8,
+     "cellSpacingY": 8,
+     "fit": "original",
+     "gutterColor": "#C5D3E0"
+    },
+    "version": 1
+   }
+  ],
+  "layouts": [],
+  "steps": {
+   "s_qtr": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "By Quarter",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Amount\"]],\"groups\":[\"CloseDate_Year\",\"CloseDate_Quarter\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "s_lead": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001iBtCAI",
+      "label": "Sales Rep Performance",
+      "name": "DS_Sales_Rep_Performance",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001iBtCAI"
+     }
+    ],
+    "isGlobal": false,
+    "label": "Leaderboard",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Won_Revenue\"],[\"sum\",\"Open_Pipeline\"],[\"avg\",\"Win_Rate\"],[\"avg\",\"Avg_Deal_Size\"]],\"groups\":[\"Rep_Name\",\"Manager_Name\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "Mgr_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Manager_Name\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "k_weighted": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "k",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Weighted_Pipeline\"]],\"groups\":[],\"filters\":[[\"Opportunity_Status\",[\"Open\",\"Overdue\",\"At Risk\",\"Stalled\"],\"in\"]]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "Qtr_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"CloseDate_Quarter\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "Status_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Opportunity_Status\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "Region_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Region\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "k_won": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "k",
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[],\"filters\":[[\"Opportunity_Status\",[\"Won\"],\"in\"]]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "test_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "test",
+    "query": {
+     "aggregateFilters": [],
+     "columnGroups": [],
+     "columnTotals": [],
+     "limit": 2000,
+     "orders": [],
+     "rowTotals": [],
+     "sourceFilters": {},
+     "sources": [
+      {
+       "columns": [
+        {
+         "field": [
+          "count",
+          "*"
+         ],
+         "name": "A"
+        }
+       ],
+       "filters": [],
+       "groups": [
+        "all"
+       ],
+       "joins": [],
+       "name": "DS_Pipeline_Intelligence"
+      }
+     ]
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {
+     "parameters": {
+      "autoFitMode": "keepLabels",
+      "bins": {
+       "breakpoints": {
+        "high": 100,
+        "low": 0
+       },
+       "bands": {
+        "high": {
+         "color": "#008000",
+         "label": ""
+        },
+        "low": {
+         "color": "#B22222",
+         "label": ""
+        },
+        "medium": {
+         "color": "#ffa500",
+         "label": ""
+        }
+       }
+      },
+      "legend": {
+       "descOrder": false,
+       "showHeader": true,
+       "show": true,
+       "customSize": "auto",
+       "position": "right-top",
+       "inside": false
+      },
+      "axisMode": "sync",
+      "tooltip": {
+       "content": {
+        "legend": {
+         "showBinLabel": true,
+         "measures": [],
+         "showNullValues": true,
+         "customizeLegend": false,
+         "showPercentage": true,
+         "showDimensions": true,
+         "showMeasures": true,
+         "dimensions": []
+        }
+       }
+      },
+      "visualizationType": "hbar",
+      "title": {
+       "fontSize": 14,
+       "subtitleFontSize": 11,
+       "label": "",
+       "align": "center",
+       "subtitleLabel": ""
+      },
+      "binValues": false,
+      "trellis": {
+       "flipLabels": false,
+       "showGridLines": true,
+       "size": [
+        100,
+        100
+       ],
+       "enable": false,
+       "type": "x",
+       "chartsPerLine": 4
+      },
+      "columnMap": {
+       "trellis": [],
+       "dimensionAxis": [],
+       "plots": [
+        "A"
+       ]
+      },
+      "showActionMenu": true,
+      "measureAxis2": {
+       "sqrtScale": false,
+       "showTitle": true,
+       "showAxis": true,
+       "title": "",
+       "customDomain": {
+        "showDomain": false
+       }
+      },
+      "valueType": "compactNumber",
+      "measureAxis1": {
+       "sqrtScale": false,
+       "showTitle": true,
+       "showAxis": true,
+       "title": "",
+       "customDomain": {
+        "showDomain": false
+       }
+      },
+      "theme": "wave",
+      "compactDecimalDigits": -1,
+      "dimensionAxis": {
+       "showTitle": true,
+       "customSize": "auto",
+       "showAxis": true,
+       "title": "",
+       "icons": {
+        "useIcons": false,
+        "iconProps": {
+         "fit": "cover",
+         "column": "",
+         "type": "round"
+        }
+       }
+      },
+      "applyConditionalFormatting": true
+     },
+     "type": "chart"
+    }
+   },
+   "Year_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"CloseDate_Year\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "StageName_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"StageName\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "s_open": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "Open",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Amount\"]],\"groups\":[],\"filters\":[[\"Opportunity_Status\",[\"Open\",\"Overdue\",\"At Risk\",\"Stalled\"],\"in\"]]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "s_detail": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "Detail",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Amount\"]],\"groups\":[\"StageName\",\"Opportunity_Status\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "k_atrisk": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "label": "k",
+    "query": {
+     "query": "{\"measures\":[[\"sum\",\"Amount\"]],\"groups\":[],\"filters\":[[\"Opportunity_Status\",[\"Overdue\",\"At Risk\"],\"in\"]]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   },
+   "Owner_1": {
+    "broadcastFacet": true,
+    "datasets": [
+     {
+      "id": "0Fbhg0000001i5RCAQ",
+      "label": "Pipeline Intelligence",
+      "name": "DS_Pipeline_Intelligence",
+      "url": "/services/data/v62.0/wave/datasets/0Fbhg0000001i5RCAQ"
+     }
+    ],
+    "isGlobal": false,
+    "query": {
+     "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Owner_Name\"]}",
+     "version": -1
+    },
+    "receiveFacetSource": {
+     "mode": "all",
+     "steps": []
+    },
+    "selectMode": "single",
+    "type": "aggregateflex",
+    "useGlobal": true,
+    "visualizationParameters": {}
+   }
+  },
+  "widgetStyle": {
+   "backgroundColor": "#FFFFFF",
+   "borderColor": "#747474",
+   "borderEdges": [],
+   "borderRadius": 0,
+   "borderWidth": 1
+  },
+  "widgets": {
+   "w_kpi": {
+    "parameters": {
+     "compact": true,
+     "exploreLink": true,
+     "interactions": [],
+     "measureField": "sum_Amount",
+     "numberBold": false,
+     "numberColor": "#091A3E",
+     "numberItalic": false,
+     "numberSize": 18,
+     "showActionMenu": true,
+     "step": "s_open",
+     "textAlignment": "center",
+     "title": "Total Open Pipeline",
+     "titleBold": false,
+     "titleColor": "#091A3E",
+     "titleItalic": false,
+     "titleSize": 16
+    },
+    "type": "number"
+   },
+   "ls_Mgr_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Mgr_1",
+     "title": "Manager_Name"
+    },
+    "type": "listselector"
+   },
+   "ls_Region_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Region_1",
+     "title": "Region"
+    },
+    "type": "listselector"
+   },
+   "ls_Status_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Status_1",
+     "title": "Opportunity_Status"
+    },
+    "type": "listselector"
+   },
+   "ls_Owner_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Owner_1",
+     "title": "Owner_Name"
+    },
+    "type": "listselector"
+   },
+   "w_kpi_weighted": {
+    "parameters": {
+     "compact": true,
+     "interactions": [],
+     "measureField": "sum_Weighted_Pipeline",
+     "numberSize": 18,
+     "step": "k_weighted",
+     "textAlignment": "center",
+     "title": "Weighted Pipeline"
+    },
+    "type": "number"
+   },
+   "w_table": {
+    "parameters": {
+     "borderColor": "#e0e5ee",
+     "borderWidth": 1,
+     "cell": {
+      "backgroundColor": "#ffffff",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "textWrap": false
+     },
+     "columnProperties": {},
+     "columns": [],
+     "customBulkActions": [],
+     "header": {
+      "alignment": "left",
+      "backgroundColor": "#f4f6f9",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "italic": false,
+      "textWrap": false,
+      "underline": false
+     },
+     "innerMajorBorderColor": "#a8b7c7",
+     "innerMinorBorderColor": "#e0e5ee",
+     "interactions": [],
+     "maxColumnWidth": 300,
+     "minColumnWidth": 40,
+     "mode": "variable",
+     "numberOfLines": 1,
+     "showActionMenu": true,
+     "showRowIndexColumn": false,
+     "step": "s_detail",
+     "verticalPadding": 8
+    },
+    "type": "table"
+   },
+   "ls_Year_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Year_1",
+     "title": "CloseDate_Year"
+    },
+    "type": "listselector"
+   },
+   "listselector_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "StageName_1",
+     "title": "StageName"
+    },
+    "type": "listselector"
+   },
+   "ls_Qtr_1": {
+    "parameters": {
+     "compact": false,
+     "displayMode": "filter",
+     "exploreLink": false,
+     "filterStyle": {
+      "titleColor": "#747474",
+      "valueColor": "#16325C"
+     },
+     "instant": true,
+     "measureField": "count",
+     "showActionMenu": true,
+     "step": "Qtr_1",
+     "title": "CloseDate_Quarter"
+    },
+    "type": "listselector"
+   },
+   "w_lead": {
+    "parameters": {
+     "borderColor": "#e0e5ee",
+     "borderWidth": 1,
+     "cell": {
+      "backgroundColor": "#ffffff",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "textWrap": false
+     },
+     "columnProperties": {},
+     "columns": [],
+     "customBulkActions": [],
+     "header": {
+      "alignment": "left",
+      "backgroundColor": "#f4f6f9",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "italic": false,
+      "textWrap": false,
+      "underline": false
+     },
+     "innerMajorBorderColor": "#a8b7c7",
+     "innerMinorBorderColor": "#e0e5ee",
+     "interactions": [],
+     "maxColumnWidth": 300,
+     "minColumnWidth": 40,
+     "mode": "variable",
+     "numberOfLines": 1,
+     "showActionMenu": true,
+     "showRowIndexColumn": false,
+     "step": "s_lead",
+     "verticalPadding": 8
+    },
+    "type": "table"
+   },
+   "w_kpi_atrisk": {
+    "parameters": {
+     "compact": true,
+     "interactions": [],
+     "measureField": "sum_Amount",
+     "numberSize": 18,
+     "step": "k_atrisk",
+     "textAlignment": "center",
+     "title": "At-Risk Pipeline"
+    },
+    "type": "number"
+   },
+   "chart_1": {
+    "parameters": {
+     "autoFitMode": "keepLabels",
+     "bins": {
+      "breakpoints": {
+       "high": 100,
+       "low": 0
+      },
+      "bands": {
+       "high": {
+        "color": "#008000",
+        "label": ""
+       },
+       "low": {
+        "color": "#B22222",
+        "label": ""
+       },
+       "medium": {
+        "color": "#ffa500",
+        "label": ""
+       }
+      }
+     },
+     "legend": {
+      "descOrder": false,
+      "showHeader": true,
+      "show": true,
+      "customSize": "auto",
+      "position": "right-top",
+      "inside": false
+     },
+     "axisMode": "sync",
+     "tooltip": {
+      "content": {
+       "legend": {
+        "showBinLabel": true,
+        "measures": [],
+        "showNullValues": true,
+        "customizeLegend": false,
+        "showPercentage": true,
+        "showDimensions": true,
+        "showMeasures": true,
+        "dimensions": []
+       }
+      }
+     },
+     "visualizationType": "hbar",
+     "exploreLink": true,
+     "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+     },
+     "binValues": false,
+     "trellis": {
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+       100,
+       100
+      ],
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4
+     },
+     "columnMap": {
+      "trellis": [],
+      "dimensionAxis": [],
+      "plots": [
+       "A"
+      ]
+     },
+     "showActionMenu": true,
+     "measureAxis2": {
+      "sqrtScale": false,
+      "showTitle": true,
+      "showAxis": true,
+      "title": "",
+      "customDomain": {
+       "showDomain": false
+      }
+     },
+     "valueType": "compactNumber",
+     "measureAxis1": {
+      "sqrtScale": false,
+      "showTitle": true,
+      "showAxis": true,
+      "title": "",
+      "customDomain": {
+       "showDomain": false
+      }
+     },
+     "theme": "wave",
+     "step": "test_1",
+     "compactDecimalDigits": -1,
+     "dimensionAxis": {
+      "showTitle": true,
+      "customSize": "auto",
+      "showAxis": true,
+      "title": "",
+      "icons": {
+       "useIcons": false,
+       "iconProps": {
+        "fit": "cover",
+        "column": "",
+        "type": "round"
+       }
+      }
+     },
+     "applyConditionalFormatting": true
+    },
+    "type": "chart"
+   },
+   "w_qtr": {
+    "parameters": {
+     "autoFitMode": "keepLabels",
+     "bins": {
+      "breakpoints": {
+       "high": 100,
+       "low": 0
+      },
+      "bands": {
+       "high": {
+        "color": "#008000",
+        "label": ""
+       },
+       "low": {
+        "color": "#B22222",
+        "label": ""
+       },
+       "medium": {
+        "color": "#ffa500",
+        "label": ""
+       }
+      }
+     },
+     "legend": {
+      "descOrder": false,
+      "showHeader": true,
+      "show": false,
+      "customSize": "auto",
+      "position": "right-top",
+      "inside": false
+     },
+     "axisMode": "sync",
+     "tooltip": {
+      "content": {
+       "legend": {
+        "showBinLabel": true,
+        "measures": [],
+        "showNullValues": true,
+        "customizeLegend": false,
+        "showPercentage": true,
+        "showDimensions": true,
+        "showMeasures": true,
+        "dimensions": []
+       }
+      }
+     },
+     "visualizationType": "vbar",
+     "exploreLink": true,
+     "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "Open Pipeline by Quarter",
+      "align": "left",
+      "subtitleLabel": ""
+     },
+     "trellis": {
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+       100,
+       100
+      ],
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4
+     },
+     "binValues": false,
+     "showActionMenu": true,
+     "measureAxis2": [],
+     "measureAxis1": [
+      "sum_Amount"
+     ],
+     "valueType": "compactNumber",
+     "step": "s_qtr",
+     "theme": "wave",
+     "compactDecimalDigits": -1,
+     "dimensionAxis": [
+      "CloseDate_Year",
+      "CloseDate_Quarter"
+     ],
+     "applyConditionalFormatting": false
+    },
+    "type": "chart"
+   },
+   "w_kpi_won": {
+    "parameters": {
+     "compact": true,
+     "interactions": [],
+     "measureField": "count",
+     "numberSize": 18,
+     "step": "k_won",
+     "textAlignment": "center",
+     "title": "Won Opportunities"
+    },
+    "type": "number"
+   }
+  }
+ }
+}

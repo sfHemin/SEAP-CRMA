@@ -1,0 +1,1324 @@
+{
+    "version": "67.0",
+    "nodes": {
+        "LOAD_DATASET0": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "SI_Case_demo",
+                    "name": "SI_Case_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [
+                    "ssotSubjectc",
+                    "ssotAccountContactIdc",
+                    "ssotClosedDateTimec",
+                    "UserssotUniqueUserNamec",
+                    "ssotParentRoleIdc",
+                    "ssotEscalatedDateTimec",
+                    "ssotIsClosedc",
+                    "UserGroupssotAliasc",
+                    "AccountContactssotNamec",
+                    "ssotUserRolec",
+                    "ssotCaseStatusIdc",
+                    "ssotIsEscalatedc",
+                    "ssotIdc",
+                    "ssotCaseNumberc",
+                    "ssotCaseTypeIdc",
+                    "AccountssotNamec",
+                    "ssotCreatedDatec",
+                    "KeyCaseRecord",
+                    "ssotCasePriorityIdc",
+                    "LastProcessedDate",
+                    "ssotIsClosedOnCreatec",
+                    "ssotDescriptionc",
+                    "ssotCaseAccountDerivedc",
+                    "ssotAccountIdc",
+                    "ssotAssignedUserIdc",
+                    "UserssotFullNamec",
+                    "ssotCaseCreationChannelIdc",
+                    "ssotCaseSupportWorkHoursIdc",
+                    "ssotParentRoleNamec",
+                    "ssotFirstContactResolutionc",
+                    "ssotUserRoleIdc",
+                    "ssotTimetoFirstClosec",
+                    "ssotTimetoClosec",
+                    "ssotCSATc",
+                    "ssotCostc",
+                    "ssotContactReasonc"
+                ],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "REPLACE0": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "formulaExpression": "replace(KeyCaseRecord, '500Hp00001YcND3IAN', '500a5000003UzkJAAS')",
+                        "label": "KeyCaseRecord",
+                        "name": "KeyCaseRecord_replace",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "KeyCaseRecord_replace",
+                        "newProperties": {
+                            "name": "KeyCaseRecord"
+                        }
+                    }
+                ],
+                "slice": {
+                    "fields": [
+                        "KeyCaseRecord"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "LOAD_DATASET0"
+            ]
+        },
+        "FORMULA0": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "datediff(now(), LastProcessedDate)",
+                        "label": "ElapsedDays",
+                        "name": "ElapsedDays",
+                        "precision": 18,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "REPLACE0"
+            ]
+        },
+        "FORMULA1": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotClosedDateTimec) + (86400 * ElapsedDays))",
+                        "label": "AuxClosedDateTimec",
+                        "name": "AuxClosedDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA0"
+            ]
+        },
+        "FORMULA2": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotEscalatedDateTimec) + (86400 * ElapsedDays))",
+                        "label": "AuxEscalatedDateTimec",
+                        "name": "AuxEscalatedDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA1"
+            ]
+        },
+        "FORMULA3": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotCreatedDatec) + (86400 * ElapsedDays))",
+                        "label": "AuxCreatedDatec",
+                        "name": "AuxCreatedDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA2"
+            ]
+        },
+        "DROP_FIELDS0": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "ssotCreatedDatec",
+                        "ssotClosedDateTimec",
+                        "ssotEscalatedDateTimec",
+                        "LastProcessedDate"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA3"
+            ]
+        },
+        "FORMULA4": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxClosedDateTimec",
+                        "label": "ssotClosedDateTimec",
+                        "name": "ssotClosedDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS0"
+            ]
+        },
+        "FORMULA5": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxEscalatedDateTimec",
+                        "label": "ssotEscalatedDateTimec",
+                        "name": "ssotEscalatedDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA4"
+            ]
+        },
+        "FORMULA6": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxCreatedDatec",
+                        "label": "ssotCreatedDatec",
+                        "name": "ssotCreatedDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA5"
+            ]
+        },
+        "DROP_FIELDS1": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "AuxCreatedDatec",
+                        "AuxClosedDateTimec",
+                        "AuxEscalatedDateTimec"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA6"
+            ]
+        },
+        "FORMULA7": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "now()",
+                        "label": "LastProcessedDate",
+                        "name": "LastProcessedDate",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS1"
+            ]
+        },
+        "OUTPUT0": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "Service_Intelligence_Demo_V1",
+                    "label": "SI_Case_demo",
+                    "name": "SI_Case_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "FORMULA7"
+            ]
+        },
+        "LOAD_DATASET1": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "SI_AgentWork_demo",
+                    "name": "SI_AgentWork_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [
+                    "ssotUniqueUserNamec",
+                    "ssotRelatedObjectLabelc",
+                    "ssotRelatedToObjectc",
+                    "ssotBotlIdc",
+                    "ssotIdc",
+                    "ssotUserEmailc",
+                    "ssotAcceptDateTimec",
+                    "ssotAWwithinSLAFlagc",
+                    "ssotIsBotc",
+                    "ssotAgentWorkStatusc",
+                    "ssotRequestDateTimec",
+                    "ssotUserFullNamec",
+                    "ssotRelatedToIdc",
+                    "LastProcessedDate",
+                    "ssotUserGroupIdc",
+                    "ssotUserGroupAliasc",
+                    "ssotUserIdc",
+                    "ssotCloseDateTimec",
+                    "ssotNamec",
+                    "ssotSpeedToAnswerSecondsc",
+                    "ssotHandleTimeMinsc",
+                    "ssotActiveTimeMinsc",
+                    "ssotCSATc",
+                    "ssotCostc",
+                    "ssotReassignedc"
+                ],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "FORMULA8": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "datediff(now(), LastProcessedDate)",
+                        "label": "ElapsedDays",
+                        "name": "ElapsedDays",
+                        "precision": 18,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "LOAD_DATASET1"
+            ]
+        },
+        "FORMULA9": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotRequestDateTimec) + (86400 * ElapsedDays))",
+                        "label": "AuxRequestDateTimec",
+                        "name": "AuxRequestDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA8"
+            ]
+        },
+        "FORMULA10": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotAcceptDateTimec) + (86400 * ElapsedDays))",
+                        "label": "AuxAcceptDateTimec",
+                        "name": "AuxAcceptDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA9"
+            ]
+        },
+        "FORMULA11": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotCloseDateTimec) + (86400 * ElapsedDays))",
+                        "label": "AuxCloseDateTimec",
+                        "name": "AuxCloseDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA10"
+            ]
+        },
+        "DROP_FIELDS2": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "ssotRequestDateTimec",
+                        "ssotAcceptDateTimec",
+                        "ssotCloseDateTimec",
+                        "LastProcessedDate"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA11"
+            ]
+        },
+        "FORMULA12": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxRequestDateTimec",
+                        "label": "ssotRequestDateTimec",
+                        "name": "ssotRequestDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS2"
+            ]
+        },
+        "FORMULA13": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxAcceptDateTimec",
+                        "label": "ssotAcceptDateTimec",
+                        "name": "ssotAcceptDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA12"
+            ]
+        },
+        "FORMULA14": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxCloseDateTimec",
+                        "label": "ssotCloseDateTimec",
+                        "name": "ssotCloseDateTimec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA13"
+            ]
+        },
+        "DROP_FIELDS3": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "AuxRequestDateTimec",
+                        "AuxAcceptDateTimec",
+                        "AuxCloseDateTimec"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA14"
+            ]
+        },
+        "FORMULA15": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "now()",
+                        "label": "LastProcessedDate",
+                        "name": "LastProcessedDate",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS3"
+            ]
+        },
+        "OUTPUT1": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "Service_Intelligence_Demo_V1",
+                    "label": "SI_AgentWork_demo",
+                    "name": "SI_AgentWork_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "FORMULA15"
+            ]
+        },
+        "LOAD_DATASET2": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "SI_AgentServicePresence_demo",
+                    "name": "SI_AgentServicePresence_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [
+                    "ssotStatusStartDatec",
+                    "ssotUserFullNamec",
+                    "LastProcessedDate",
+                    "ssotStatusEndDatec",
+                    "ssotServicePresenceStatusNamec",
+                    "ssotServicePresenceStatusIdc",
+                    "ssotIdc",
+                    "ssotIsAwayc",
+                    "ssotServicePresenceAgentNamec",
+                    "ssotUserEmailc",
+                    "ssotUserIdc",
+                    "ssotAtCapacityDurationc",
+                    "ssotIdleDurationc",
+                    "ssotAverageCapacityc",
+                    "ssotStatusDurationSecondsc",
+                    "ssotConfiguredCapacityc"
+                ],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "FORMULA16": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "datediff(now(), LastProcessedDate)",
+                        "label": "ElapsedDays",
+                        "name": "ElapsedDays",
+                        "precision": 18,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "LOAD_DATASET2"
+            ]
+        },
+        "FORMULA17": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotStatusStartDatec) + (86400 * ElapsedDays))",
+                        "label": "AuxStatusStartDatec",
+                        "name": "AuxStatusStartDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA16"
+            ]
+        },
+        "FORMULA18": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "to_timestamp(to_unix_timestamp(ssotStatusEndDatec) + (86400 * ElapsedDays))",
+                        "label": "AuxStatusEndDatec",
+                        "name": "AuxStatusEndDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA17"
+            ]
+        },
+        "DROP_FIELDS4": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "LastProcessedDate",
+                        "ssotStatusEndDatec",
+                        "ssotStatusStartDatec",
+                        "ElapsedDays"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA18"
+            ]
+        },
+        "FORMULA19": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxStatusStartDatec",
+                        "label": "ssotStatusStartDatec",
+                        "name": "ssotStatusStartDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS4"
+            ]
+        },
+        "FORMULA20": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "AuxStatusEndDatec",
+                        "label": "ssotStatusEndDatec",
+                        "name": "ssotStatusEndDatec",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA19"
+            ]
+        },
+        "DROP_FIELDS5": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "AuxStatusStartDatec",
+                        "AuxStatusEndDatec"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA20"
+            ]
+        },
+        "FORMULA21": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "M/d/yy",
+                        "formulaExpression": "now()",
+                        "label": "LastProcessedDate",
+                        "name": "LastProcessedDate",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS5"
+            ]
+        },
+        "OUTPUT2": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "Service_Intelligence_Demo_V1",
+                    "label": "SI_AgentServicePresence_demo",
+                    "name": "SI_AgentServicePresence_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "FORMULA21"
+            ]
+        },
+        "LOAD_DATASET3": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "SI Knowledge demo",
+                    "name": "SI_Knowledge_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [
+                    "LPD",
+                    "Company",
+                    "DataCategory",
+                    "Email",
+                    "UsedforGrounding",
+                    "UpdatedDate",
+                    "ExternalID",
+                    "ArticleTitle",
+                    "KnowledgeId",
+                    "GuidanceText",
+                    "Language",
+                    "RecordType",
+                    "ArticleNumber",
+                    "PublicationStatus",
+                    "Context",
+                    "CreatedBy",
+                    "UserName",
+                    "Date",
+                    "Guidance",
+                    "RecentView",
+                    "CreatedDate",
+                    "Country",
+                    "UserType",
+                    "AHTCwA",
+                    "Engagements",
+                    "TotalCases",
+                    "Attachments",
+                    "AHTCwAorV",
+                    "CaseswithAttachments",
+                    "AHTCwV",
+                    "CaseswithEngagements",
+                    "CasesAttachmentRate",
+                    "AHTCwoAorV"
+                ],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "UPDATE0": {
+            "action": "update",
+            "parameters": {
+                "leftKeys": [
+                    "ExternalID"
+                ],
+                "rightKeys": [
+                    "FAQ_External_ID__c"
+                ],
+                "updateColumns": {
+                    "ArticleNumber": "ArticleNumber",
+                    "ArticleTitle": "Title",
+                    "KnowledgeId": "Id",
+                    "PublicationStatus": "PublishStatus"
+                }
+            },
+            "sources": [
+                "LOAD_DATASET3",
+                "LOAD_DATASET4"
+            ]
+        },
+        "LOAD_DATASET4": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "connectionName": "SFDC_LOCAL",
+                    "label": "Knowledge__kav",
+                    "sourceObjectName": "Knowledge__kav",
+                    "type": "connectedDataset"
+                },
+                "fields": [
+                    "Id",
+                    "KnowledgeArticleId",
+                    "OwnerId",
+                    "IsDeleted",
+                    "ValidationStatus",
+                    "PublishStatus",
+                    "VersionNumber",
+                    "IsLatestVersion",
+                    "IsVisibleInApp",
+                    "IsVisibleInPkb",
+                    "IsVisibleInCsp",
+                    "IsVisibleInPrm",
+                    "CreatedDate",
+                    "CreatedById",
+                    "LastModifiedDate",
+                    "LastModifiedById",
+                    "SystemModstamp",
+                    "IsMasterLanguage",
+                    "Language",
+                    "Title",
+                    "UrlName",
+                    "CurrencyIsoCode",
+                    "ArchivedDate",
+                    "ArchivedById",
+                    "Summary",
+                    "NextReviewDate",
+                    "LargeLanguageModel",
+                    "ArticleNumber",
+                    "FirstPublishedDate",
+                    "LastPublishedDate",
+                    "ArticleArchivedById",
+                    "ArticleArchivedDate",
+                    "ArticleCaseAttachCount",
+                    "ArticleCreatedById",
+                    "ArticleCreatedDate",
+                    "ArticleTotalViewCount",
+                    "SourceId",
+                    "MasterVersionId",
+                    "RecordTypeId",
+                    "AssignedToId",
+                    "AssignedById",
+                    "AssignmentDate",
+                    "AssignmentDueDate",
+                    "AssignmentNote",
+                    "MigratedToFromArticleVersion",
+                    "FAQ_External_ID__c"
+                ],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "OUTPUT3": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "Service_Intelligence_Demo_V1",
+                    "label": "SI Knowledge demo",
+                    "name": "SI_Knowledge_demo",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "UPDATE0"
+            ]
+        }
+    },
+    "ui": {
+        "nodes": {
+            "LOAD_DATASET0": {
+                "label": "SI_Case_demo",
+                "type": "LOAD_DATASET",
+                "top": 112,
+                "left": 112,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM1": {
+                "label": "Replace Key Case Id",
+                "description": "Copy the case record id of the key record you want to open using the action framework and replace it in this node",
+                "type": "TRANSFORM",
+                "top": 112,
+                "left": 252,
+                "graph": {
+                    "REPLACE0": {
+                        "parameters": {
+                            "type": "REPLACE_UI"
+                        },
+                        "label": "Replace Case Id - key record"
+                    }
+                },
+                "connectors": []
+            },
+            "TRANSFORM2": {
+                "label": "Time shifting",
+                "description": "",
+                "type": "TRANSFORM",
+                "top": 112,
+                "left": 392,
+                "graph": {
+                    "FORMULA0": {
+                        "parameters": {
+                            "type": "DATE_DIFFERENCE_UI"
+                        },
+                        "label": "LPD minus now"
+                    },
+                    "FORMULA1": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux ClosedDate"
+                    },
+                    "FORMULA2": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux EscalatedDate"
+                    },
+                    "FORMULA3": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux CreatedDate"
+                    },
+                    "DROP_FIELDS0": {
+                        "label": "Drop Columns"
+                    },
+                    "FORMULA4": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotClosedDateTimec"
+                    },
+                    "FORMULA5": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotEscalatedDateTimec"
+                    },
+                    "FORMULA6": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotCreatedDatec"
+                    },
+                    "DROP_FIELDS1": {
+                        "label": "Drop Aux Columns"
+                    },
+                    "FORMULA7": {
+                        "parameters": {
+                            "type": "DATE_NOW_UI"
+                        },
+                        "label": "Add LPD"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA0",
+                        "target": "FORMULA1"
+                    },
+                    {
+                        "source": "FORMULA1",
+                        "target": "FORMULA2"
+                    },
+                    {
+                        "source": "FORMULA2",
+                        "target": "FORMULA3"
+                    },
+                    {
+                        "source": "FORMULA3",
+                        "target": "DROP_FIELDS0"
+                    },
+                    {
+                        "source": "DROP_FIELDS0",
+                        "target": "FORMULA4"
+                    },
+                    {
+                        "source": "FORMULA4",
+                        "target": "FORMULA5"
+                    },
+                    {
+                        "source": "FORMULA5",
+                        "target": "FORMULA6"
+                    },
+                    {
+                        "source": "FORMULA6",
+                        "target": "DROP_FIELDS1"
+                    },
+                    {
+                        "source": "DROP_FIELDS1",
+                        "target": "FORMULA7"
+                    }
+                ]
+            },
+            "OUTPUT0": {
+                "label": "Output 0",
+                "type": "OUTPUT",
+                "top": 112,
+                "left": 532
+            },
+            "LOAD_DATASET1": {
+                "label": "SI_AgentWork_demo",
+                "type": "LOAD_DATASET",
+                "top": 111.80000000000001,
+                "left": 811.6,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM3": {
+                "label": "Time shifting",
+                "description": "",
+                "type": "TRANSFORM",
+                "top": 111.80000000000001,
+                "left": 951.6,
+                "graph": {
+                    "FORMULA8": {
+                        "parameters": {
+                            "type": "DATE_DIFFERENCE_UI"
+                        },
+                        "label": "LPD minus now"
+                    },
+                    "FORMULA9": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux RequestDate"
+                    },
+                    "FORMULA10": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux AcceptDate"
+                    },
+                    "FORMULA11": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux CloseDate"
+                    },
+                    "DROP_FIELDS2": {
+                        "label": "Drop Columns"
+                    },
+                    "FORMULA12": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotRequestDateTimec"
+                    },
+                    "FORMULA13": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotAcceptDateTimec"
+                    },
+                    "FORMULA14": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotCloseDateTimec"
+                    },
+                    "DROP_FIELDS3": {
+                        "label": "Drop Aux Columns"
+                    },
+                    "FORMULA15": {
+                        "parameters": {
+                            "type": "DATE_NOW_UI"
+                        },
+                        "label": "Add LPD"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA8",
+                        "target": "FORMULA9"
+                    },
+                    {
+                        "source": "FORMULA9",
+                        "target": "FORMULA10"
+                    },
+                    {
+                        "source": "FORMULA10",
+                        "target": "FORMULA11"
+                    },
+                    {
+                        "source": "FORMULA11",
+                        "target": "DROP_FIELDS2"
+                    },
+                    {
+                        "source": "DROP_FIELDS2",
+                        "target": "FORMULA12"
+                    },
+                    {
+                        "source": "FORMULA12",
+                        "target": "FORMULA13"
+                    },
+                    {
+                        "source": "FORMULA13",
+                        "target": "FORMULA14"
+                    },
+                    {
+                        "source": "FORMULA14",
+                        "target": "DROP_FIELDS3"
+                    },
+                    {
+                        "source": "DROP_FIELDS3",
+                        "target": "FORMULA15"
+                    }
+                ]
+            },
+            "OUTPUT1": {
+                "label": "Output 1",
+                "type": "OUTPUT",
+                "top": 111.80000000000001,
+                "left": 1091.6
+            },
+            "LOAD_DATASET2": {
+                "label": "SI_AgentServicePresence_demo",
+                "type": "LOAD_DATASET",
+                "top": 251.8,
+                "left": 811.6,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM4": {
+                "label": "Timeshifting",
+                "description": "",
+                "type": "TRANSFORM",
+                "top": 251.8,
+                "left": 951.6,
+                "graph": {
+                    "FORMULA16": {
+                        "parameters": {
+                            "type": "DATE_DIFFERENCE_UI"
+                        },
+                        "label": "LPD minus now"
+                    },
+                    "FORMULA17": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux StatusStartDatec"
+                    },
+                    "FORMULA18": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Aux StatusEndDatec"
+                    },
+                    "DROP_FIELDS4": {
+                        "label": "Drop Columns"
+                    },
+                    "FORMULA19": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotStatusStartDatec"
+                    },
+                    "FORMULA20": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "New ssotStatusEndDatec"
+                    },
+                    "DROP_FIELDS5": {
+                        "label": "Drop Aux Columns"
+                    },
+                    "FORMULA21": {
+                        "parameters": {
+                            "type": "DATE_NOW_UI"
+                        },
+                        "label": "Add LPD"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA16",
+                        "target": "FORMULA17"
+                    },
+                    {
+                        "source": "FORMULA17",
+                        "target": "FORMULA18"
+                    },
+                    {
+                        "source": "FORMULA18",
+                        "target": "DROP_FIELDS4"
+                    },
+                    {
+                        "source": "DROP_FIELDS4",
+                        "target": "FORMULA19"
+                    },
+                    {
+                        "source": "FORMULA19",
+                        "target": "FORMULA20"
+                    },
+                    {
+                        "source": "FORMULA20",
+                        "target": "DROP_FIELDS5"
+                    },
+                    {
+                        "source": "DROP_FIELDS5",
+                        "target": "FORMULA21"
+                    }
+                ]
+            },
+            "OUTPUT2": {
+                "label": "Output 2",
+                "type": "OUTPUT",
+                "top": 252,
+                "left": 1092
+            },
+            "LOAD_DATASET3": {
+                "label": "SI Knowledge demo",
+                "type": "LOAD_DATASET",
+                "top": 390.2,
+                "left": 112.30000000000001,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "UPDATE0": {
+                "label": "Update 0",
+                "type": "UPDATE",
+                "top": 390.2,
+                "left": 252.3
+            },
+            "LOAD_DATASET4": {
+                "label": "Knowledge__kav",
+                "type": "LOAD_DATASET",
+                "top": 530.2,
+                "left": 112.30000000000001,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "OUTPUT3": {
+                "label": "Output 3",
+                "type": "OUTPUT",
+                "top": 392,
+                "left": 392
+            }
+        },
+        "connectors": [
+            {
+                "source": "LOAD_DATASET0",
+                "target": "TRANSFORM1"
+            },
+            {
+                "source": "TRANSFORM1",
+                "target": "TRANSFORM2"
+            },
+            {
+                "source": "TRANSFORM2",
+                "target": "OUTPUT0"
+            },
+            {
+                "source": "LOAD_DATASET1",
+                "target": "TRANSFORM3"
+            },
+            {
+                "source": "TRANSFORM3",
+                "target": "OUTPUT1"
+            },
+            {
+                "source": "LOAD_DATASET2",
+                "target": "TRANSFORM4"
+            },
+            {
+                "source": "TRANSFORM4",
+                "target": "OUTPUT2"
+            },
+            {
+                "source": "LOAD_DATASET3",
+                "target": "UPDATE0"
+            },
+            {
+                "source": "LOAD_DATASET4",
+                "target": "UPDATE0"
+            },
+            {
+                "source": "UPDATE0",
+                "target": "OUTPUT3"
+            }
+        ],
+        "hiddenColumns": []
+    }
+}

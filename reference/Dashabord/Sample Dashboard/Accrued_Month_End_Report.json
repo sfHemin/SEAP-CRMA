@@ -1,0 +1,515 @@
+{
+  "allowPreview": true,
+  "assetSharingUrl": "https://computing-innovation-7984--tpmdev2.sandbox.my.salesforce.com/analytics/wave/dashboard?assetId=0FKWB0000006SPp4AM&orgId=00DWB000009lhsL&loginHost=usa754s.sfdc-8tgtt5.salesforce.com&urlType=sharing",
+  "createdBy": {
+    "id": "005a500001oHHs1AAG",
+    "name": "Manivannan Sugumar",
+    "profilePhotoUrl": "https://computing-innovation-7984--tpmdev2.sandbox.file.force.com/profilephoto/005/T"
+  },
+  "createdDate": "2026-08-12T23:29:26.000Z",
+  "datasets": [],
+  "dateVersion": 1,
+  "files": [],
+  "folder": {
+    "id": "00lWB000006tiEfYAI",
+    "label": "TPM Accrual Reports",
+    "name": "TPM_Accrual_Reports",
+    "url": "/services/data/v62.0/wave/folders/00lWB000006tiEfYAI"
+  },
+  "historiesUrl": "/services/data/v62.0/wave/dashboards/0FKWB0000006SPp4AM/histories",
+  "id": "0FKWB0000006SPp4AM",
+  "label": "Accrued Month End Report default",
+  "lastAccessedDate": "2026-09-02T04:41:45.000Z",
+  "lastModifiedBy": {
+    "id": "005a500001oHHs1AAG",
+    "name": "Manivannan Sugumar",
+    "profilePhotoUrl": "https://computing-innovation-7984--tpmdev2.sandbox.file.force.com/profilephoto/005/T"
+  },
+  "lastModifiedDate": "2026-08-12T23:29:26.000Z",
+  "mobileDisabled": false,
+  "name": "Accrued_Month_End_Reports",
+  "permissions": {
+    "create": true,
+    "manage": true,
+    "modify": true,
+    "view": true
+  },
+  "state": {
+    "dataSourceLinksInfo": {
+      "enableAutomaticLinking": true,
+      "excludeRelationships": [],
+      "links": []
+    },
+    "filters": [
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "SalesOrg__c"
+        ],
+        "label": "Sales Org",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "AccountLabel__c"
+        ],
+        "label": "Accounts",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "CategoryLabel__c"
+        ],
+        "label": "Product Categories",
+        "locked": false,
+        "operator": "in"
+      }
+    ],
+    "gridLayouts": [
+      {
+        "name": "Default",
+        "numColumns": 12,
+        "pages": [
+          {
+            "label": "Default",
+            "name": "49844678-368a-4623-a11d-a7c2ab664561",
+            "navigationHidden": false,
+            "widgets": [
+              {
+                "colspan": 12,
+                "column": 0,
+                "name": "table_1",
+                "row": 2,
+                "rowspan": 17,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 12,
+                "column": 0,
+                "name": "text_1",
+                "row": 0,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 2,
+                "column": 0,
+                "name": "filterpanel_1",
+                "row": 1,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#747474",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 2,
+                "column": 2,
+                "name": "filterpanel_2",
+                "row": 1,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#747474",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              }
+            ]
+          }
+        ],
+        "rowHeight": "normal",
+        "selectors": [],
+        "style": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "backgroundColor": "#F2F6FA",
+          "cellSpacingX": 8,
+          "cellSpacingY": 8,
+          "fit": "original",
+          "gutterColor": "#C5D3E0"
+        },
+        "version": 1
+      }
+    ],
+    "layouts": [],
+    "steps": {
+      "lens_1": {
+        "broadcastFacet": true,
+        "cdpObjects": [
+          "accrualoutput_decorated__dlm"
+        ],
+        "datasets": [],
+        "dataspace": "default",
+        "isGlobal": false,
+        "label": "lens_1",
+        "query": {
+          "aggregateFilters": [],
+          "columnGroups": [],
+          "columnTotals": [],
+          "limit": 250,
+          "orders": [
+            {
+              "name": "AccountLabel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "PromotionLabel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "TacticLabel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "CompensationModel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "TacticShipmentTimeframe__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "ProductLabel__c",
+              "filters": [],
+              "ascending": true
+            }
+          ],
+          "rowTotals": [],
+          "sourceFilters": {},
+          "sources": [
+            {
+              "columns": [
+                {
+                  "field": [
+                    "sum",
+                    "PaidAmount__c"
+                  ],
+                  "name": "Paid"
+                }
+              ],
+              "filters": [],
+              "groups": [
+                "AccountLabel__c",
+                "PromotionLabel__c",
+                "TacticLabel__c",
+                "CompensationModel__c",
+                "TacticShipmentTimeframe__c",
+                "ProductLabel__c"
+              ],
+              "joins": [],
+              "name": "accrualoutput_decorated__dlm"
+            },
+            {
+              "columns": [
+                {
+                  "field": [
+                    "sum",
+                    "OpenAccrual__c"
+                  ],
+                  "name": "Opening_Balance"
+                }
+              ],
+              "filters": [
+                [
+                  "EffectiveDate__c",
+                  [
+                    [
+                      "month",
+                      -18
+                    ],
+                    [
+                      "month",
+                      -1
+                    ]
+                  ],
+                  "between"
+                ]
+              ],
+              "groups": [
+                "AccountLabel__c",
+                "PromotionLabel__c",
+                "TacticLabel__c",
+                "CompensationModel__c",
+                "TacticShipmentTimeframe__c",
+                "ProductLabel__c"
+              ],
+              "joins": [],
+              "name": "accrualoutput_decorated__dlm"
+            },
+            {
+              "columns": [
+                {
+                  "field": [
+                    "sum",
+                    "Value__c"
+                  ],
+                  "name": "Accrued"
+                }
+              ],
+              "filters": [
+                [
+                  "EffectiveDate__c",
+                  [
+                    [
+                      "month",
+                      0
+                    ],
+                    [
+                      "day",
+                      0
+                    ]
+                  ],
+                  "between"
+                ]
+              ],
+              "groups": [
+                "AccountLabel__c",
+                "PromotionLabel__c",
+                "TacticLabel__c",
+                "CompensationModel__c",
+                "TacticShipmentTimeframe__c",
+                "ProductLabel__c"
+              ],
+              "joins": [],
+              "name": "accrualoutput_decorated__dlm"
+            },
+            {
+              "columns": [
+                {
+                  "formula": "IF(coalesce(Paid,0) &gt; coalesce(Accrued,0), coalesce(Accrued,0) - coalesce(Paid,0),0)",
+                  "name": "Writeback"
+                },
+                {
+                  "formula": "coalesce(Opening_Balance,0) + coalesce(Accrued,0) - coalesce(Paid,0) - coalesce(Writeback,0)",
+                  "name": "Closing_Balance"
+                },
+                {
+                  "formula": "coalesce(Closing_Balance,0) - coalesce(Opening_Balance,0)",
+                  "name": "Change_In_Month"
+                },
+                {
+                  "formula": "coalesce(Accrued,0) - coalesce(Writeback,0)",
+                  "name": "Monthly_Expense"
+                }
+              ],
+              "filters": [],
+              "groups": [],
+              "joins": []
+            }
+          ]
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "options": {},
+          "parameters": {
+            "borderColor": "#e0e5ee",
+            "borderWidth": 1,
+            "cell": {
+              "backgroundColor": "#ffffff",
+              "fontColor": "#16325c",
+              "fontSize": 12,
+              "textWrap": true
+            },
+            "columnProperties": {},
+            "columns": [
+              "Opening_Balance",
+              "Accrued",
+              "Paid",
+              "AccountLabel__c",
+              "PromotionLabel__c",
+              "TacticLabel__c",
+              "CompensationModel__c",
+              "TacticShipmentTimeframe__c",
+              "ProductLabel__c",
+              "Writeback",
+              "Change_In_Month",
+              "Closing_Balance",
+              "Monthly_Expense"
+            ],
+            "customBulkActions": [],
+            "header": {
+              "alignment": "left",
+              "backgroundColor": "#f4f6f9",
+              "fontColor": "#16325c",
+              "fontSize": 12,
+              "italic": false,
+              "textWrap": true,
+              "underline": false
+            },
+            "innerMajorBorderColor": "#a8b7c7",
+            "innerMinorBorderColor": "#e0e5ee",
+            "interactions": [],
+            "maxColumnWidth": 300,
+            "minColumnWidth": 40,
+            "mode": "variable",
+            "numberOfLines": 1,
+            "pivoted": false,
+            "showActionMenu": true,
+            "showRowIndexColumn": false,
+            "totals": true,
+            "verticalPadding": 8
+          },
+          "type": "table"
+        }
+      }
+    },
+    "widgetStyle": {
+      "backgroundColor": "#FFFFFF",
+      "borderColor": "#747474",
+      "borderEdges": [],
+      "borderRadius": 0,
+      "borderWidth": 1
+    },
+    "widgets": {
+      "table_1": {
+        "parameters": {
+          "borderColor": "#e0e5ee",
+          "borderWidth": 1,
+          "cell": {
+            "backgroundColor": "#ffffff",
+            "fontColor": "#16325c",
+            "fontSize": 12,
+            "textWrap": true
+          },
+          "columnProperties": {},
+          "columns": [
+            "Opening_Balance",
+            "Accrued",
+            "Paid",
+            "AccountLabel__c",
+            "PromotionLabel__c",
+            "TacticLabel__c",
+            "CompensationModel__c",
+            "TacticShipmentTimeframe__c",
+            "ProductLabel__c",
+            "Writeback",
+            "Change_In_Month",
+            "Closing_Balance",
+            "Monthly_Expense"
+          ],
+          "customBulkActions": [],
+          "exploreLink": true,
+          "header": {
+            "alignment": "left",
+            "backgroundColor": "#f4f6f9",
+            "fontColor": "#16325c",
+            "fontSize": 12,
+            "italic": false,
+            "textWrap": true,
+            "underline": false
+          },
+          "innerMajorBorderColor": "#a8b7c7",
+          "innerMinorBorderColor": "#e0e5ee",
+          "interactions": [],
+          "maxColumnWidth": 300,
+          "minColumnWidth": 40,
+          "mode": "variable",
+          "numberOfLines": 1,
+          "pivoted": false,
+          "showActionMenu": true,
+          "showRowIndexColumn": false,
+          "step": "lens_1",
+          "totals": true,
+          "verticalPadding": 8
+        },
+        "type": "table"
+      },
+      "text_1": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#e74340",
+                  "size": "16px",
+                  "bold": true
+                },
+                "insert": "Note: This dashboard requires a successful accrual calculation to show updated values."
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "filterpanel_2": {
+        "parameters": {
+          "filterItemOptions": {
+            "propertyColor": "#54698D",
+            "valueColor": "#16325C"
+          },
+          "filters": [
+            {
+              "cdpObject": "accrualoutput_decorated__dlm",
+              "dataspace": "default",
+              "field": "CategoryLabel__c"
+            }
+          ],
+          "showAllFilters": false
+        },
+        "type": "filterpanel"
+      },
+      "filterpanel_1": {
+        "parameters": {
+          "filterItemOptions": {
+            "propertyColor": "#54698D",
+            "valueColor": "#16325C"
+          },
+          "filters": [
+            {
+              "cdpObject": "accrualoutput_decorated__dlm",
+              "dataspace": "default",
+              "field": "AccountLabel__c"
+            }
+          ],
+          "showAllFilters": false
+        },
+        "type": "filterpanel"
+      }
+    }
+  },
+  "type": "dashboard",
+  "url": "/services/data/v62.0/wave/dashboards/0FKWB0000006SPp4AM",
+  "visibility": "All"
+}

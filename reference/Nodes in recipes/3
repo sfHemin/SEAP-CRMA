@@ -1,0 +1,199 @@
+You are here:
+Salesforce Help
+Docs
+CRM Analytics
+Transform Node: Transform the Data Before Loading It Into a Target
+Use a Transform node in CRM Analytics to manipulate data based on the transformations added to the node. You can add one or more transformations to each Transform node. For example, you can add transformations to concatenate two columns, standardize the formats in a date column, and detect the sentiments of comments in a Feedback column. Each transformation modifies the data in a unique way. To manipulate data at multiple stages of a recipe, add a separate Transform node at each stage.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit Dataset Recipes
+Watch a Demo: Play button Prep Your Data with the Transform Node (English Only)
+
+In the recipe, select the Add Node button (Add Node button) between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node dialog box, select Transform.
+The Add Node modal shows all possible nodes that you can add, including the Transform node.
+In the Preview tab of the details section, select one or more columns for which you want to transform their data.
+Use the Transform toolbar (1) to add a transformation based on the selected columns .
+Each time you add a transformation to the Transform node, it appears in the left panel (2). We refer to each card in the left panel as a step.
+
+The Transform toolbar changes based on the type and number of columns selected.
+To preview the results of a transformation in the Preview tab, select the step in the left panel.
+The Preview tab previews the results of the selected transformation or node.
+To view the Graph area, click the Collapse button (Collapse button).
+If needed, select a node in the graph to preview the results of the node.
+It’s always a great idea to preview results to ensure that each node and transformation returns expected results.
+
+If needed, add more transformations to the Transform node.
+Save the recipe.
+See Also
+Transformations for Data Prep Recipes
+
+You are here:
+Salesforce Help
+Docs
+CRM Analytics
+Update Node: Swap Column Values
+In CRM Analytics, you can swap column values with data from another data source when key pairs match with the Update node. For example, to update selected account names after a series of recent acquisitions and mergers, replace the name from an uploaded spreadsheet based on matching account IDs. Processing time is minimized by only changing column values with matching key pairs, instead of every value in the column.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataset Recipes
+In a Data Prep recipe that already has at least one Input node, select the Add Node button Add Node button between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node dialog, select Update.
+The Add Node modal shows all possible nodes that you can add, including the Update node.
+Choose the data source containing the update data.
+The update node replacement value selector.
+Alternatively, if the original and update data are already added as input nodes, drag the Add Node button (Add Node button) from one to the other and click Update. The two inputs are used as the source and update location.
+
+Choose which key pair values must match between the original and update data (1).
+The Update node configuration screen.
+Choose the columns to update (2). If all key pairs match for a row, the column value is updated.
+Click Apply. When the recipe runs, the update node contains the original data with updated column values.
+Save the recipe.
+You are here:
+Salesforce Help
+Docs
+CRM Analytics
+Output Node: Write Recipe Results to a Dataset or External System
+In CRM Analytics, use Output nodes with Data Prep recipes to write recipe results to a target, such as a dataset, staged data, .csv, a Data 360 data lake object, or remote location like Amazon S3. A recipe can have more than one Output node. If the recipe writes to a dataset, you can change the API name and label of the dataset in the Output node. If an existing dataset uses the specified API name, the recipe overwrites the existing dataset when it runs.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataset Recipes
+Note
+Note For an Output node, avoid using data that has multiple unique keys. This can occur when the output results come from an augment, where the each source dataset has a unique id field with the schema. Instead of an augment, ensure the output results come from joins between the source datasets.
+In the recipe, select the Add Node button (Add Node button) at the end of the recipe.
+In the Add Node dialog box, select Output.
+The Add Node modal shows all possible nodes that you can add, including the Output node.
+In Write To, select the output type, Dataset, Existing Dataset, or CSV.
+For Dataset, add:
+The label, API name, and dataset’s app.
+Optionally, if using sharing inheritance, select a Sharing Source to apply sharing rules.
+Optionally, add a security predicate to restrict access to records with row-level security.
+Note
+Note After creating a dataset, you must edit it to make changes to its security settings; changes to security settings in the dataflow (rowLevelSharingSource or rowLevelSecurityFilter) or recipe (Security Predicate) have no effect.
+The Output tab shows the options that you can set when writing to a dataset.
+For Existing Dataset:
+Select the operation, Append, Upsert, or Delete.
+Select the existing dataset to run the operation on. The append operation adds all data from the input to the existing dataset, and records can be duplicated. The upsert operation appends data from the input to the existing dataset if new and overwrites existing rows when they match. The delete operation removes input data from the the existing dataset when existing rows match.
+
+The upsert and delete operations only work with datasets created by external uploads and data syncs, which preserve the required isUniqueKey information.
+
+Enter the dataset label and API name.
+Turn on the disjointed schema option to ensure the dataset updates if the snapshot data schema changes. If the option isn’t selected, the recipe fails when the schema changes
+The Output tab shows the options that you can set when using Write To Existing Dataset.
+When using this option, remember that:
+
+The dataset row limits apply. Consider adding and scheduling a recipe to delete old snapshot rows to avoid hitting the limits.
+When the snapshot schema changes, and the disjointed schema option is active, the recipe takes longer to run as it reregisters all the rows.
+For CSV:
+Select the user who has permission to download the generated files.
+Optionally, select whether to include a header in the CSV file.
+Optionally, determine how to split the CSV over multiple files.
+The Output tab shows the options that you can set when outputing to CSV.
+For Output Connection, see the relevant output connector help.
+Note
+Note The Dataset API Name can contain only underscores and alphanumeric characters. It must also be unique, begin with a letter, and not include spaces, end with an underscore, or contain two consecutive underscores. If another dataset in the same app uses the API name, the dataset is overwritten. If a dataset in another app uses the name, choose a different, unique name. If an API name isn’t specified, a unique API name is generated.
+Click Apply.
+Save the recipe.
+To create the dataset, run the recipe. As you create more datasets, remember that your org has a row limit for all datasets in your org.
+
+Run Sequential Recipes with Staged Data
+When your data strategy involves multiple recipes, you can reduce processing time by using staged data instead of datasets. Place the steps you would otherwise repeat into one recipe that outputs results as staged data. Subsequent recipes can then use the staged data as input nodes to do other work. For example, rather than merge account and opportunity data in several region-specific forecasting recipe, merge in an initial recipe that outputs the results as staged data, and use this data in the other recipes.
+Recipe Output to CSV
+Use the Data Prep output node in CRM Analytics to save your prepared data as a data and schema file in a Salesforce BPO (storage database). You can then download the data locally using the public API as a CSV file. Use the CSV file to transfer prepared, cleaned, and improved data into your system for analysis, storage, or to inform business processes.
+Write Recipe Output to Data 360
+Use the Data Prep output node in CRM Analytics to save your prepared data as a Data 360 data lake object (DLO). After your data is in Data 360, you can create calculated insights, semantic models, and Data 360 reports and dashboards.
+See Also
+Run a Recipe
+CRM Anaytics Limits
+Set Up Dataset Security to Control Access to Rows
+Data Prep Date Configuration
+You are here:
+Salesforce Help
+Docs
+CRM Analytics
+Run Sequential Recipes with Staged Data
+When your data strategy involves multiple recipes, you can reduce processing time by using staged data instead of datasets. Place the steps you would otherwise repeat into one recipe that outputs results as staged data. Subsequent recipes can then use the staged data as input nodes to do other work. For example, rather than merge account and opportunity data in several region-specific forecasting recipe, merge in an initial recipe that outputs the results as staged data, and use this data in the other recipes.
+
+
+Note
+Note
+Staged data can’t be used in dataflows, dashboards, or lenses.
+
+Staged data acts as “cache”, and isn’t suited to cases where the original records can’t be retrieved from the source system, whether that be Salesforce or outside. For example, don’t use staged data as a snapshot dataset where you read and write to the same staged data in a recipe. Also, don’t use a staged dataset as a “system of record”.
+
+After performing a site switch or instance refresh, recreate the staged data from its original source using the appropriate recipes.
+
+Build your recipe with Data Prep and add an output node. Write the output node to Staged Data.
+
+Choose Staged Data when configuring an output node.
+After you save the output, you can’t change the type. To change from staged data to a dataset or a dataset to staged data, create another output node.
+
+Build your second recipe. When you add the input data, select the staged data from your first recipe.
+
+To use staged data, select the staged data output from the first recipe.
+Continue to build and save your recipe. When the recipe sequence runs, the staged data is used as an input source.
+
+Staged data is retained for 7 days and its rows are counted in the row limits for recipes.
+
+Recipe Output to CSV
+Use the Data Prep output node in CRM Analytics to save your prepared data as a data and schema file in a Salesforce BPO (storage database). You can then download the data locally using the public API as a CSV file. Use the CSV file to transfer prepared, cleaned, and improved data into your system for analysis, storage, or to inform business processes.
+
+
+Push Data to the Salesforce Database
+
+Build your recipe with Data Prep and add an output node.
+Write the output node to CSV.
+Enter the user who downloads the file.
+(Optional) To output more information in the header, select Use fully qualified names in CSV header.
+The fully qualified name has more information about the source object to help you understand the data lineage, usually in the format [ObjectName].[APIName]. For example, the CSV header uses the fully qualified name Account.BillingCity instead of the column label BillingCity.
+
+(Optional) To set the maximum file size and maximum number of rows per partitioned section, select Specify CSV partition settings.
+Click Apply and save the recipe.
+Pull Data from the Salesforce Database
+
+To retrieve the data from the Salesforce database, use a tool to find the dataset ID. Download the file using the Salesforce CLI. Work with your Salesforce developer about using these tools and consult this Salesforce blog for a similar process.
+
+CSV Output Considerations
+
+Keep these behaviors in mind when working with the CSV output from the Data Prep recipe output node.
+
+An output connection is available only for recipes built with Data Prep.
+Stored data is removed after 48 hours.
+If the data exceeds the maximum file size or number of rows specified in the output node’s partition settings, more than one CSV file is created. All partitioned CSV files can function independently, and you can download and merge the files to recreate the dataset.
+The maximum size of an export job is 40 GB.
+The maximum export data size per day (sum of all exports) is 50 GB.
+Exporting a Dataset
+
+When you export a dataset, a DatasetExportEvent is generated. You can subscribe to receive DatasetExportEvents. See Subscribing to Platform Events. For event reference, see DatasetExportEvent.
+
+You are here:
+Salesforce Help
+Docs
+CRM Analytics
+Profile Columns to Understand Data in a Data Prep Recipe
+In CRM Analytics, run column profiling on sample data to estimate key stats about columns, such as the frequency of values and percent of columns with missing values. Column profiling is especially useful when you are combining data from different sources, where inconsistencies are often introduced. Column profiles are available only for columns shown in preview.
+
+
+Column profiling works on the latest available data, except when you profile columns from a connected object. If you profile a column from a connected object, the profile can be based on outdated sample data. The sample doesn’t include changes to the connected object data within the last 24 hours. The sample data for a connected object updates when you run data sync and the sample data is more than 24 hours old. For example, if the data sync just ran, but your sample data isn’t more than 24 hours old, the sample data isn’t updated right away.
+
+To run a column profile, select the column in the Preview or Columns tab, and then click Column profile button. The Profile tab shows different results based on the data type of the column. Use the results to understand the shape of the data and identify potential data quality issues. The statistics provided for column profiles are based on sample rows, not all rows in the recipe.
+
+Column profile pane in recipe
+The Profile tab shows the following information.
+
+Valid values—Valid values are values that aren’t missing.
+Missing values—Missing values, which include nulls and empty strings (””), can lead to skewed calculations. For more information, see Handle Missing Values.
+Zero values—For measures, the column profile shows the count of zeroes.
+Frequent values—The Frequent Values chart shows the top dimension values by count (based on the sample), sorted in descending order. To see the percentage of the sample total, hover over a bar. In the following example, Florida (FL) represents 8.7% of all sample values in the Billing State/Province column.
+The FL value represents 8.7% of all sample values.
+Histogram—The histogram shows the shape of the sample data for measure and date columns. Shape refers to the distribution of the data over equal-length ranges. Use the histogram to understand the shape of the data and identify outliers. Outliers are important because they can distort calculation results. For a measure column profile, the histogram shows the count of rows, maximum value, minimum value, median value, and average value for each range. To see the percentage of the sample total, hover over a bar. For a date column profile, the histogram shows the count of rows for the selected date grouping. You can group by different time frames, including Year-Month, Year-Quarter, Year, Quarter, and Month.
+The column profile for Close Date shows the count of dates for Year and Month.
+The Attributes tab shows the label, API name, and data type of the selected column. For measure columns, it also shows the scale. For dimension columns, it also indicates whether the column contains multiple values.
+
+The profile shows the API name, column type, and whether the column contains multiple values.

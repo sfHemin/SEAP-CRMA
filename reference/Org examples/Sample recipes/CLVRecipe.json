@@ -1,0 +1,1159 @@
+{
+  "name" : "CLVRecipe",
+  "label" : "",
+  "publishingTarget" : "DATASET",
+  "format" : "R3",
+  "scheduleType" : "EventDriven",
+  "scheduleExpression": null,
+  "recipeDefinition" : {
+      "version": "53.0",
+      "nodes": {
+          "LOAD_PRICE_BOOK_ENTRY": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "PricebookEntry",
+                      "sourceObjectName": "PricebookEntry",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "Product2Id"
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_PRODUCT": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "Product2",
+                      "sourceObjectName": "Product2",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "Name",
+                      "ProductCode",
+                      "Family"
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_OPPORTUNITY": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "Opportunity",
+                      "sourceObjectName": "Opportunity",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "AccountId",
+                      "RecordTypeId",
+                      "Name",
+                      "StageName",
+                      "Amount",
+                      "CloseDate",
+                      "Type",
+                      "LeadSource",
+                      "IsClosed",
+                      "IsWon",
+                      "ForecastCategoryName",
+                      "CreatedDate"
+
+
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_OPPORTUNITY_LINE_ITEM": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "OpportunityLineItem",
+                      "sourceObjectName": "OpportunityLineItem",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "OpportunityId",
+                      "PricebookEntryId",
+                      "Name",
+                      "Quantity",
+                      "TotalPrice"
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_ACCOUNT": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "Account",
+                      "sourceObjectName": "Account",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "Name",
+                      "Type",
+                      "BillingState",
+                      "BillingCountry",
+                      "Industry",
+                      "AnnualRevenue",
+                      "NumberOfEmployees",
+                      "OwnerId",
+                      "CreatedDate",
+                      "AccountSource"
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_LEAD": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "Lead",
+                      "sourceObjectName": "Lead",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "IsConverted",
+                      "ConvertedDate",
+                      "ConvertedAccountId",
+                      "ConvertedContactId",
+                      "ConvertedOpportunityId",
+                      "CreatedDate"
+
+                  ]
+              },
+              "sources": []
+          },
+          "LOAD_RECORDTYPE": {
+              "action": "load",
+              "parameters": {
+                  "dataset": {
+                      "connectionName": "SFDC_LOCAL",
+                      "label": "RecordType",
+                      "sourceObjectName": "RecordType",
+                      "type": "connectedDataset"
+                  },
+                  "fields": [
+                      "Id",
+                      "Name"
+                  ]
+              },
+              "sources": []
+          },
+          "JOIN_RECORDTYPE_OPPORTUNITY": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "RecordTypeId"
+                  ],
+                  "rightKeys": [
+                      "Id"
+                  ],
+                  "rightQualifier": "RecordType"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "LOAD_OPPORTUNITY",
+                  "LOAD_RECORDTYPE"
+              ]
+          },
+          "FORMULA0": {
+              "action": "formula",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "formulaExpression": "datediff(CloseDate, CreatedDate)",
+                          "label": "Age",
+                          "name": "DealAge",
+                          "precision": 18,
+                          "scale": 0,
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "JOIN_RECORDTYPE_OPPORTUNITY"
+              ]
+          },
+          "FORMULA1": {
+              "action": "formula",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "formulaExpression": "datediff(now(), CloseDate)",
+                          "label": "Days Since Close",
+                          "name": "DaysSinceClosed",
+                          "precision": 18,
+                          "scale": 0,
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "FORMULA0"
+              ]
+          },
+          "FORMULA2": {
+              "action": "computeRelative",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "format": "dd/MM/yyyy",
+                          "formulaExpression": "to_date(first_value(CloseDate))",
+                          "type": "DATE_ONLY",
+                          "label": "First Deal Date",
+                          "name": "CloseDate_formula1"
+                      }
+                  ],
+                  "orderBy": [
+                      {
+                          "direction": "ASC",
+                          "fieldName": "CloseDate"
+                      }
+                  ],
+                  "partitionBy": [
+                      "AccountId"
+                  ]
+              },
+              "sources": [
+                  "FORMULA1"
+              ]
+          },
+          "FILTER0": {
+              "action": "filter",
+              "parameters": {
+                  "filterExpressions": [
+                      {
+                          "field": "IsWon",
+                          "operands": [
+                              "true"
+                          ],
+                          "operator": "EQUAL",
+                          "type": "TEXT"
+                      },
+                      {
+                          "field": "DaysSinceClosed",
+                          "operands": [
+                              "${Variables.Last_Opportunity_Filter}"
+                          ],
+                          "operator": "LESS_THAN",
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "FORMULA2"
+              ]
+          },
+          "EXTRACT0": {
+              "action": "extractGrains",
+              "parameters": {
+                  "grainExtractions": []
+              },
+              "sources": [
+                  "FILTER0"
+              ]
+          },
+          "AGGREGATE1": {
+              "action": "aggregate",
+              "parameters": {
+                  "aggregations": [
+                      {
+                          "action": "SUM",
+                          "label": "Total Revenue",
+                          "name": "LTV",
+                          "source": "Amount"
+                      },
+                      {
+                          "action": "COUNT",
+                          "label": "# Won Deals",
+                          "name": "NumberOfWonDeals"
+                      },
+                      {
+                          "action": "AVG",
+                          "label": "Average Age",
+                          "name": "AverageDealAge",
+                          "source": "DealAge"
+                      },
+                      {
+                          "action": "MAX",
+                          "label": "Days Since First Deal Close",
+                          "name": "DaysSinceFirstDealDate",
+                          "source": "DaysSinceClosed"
+                      },
+                      {
+                          "action": "AVG",
+                          "label": "Average Deal Size",
+                          "name": "AverageDealSize",
+                          "source": "Amount"
+                      },
+                      {
+                          "action": "MIN",
+                          "label": "Days Since Most Recent Deal Close",
+                          "name": "DaysSinceLastDealDate",
+                          "source": "DaysSinceClosed"
+                      }
+                  ],
+                  "groupings": [
+                      "AccountId"
+                  ],
+                  "nodeType": "STANDARD",
+                  "pivots": []
+              },
+              "sources": [
+                  "EXTRACT0"
+              ]
+          },
+          "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "Id"
+                  ],
+                  "rightKeys": [
+                      "AccountId"
+                  ],
+                  "rightQualifier": "Aggregates"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "JOIN_LEADS_ACCOUNT",
+                  "AGGREGATE1"
+              ]
+          },
+          "FILTER_LEADS": {
+              "action": "filter",
+              "parameters": {
+                  "filterExpressions": [
+                      {
+                          "field": "IsConverted",
+                          "operands": [
+                              "true"
+                          ],
+                          "operator": "EQUAL",
+                          "type": "TEXT"
+                      }
+                  ]
+              },
+              "sources": [
+                  "LOAD_LEAD"
+              ]
+          },
+          "EXTRACT1": {
+              "action": "extractGrains",
+              "parameters": {
+                  "grainExtractions": []
+              },
+              "sources": [
+                  "FILTER_LEADS"
+              ]
+          },
+          "AGGREGATE_LEADS1": {
+              "action": "aggregate",
+              "parameters": {
+                  "aggregations": [
+                      {
+                          "action": "COUNT",
+                          "label": "Number of Converted Leads",
+                          "name": "NumberOfConvertedLeads"
+                      }
+                  ],
+                  "groupings": [
+                      "ConvertedAccountId"
+                  ],
+                  "nodeType": "STANDARD",
+                  "pivots": []
+              },
+              "sources": [
+                  "EXTRACT1"
+              ]
+          },
+          "JOIN_LEADS_ACCOUNT": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "Id"
+                  ],
+                  "rightKeys": [
+                      "ConvertedAccountId"
+                  ],
+                  "rightQualifier": "Leads"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "LOAD_ACCOUNT",
+                  "AGGREGATE_LEADS1"
+              ]
+          },
+          "JOIN_LINE_ITEM_PRICEBOOK": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "PricebookEntryId"
+                  ],
+                  "rightKeys": [
+                      "Id"
+                  ],
+                  "rightQualifier": "PricebookE"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "LOAD_OPPORTUNITY_LINE_ITEM",
+                  "LOAD_PRICE_BOOK_ENTRY"
+              ]
+          },
+          "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "PricebookE.Product2Id"
+                  ],
+                  "rightKeys": [
+                      "Id"
+                  ],
+                  "rightQualifier": "Product"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "JOIN_LINE_ITEM_PRICEBOOK",
+                  "LOAD_PRODUCT"
+              ]
+          },
+          "EXTRACT2": {
+              "action": "extractGrains",
+              "parameters": {
+                  "grainExtractions": []
+              },
+              "sources": [
+                  "JOIN_OPPORTUNITY_PRODUCT"
+              ]
+          },
+          "AGGREGATE_PRODUCT_METRICS1": {
+              "action": "aggregate",
+              "parameters": {
+                  "aggregations": [
+                      {
+                          "action": "SUM",
+                          "label": "Sum of Total Price",
+                          "name": "TotalPriceByProduct",
+                          "source": "TotalPrice"
+                      }
+                  ],
+                  "groupings": [
+                      "Opportunity.AccountId",
+                      "Product.Name",
+                      "Product.Family"
+                  ],
+                  "nodeType": "STANDARD",
+                  "pivots": []
+              },
+              "sources": [
+                  "EXTRACT2"
+              ]
+          },
+          "FORMULA3": {
+              "action": "computeRelative",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "formulaExpression": "row_number()",
+                          "label": "Product Rank",
+                          "name": "SUM_Opportunity.Amount_formula",
+                          "precision": 10,
+                          "scale": 0,
+                          "type": "NUMBER"
+                      }
+                  ],
+                  "orderBy": [
+                      {
+                          "direction": "DESC",
+                          "fieldName": "TotalPriceByProduct"
+                      }
+                  ],
+                  "partitionBy": [
+                      "Opportunity.AccountId"
+                  ]
+              },
+              "sources": [
+                  "AGGREGATE_PRODUCT_METRICS1"
+              ]
+          },
+          "FILTER_TOP_PRODUCT": {
+              "action": "filter",
+              "parameters": {
+                  "filterExpressions": [
+                      {
+                          "field": "SUM_Opportunity.Amount_formula",
+                          "operands": [
+                              "1"
+                          ],
+                          "operator": "EQUAL",
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "FORMULA3"
+              ]
+          },
+          "JOIN_TOP_PRODUCT": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "Id"
+                  ],
+                  "rightKeys": [
+                      "Opportunity.AccountId"
+                  ],
+                  "rightQualifier": "Top_Product"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT",
+                  "FILTER_TOP_PRODUCT"
+              ]
+          },
+          "DROP_FIELDS0": {
+              "action": "schema",
+              "parameters": {
+                  "fields": [],
+                  "slice": {
+                      "fields": [
+                          "Filter.Opportunity.AccountId",
+                          "Filter.SUM_Opportunity.Amount",
+                          "Filter.SUM_Opportunity.Amount_formula",
+                          "LeadAggregates.ConvertedAccountId",
+                          "Aggregates.AccountId"
+                      ],
+                      "ignoreMissingFields": true,
+                      "mode": "DROP"
+                  }
+              },
+              "sources": [
+                  "JOIN_TOP_PRODUCT"
+              ]
+          },
+        "FORMULA6": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "yyyy-MM-dd",
+                        "formulaExpression": "date_add(now(), - \"Aggregates.DaysSinceFirstDealDate\")",
+                        "label": "First Deal Date",
+                        "name": "Aggregates.FirstDealDate",
+                        "type": "DATE_ONLY"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS0"
+            ]
+        },
+          "OUTPUT_DATASET": {
+              "action": "save",
+              "parameters": {
+                    "dataset": {
+                        "label": "Account Training Dataset",
+                        "name": "${App.Datasets.Accounts.Alias}",
+                        "type": "analyticsDataset",
+                        "folderName": "${App.Folder.FullyQualifiedName}"
+                    },
+                  "fields": []
+              },
+              "sources": [
+                  "FORMULA5"
+              ]
+          },
+          "JOIN_OPPORTUNITY_PRODUCT": {
+              "action": "join",
+              "parameters": {
+                  "joinType": "LOOKUP",
+                  "leftKeys": [
+                      "OpportunityId"
+                  ],
+                  "rightKeys": [
+                      "Id"
+                  ],
+                  "rightQualifier": "Opportunity"
+              },
+              "schema": {
+                  "slice": {
+                      "mode": "DROP",
+                      "ignoreMissingFields": true,
+                      "fields": []
+                  }
+              },
+              "sources": [
+                  "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT",
+                  "FILTER0"
+              ]
+          },
+          "DISCOVERY_PREDICT0": {
+              "action": "smartDataDiscoveryPredict",
+              "parameters": {
+                  "columnMapping": {
+                      "Type": "Type"
+                  },
+                  "predictSource": {
+                      "name": "${App.PredictiveScoring.PredictionDefinitions.Predicted_Customer_Revenue.Name}",
+                      "type": "PRED_DEF"
+                  },
+                  "predictionFactorFields": [
+                      {
+                          "field": {
+                              "label": "Predictor 1",
+                              "name": "Predicted_Revenue_predictor1"
+                          },
+                          "impact": {
+                              "label": "Predictor 1 Impact",
+                              "name": "Predicted_Revenue_predictor1_impact"
+                          }
+                      },
+                      {
+                          "field": {
+                              "label": "Predictor 2",
+                              "name": "Predicted_Revenue_predictor2"
+                          },
+                          "impact": {
+                              "label": "Predictor 2 Impact",
+                              "name": "Predicted_Revenue_predictor2_impact"
+                          }
+                      },
+                      {
+                          "field": {
+                              "label": "Predictor 3",
+                              "name": "Predicted_Revenue_predictor3"
+                          },
+                          "impact": {
+                              "label": "Predictor 3 Impact",
+                              "name": "Predicted_Revenue_predictor3_impact"
+                          }
+                      }
+                  ],
+                  "predictionField": {
+                      "label": "Predicted Revenue",
+                      "name": "Predicted_Revenue"
+                  },
+                  "prescriptionFields": []
+              },
+              "sources": [
+                "FORMULA6"
+              ]
+          },
+          "FORMULA4": {
+              "action": "formula",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "formulaExpression": "abs(\"Aggregates.LTV\" - Predicted_Revenue)",
+                          "label": "Absolute Difference",
+                          "name": "AbsDiff",
+                          "precision": 16,
+                          "scale": 2,
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "DISCOVERY_PREDICT0"
+              ]
+          },
+          "FORMULA5": {
+              "action": "formula",
+              "parameters": {
+                  "expressionType": "SQL",
+                  "fields": [
+                      {
+                          "defaultValue": "",
+                          "formulaExpression": "case when (Predicted_Revenue-\"Aggregates.LTV\") > 0 then Predicted_Revenue-\"Aggregates.LTV\" else 0 end",
+                          "label": "Potential Revenue",
+                          "name": "Potential_Revenue",
+                          "precision": 10,
+                          "scale": 0,
+                          "type": "NUMBER"
+                      }
+                  ]
+              },
+              "sources": [
+                  "FORMULA4"
+              ]
+          }
+      },
+      "ui": {
+          "nodes": {
+              "LOAD_PRICE_BOOK_ENTRY": {
+                  "label": "PricebookEntry",
+                  "type": "LOAD_DATASET",
+                  "top": 812,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_PRICE_BOOK_ENTRY": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_PRODUCT": {
+                  "label": "Product2",
+                  "type": "LOAD_DATASET",
+                  "top": 952,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_PRODUCT": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_OPPORTUNITY": {
+                  "label": "Opportunity",
+                  "type": "LOAD_DATASET",
+                  "top": 392,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_OPPORTUNITY": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_OPPORTUNITY_LINE_ITEM": {
+                  "label": "OpportunityLineItem",
+                  "type": "LOAD_DATASET",
+                  "top": 672,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_OPPORTUNITY_LINE_ITEM": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_ACCOUNT": {
+                  "label": "Account",
+                  "type": "LOAD_DATASET",
+                  "top": 252,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_ACCOUNT": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_LEAD": {
+                  "label": "Lead",
+                  "type": "LOAD_DATASET",
+                  "top": 112,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_LEAD": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "LOAD_RECORDTYPE": {
+                  "label": "RecordType",
+                  "type": "LOAD_DATASET",
+                  "top": 532,
+                  "left": 112,
+                  "graph": {
+                      "LOAD_RECORDTYPE": null
+                  },
+                  "connectors": [],
+                  "parameters": {
+                      "sampleSize": 2000
+                  }
+              },
+              "JOIN_RECORDTYPE_OPPORTUNITY": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 392,
+                  "left": 252
+              },
+              "TRANSFORM0": {
+                  "label": "Calculate Fields on Opportunity",
+                  "type": "TRANSFORM",
+                  "top": 392,
+                  "left": 392,
+                  "graph": {
+                      "FORMULA0": {
+                          "parameters": {
+                              "type": "DATE_DIFFERENCE_UI"
+                          }
+                      },
+                      "FORMULA1": {
+                          "parameters": {
+                              "type": "DATE_DIFFERENCE_UI"
+                          }
+                      },
+                      "FORMULA2": null
+                  },
+                  "connectors": [
+                      {
+                          "source": "FORMULA0",
+                          "target": "FORMULA1"
+                      },
+                      {
+                          "source": "FORMULA1",
+                          "target": "FORMULA2"
+                      }
+                  ]
+              },
+              "FILTER0": {
+                  "label": "Filter only won opportunities in the past ${Variables.Last_Opportunity_Filter} days",
+                  "type": "FILTER",
+                  "top": 392,
+                  "left": 532
+              },
+              "AGGREGATE6": {
+                  "label": "Aggregate opportunity metrics by account",
+                  "type": "AGGREGATE",
+                  "top": 392,
+                  "left": 812,
+                  "graph": {
+                      "EXTRACT0": null,
+                      "AGGREGATE1": null
+                  },
+                  "connectors": [
+                      {
+                          "source": "EXTRACT0",
+                          "target": "AGGREGATE1"
+                      }
+                  ]
+              },
+              "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 252,
+                  "left": 952
+              },
+              "FILTER_LEADS": {
+                  "label": "Filter For Converted Leads",
+                  "type": "FILTER",
+                  "top": 112.30000000000001,
+                  "left": 391.9
+              },
+              "AGGREGATE_LEADS": {
+                  "label": "Count Converted Leads by Account Id",
+                  "type": "AGGREGATE",
+                  "top": 112,
+                  "left": 672,
+                  "graph": {
+                      "EXTRACT1": null,
+                      "AGGREGATE_LEADS1": null
+                  },
+                  "connectors": [
+                      {
+                          "source": "EXTRACT1",
+                          "target": "AGGREGATE_LEADS1"
+                      }
+                  ]
+              },
+              "JOIN_LEADS_ACCOUNT": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 252,
+                  "left": 672
+              },
+              "JOIN_LINE_ITEM_PRICEBOOK": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 672,
+                  "left": 252
+              },
+              "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 672.2,
+                  "left": 531.6
+              },
+              "AGGREGATE_PRODUCT_METRICS": {
+                  "label": "Aggregate total price by account and product",
+                  "type": "AGGREGATE",
+                  "top": 672,
+                  "left": 812,
+                  "graph": {
+                      "EXTRACT2": null,
+                      "AGGREGATE_PRODUCT_METRICS1": null
+                  },
+                  "connectors": [
+                      {
+                          "source": "EXTRACT2",
+                          "target": "AGGREGATE_PRODUCT_METRICS1"
+                      }
+                  ]
+              },
+              "TRANSFORM_FIND_TOP_PRODUCT": {
+                  "label": "Rank order products by account",
+                  "type": "TRANSFORM",
+                  "top": 672,
+                  "left": 952,
+                  "graph": {
+                      "FORMULA3": null
+                  },
+                  "connectors": []
+              },
+              "FILTER_TOP_PRODUCT": {
+                  "label": "Filter only top products for each account",
+                  "type": "FILTER",
+                  "top": 672,
+                  "left": 1092
+              },
+              "JOIN_TOP_PRODUCT": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 252,
+                  "left": 1092
+              },
+              "TRANSFORM2": {
+                  "label": "Transform",
+                  "type": "TRANSFORM",
+                  "top": 252,
+                  "left": 1232,
+                  "graph": {
+                    "DROP_FIELDS0": null,
+                    "FORMULA6": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        }
+                    }
+                  },
+                "connectors": [
+                    {
+                        "source": "DROP_FIELDS0",
+                        "target": "FORMULA6"
+                    }
+                ]
+              },
+              "OUTPUT_DATASET": {
+                  "label": "Output",
+                  "type": "OUTPUT",
+                  "top": 252,
+                  "left": 1652
+              },
+              "JOIN_OPPORTUNITY_PRODUCT": {
+                  "label": "Join",
+                  "type": "JOIN",
+                  "top": 672,
+                  "left": 672
+              },
+              "DISCOVERY_PREDICT0": {
+                  "label": "Discovery Predict",
+                  "type": "DISCOVERY_PREDICT",
+                  "top": 253,
+                  "left": 1372
+              },
+              "CALCULATE_FIELDS_FOR_PREDICTIONS": {
+                  "label": "calculate fields based on prediction",
+                  "type": "TRANSFORM",
+                  "top": 251.3,
+                  "left": 1512,
+                  "graph": {
+                      "FORMULA4": {
+                          "parameters": {
+                              "type": "BASE_FORMULA_UI"
+                          }
+                      },
+                      "FORMULA5": {
+                          "parameters": {
+                              "type": "BASE_FORMULA_UI"
+                          }
+                      }
+                  },
+                  "connectors": [
+                      {
+                          "source": "FORMULA4",
+                          "target": "FORMULA5"
+                      }
+                  ]
+              }
+          },
+          "connectors": [
+              {
+                  "source": "LOAD_OPPORTUNITY",
+                  "target": "JOIN_RECORDTYPE_OPPORTUNITY"
+              },
+              {
+                  "source": "LOAD_RECORDTYPE",
+                  "target": "JOIN_RECORDTYPE_OPPORTUNITY"
+              },
+              {
+                  "source": "JOIN_RECORDTYPE_OPPORTUNITY",
+                  "target": "TRANSFORM0"
+              },
+              {
+                  "source": "TRANSFORM0",
+                  "target": "FILTER0"
+              },
+              {
+                  "source": "FILTER0",
+                  "target": "AGGREGATE6"
+              },
+              {
+                  "source": "JOIN_LEADS_ACCOUNT",
+                  "target": "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT"
+              },
+              {
+                  "source": "AGGREGATE6",
+                  "target": "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT"
+              },
+              {
+                  "source": "LOAD_LEAD",
+                  "target": "FILTER_LEADS"
+              },
+              {
+                  "source": "FILTER_LEADS",
+                  "target": "AGGREGATE_LEADS"
+              },
+              {
+                  "source": "LOAD_ACCOUNT",
+                  "target": "JOIN_LEADS_ACCOUNT"
+              },
+              {
+                  "source": "AGGREGATE_LEADS",
+                  "target": "JOIN_LEADS_ACCOUNT"
+              },
+              {
+                  "source": "LOAD_OPPORTUNITY_LINE_ITEM",
+                  "target": "JOIN_LINE_ITEM_PRICEBOOK"
+              },
+              {
+                  "source": "LOAD_PRICE_BOOK_ENTRY",
+                  "target": "JOIN_LINE_ITEM_PRICEBOOK"
+              },
+              {
+                  "source": "JOIN_LINE_ITEM_PRICEBOOK",
+                  "target": "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT"
+              },
+              {
+                  "source": "LOAD_PRODUCT",
+                  "target": "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT"
+              },
+              {
+                  "source": "AGGREGATE_PRODUCT_METRICS",
+                  "target": "TRANSFORM_FIND_TOP_PRODUCT"
+              },
+              {
+                  "source": "TRANSFORM_FIND_TOP_PRODUCT",
+                  "target": "FILTER_TOP_PRODUCT"
+              },
+              {
+                  "source": "JOIN_OPPORTUNITYAGGREGATES_ACCOUNT",
+                  "target": "JOIN_TOP_PRODUCT"
+              },
+              {
+                  "source": "FILTER_TOP_PRODUCT",
+                  "target": "JOIN_TOP_PRODUCT"
+              },
+              {
+                  "source": "JOIN_TOP_PRODUCT",
+                  "target": "TRANSFORM2"
+              },
+              {
+                  "source": "CALCULATE_FIELDS_FOR_PREDICTIONS",
+                  "target": "OUTPUT_DATASET"
+              },
+              {
+                  "source": "JOIN_LINE_ITEM_PRICEBOOK_PRODUCT",
+                  "target": "JOIN_OPPORTUNITY_PRODUCT"
+              },
+              {
+                  "source": "FILTER0",
+                  "target": "JOIN_OPPORTUNITY_PRODUCT"
+              },
+              {
+                  "source": "JOIN_OPPORTUNITY_PRODUCT",
+                  "target": "AGGREGATE_PRODUCT_METRICS"
+              },
+              {
+                  "source": "TRANSFORM2",
+                  "target": "DISCOVERY_PREDICT0"
+              },
+              {
+                  "source": "DISCOVERY_PREDICT0",
+                  "target": "CALCULATE_FIELDS_FOR_PREDICTIONS"
+              }
+          ],
+          "hiddenColumns": []
+      }
+  },
+  "licenseAttributes" : { },
+  "_type" : "RECIPE"
+}

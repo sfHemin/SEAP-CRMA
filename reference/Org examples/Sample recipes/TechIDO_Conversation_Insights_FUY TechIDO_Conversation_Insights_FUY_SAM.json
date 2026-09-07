@@ -1,0 +1,2680 @@
+{
+    "version": "67.0",
+    "nodes": {
+        "NODE_0_CI_Mentions_GMX_FUY": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "CI_Mentions",
+                    "name": "CI_Mentions_GMX_FUY",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "NODE_1_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallDurationInSeconds",
+                        "newProperties": {
+                            "label": "Call.CallDurationInSeconds",
+                            "name": "Call.CallDurationInSeconds"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_0_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_2_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallRecordingId",
+                        "newProperties": {
+                            "label": "Call.CallRecordingId",
+                            "name": "Call.CallRecordingId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_1_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_3_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime",
+                            "name": "Call.CallStartDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_2_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_4_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime",
+                            "name": "Call.CallStartDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_3_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_5_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Day",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Day",
+                            "name": "Call.CallStartDateTime_Day"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_4_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_6_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Hour",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Hour",
+                            "name": "Call.CallStartDateTime_Hour"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_5_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_7_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Minute",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Minute",
+                            "name": "Call.CallStartDateTime_Minute"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_6_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_8_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Month",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Month",
+                            "name": "Call.CallStartDateTime_Month"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_7_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_9_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Month_Fiscal",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Month_Fiscal",
+                            "name": "Call.CallStartDateTime_Month_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_8_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_10_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Quarter",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Quarter",
+                            "name": "Call.CallStartDateTime_Quarter"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_9_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_11_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Quarter_Fiscal",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Quarter_Fiscal",
+                            "name": "Call.CallStartDateTime_Quarter_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_10_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_12_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Second",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Second",
+                            "name": "Call.CallStartDateTime_Second"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_11_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_13_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Week",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Week",
+                            "name": "Call.CallStartDateTime_Week"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_12_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_14_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Week_Fiscal",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Week_Fiscal",
+                            "name": "Call.CallStartDateTime_Week_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_13_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_15_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Year",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Year",
+                            "name": "Call.CallStartDateTime_Year"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_14_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_16_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_Year_Fiscal",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_Year_Fiscal",
+                            "name": "Call.CallStartDateTime_Year_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_15_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_17_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_day_epoch",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_day_epoch",
+                            "name": "Call.CallStartDateTime_day_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_16_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_18_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZCallStartDateTime_sec_epoch",
+                        "newProperties": {
+                            "label": "Call.CallStartDateTime_sec_epoch",
+                            "name": "Call.CallStartDateTime_sec_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_17_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_19_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZIntelligenceScore",
+                        "newProperties": {
+                            "label": "Call.IntelligenceScore",
+                            "name": "Call.IntelligenceScore"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_18_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_20_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZManagerId",
+                        "newProperties": {
+                            "label": "Call.Owner.ManagerId",
+                            "name": "Call.Owner.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_19_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_21_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZProfileId",
+                        "newProperties": {
+                            "label": "Call.Owner.ProfileId",
+                            "name": "Call.Owner.ProfileId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_20_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_22_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZRoleZRolePath",
+                        "newProperties": {
+                            "label": "Call.Owner.Role.RolePath",
+                            "name": "Call.Owner.Role.RolePath"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_21_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_23_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZRoleZRoles",
+                        "newProperties": {
+                            "label": "Call.Owner.Role.Roles",
+                            "name": "Call.Owner.Role.Roles"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_22_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_24_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZUsersWithViewAllDataProfileZId",
+                        "newProperties": {
+                            "label": "Call.Owner.UsersWithViewAllDataProfile.Id",
+                            "name": "Call.Owner.UsersWithViewAllDataProfile.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_23_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_25_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerZUsersWithViewAllDataProfileZManagerId",
+                        "newProperties": {
+                            "label": "Call.Owner.UsersWithViewAllDataProfile.ManagerId",
+                            "name": "Call.Owner.UsersWithViewAllDataProfile.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_24_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_26_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZOwnerId",
+                        "newProperties": {
+                            "label": "Call.OwnerId",
+                            "name": "Call.OwnerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_25_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_27_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZIntelligenceScore",
+                        "newProperties": {
+                            "label": "Call.Recording.IntelligenceScore",
+                            "name": "Call.Recording.IntelligenceScore"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_26_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_28_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime",
+                            "name": "Call.Recording.UploadDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_27_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_29_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime",
+                            "name": "Call.Recording.UploadDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_28_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_30_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Day",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Day",
+                            "name": "Call.Recording.UploadDateTime_Day"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_29_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_31_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Hour",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Hour",
+                            "name": "Call.Recording.UploadDateTime_Hour"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_30_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_32_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Minute",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Minute",
+                            "name": "Call.Recording.UploadDateTime_Minute"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_31_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_33_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Month",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Month",
+                            "name": "Call.Recording.UploadDateTime_Month"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_32_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_34_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Month_Fiscal",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Month_Fiscal",
+                            "name": "Call.Recording.UploadDateTime_Month_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_33_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_35_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Quarter",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Quarter",
+                            "name": "Call.Recording.UploadDateTime_Quarter"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_34_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_36_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Quarter_Fiscal",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Quarter_Fiscal",
+                            "name": "Call.Recording.UploadDateTime_Quarter_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_35_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_37_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Second",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Second",
+                            "name": "Call.Recording.UploadDateTime_Second"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_36_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_38_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Week",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Week",
+                            "name": "Call.Recording.UploadDateTime_Week"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_37_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_39_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Week_Fiscal",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Week_Fiscal",
+                            "name": "Call.Recording.UploadDateTime_Week_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_38_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_40_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Year",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Year",
+                            "name": "Call.Recording.UploadDateTime_Year"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_39_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_41_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_Year_Fiscal",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_Year_Fiscal",
+                            "name": "Call.Recording.UploadDateTime_Year_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_40_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_42_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_day_epoch",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_day_epoch",
+                            "name": "Call.Recording.UploadDateTime_day_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_41_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_43_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRecordingZUploadDateTime_sec_epoch",
+                        "newProperties": {
+                            "label": "Call.Recording.UploadDateTime_sec_epoch",
+                            "name": "Call.Recording.UploadDateTime_sec_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_42_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_44_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZAccountId",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.AccountId",
+                            "name": "Call.RelatedRecord.AccountId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_43_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_45_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZAmount",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.Amount",
+                            "name": "Call.RelatedRecord.Amount"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_44_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_46_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZContactId",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.ContactId",
+                            "name": "Call.RelatedRecord.ContactId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_45_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_47_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZId",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.Id",
+                            "name": "Call.RelatedRecord.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_46_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_48_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZName",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.Name",
+                            "name": "Call.RelatedRecord.Name"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_47_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_49_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZStageName",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.StageName",
+                            "name": "Call.RelatedRecord.StageName"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_48_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_50_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZStatus",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.Status",
+                            "name": "Call.RelatedRecord.Status"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_49_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_51_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZRelatedRecordZType",
+                        "newProperties": {
+                            "label": "Call.RelatedRecord.Type",
+                            "name": "Call.RelatedRecord.Type"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_50_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_52_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZSourceType",
+                        "newProperties": {
+                            "label": "Call.SourceType",
+                            "name": "Call.SourceType"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_51_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_53_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZTranscribedLanguage",
+                        "newProperties": {
+                            "label": "Call.TranscribedLanguage",
+                            "name": "Call.TranscribedLanguage"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_52_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_54_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZUserZId",
+                        "newProperties": {
+                            "label": "Call.User.Id",
+                            "name": "Call.User.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_53_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_55_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZUserZManagerId",
+                        "newProperties": {
+                            "label": "Call.User.ManagerId",
+                            "name": "Call.User.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_54_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_56_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZUserZName",
+                        "newProperties": {
+                            "label": "Call.User.Name",
+                            "name": "Call.User.Name"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_55_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_57_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZUserZProfileId",
+                        "newProperties": {
+                            "label": "Call.User.ProfileId",
+                            "name": "Call.User.ProfileId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_56_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_58_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "CallZType",
+                        "newProperties": {
+                            "label": "Type",
+                            "name": "Call.Type"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_57_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_59_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZOwnerZManagerId",
+                        "newProperties": {
+                            "label": "VoiceCall.Owner.ManagerId",
+                            "name": "VoiceCall.Owner.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_58_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_60_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZOwnerZRoleZRoles",
+                        "newProperties": {
+                            "label": "VoiceCall.Owner.Role.Roles",
+                            "name": "VoiceCall.Owner.Role.Roles"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_59_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_61_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZOwnerZUsersWithViewAllDataProfileZId",
+                        "newProperties": {
+                            "label": "VoiceCall.Owner.UsersWithViewAllDataProfile.Id",
+                            "name": "VoiceCall.Owner.UsersWithViewAllDataProfile.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_60_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_62_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZOwnerZUsersWithViewAllDataProfileZManagerId",
+                        "newProperties": {
+                            "label": "VoiceCall.Owner.UsersWithViewAllDataProfile.ManagerId",
+                            "name": "VoiceCall.Owner.UsersWithViewAllDataProfile.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_61_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_63_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZOwnerId",
+                        "newProperties": {
+                            "label": "VoiceCall.OwnerId",
+                            "name": "VoiceCall.OwnerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_62_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_64_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZRelatedRecordZAmount",
+                        "newProperties": {
+                            "label": "VoiceCall.RelatedRecord.Amount",
+                            "name": "VoiceCall.RelatedRecord.Amount"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_63_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_65_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZRelatedRecordZStatus",
+                        "newProperties": {
+                            "label": "VoiceCall.RelatedRecord.Status",
+                            "name": "VoiceCall.RelatedRecord.Status"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_64_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_66_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZTranscribedLanguage",
+                        "newProperties": {
+                            "label": "VoiceCall.TranscribedLanguage",
+                            "name": "VoiceCall.TranscribedLanguage"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_65_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_67_CI_Mentions_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "VoiceCallZUserZManagerId",
+                        "newProperties": {
+                            "label": "VoiceCall.User.ManagerId",
+                            "name": "VoiceCall.User.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_66_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "SAVE_CI_Mentions_GMX_FUY": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "TechIDO_Conversation_Insights_FUY",
+                    "label": "CI_Mentions",
+                    "name": "CI_Mentions_GMX_FUY",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "NODE_67_CI_Mentions_GMX_FUY"
+            ]
+        },
+        "NODE_0_CI_VoiceCall_GMX_FUY": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "CI_VoiceCall",
+                    "name": "CI_VoiceCall_GMX_FUY",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "NODE_1_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "MentionsZMention",
+                        "newProperties": {
+                            "label": "Mention",
+                            "name": "Mentions.Mention"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_0_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_2_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "MentionsZCategory",
+                        "newProperties": {
+                            "label": "Mention Category",
+                            "name": "Mentions.Category"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_1_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_3_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "MentionsZCount",
+                        "newProperties": {
+                            "label": "Mentions.Count",
+                            "name": "Mentions.Count"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_2_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_4_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "MentionsZUniqueCount",
+                        "newProperties": {
+                            "label": "Mentions.UniqueCount",
+                            "name": "Mentions.UniqueCount"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_3_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_5_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZManagerId",
+                        "newProperties": {
+                            "label": "Owner.ManagerId",
+                            "name": "Owner.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_4_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_6_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZProfileId",
+                        "newProperties": {
+                            "label": "Owner.ProfileId",
+                            "name": "Owner.ProfileId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_5_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_7_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZRoleZRolePath",
+                        "newProperties": {
+                            "label": "Owner.Role.RolePath",
+                            "name": "Owner.Role.RolePath"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_6_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_8_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZRoleZRoles",
+                        "newProperties": {
+                            "label": "Owner.Role.Roles",
+                            "name": "Owner.Role.Roles"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_7_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_9_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZUsersWithViewAllDataProfileZId",
+                        "newProperties": {
+                            "label": "Owner.UsersWithViewAllDataProfile.Id",
+                            "name": "Owner.UsersWithViewAllDataProfile.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_8_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_10_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "OwnerZUsersWithViewAllDataProfileZManagerId",
+                        "newProperties": {
+                            "label": "Owner.UsersWithViewAllDataProfile.ManagerId",
+                            "name": "Owner.UsersWithViewAllDataProfile.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_9_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_11_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZIntelligenceScore",
+                        "newProperties": {
+                            "label": "Recording.IntelligenceScore",
+                            "name": "Recording.IntelligenceScore"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_10_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_12_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime",
+                            "name": "Recording.UploadDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_11_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_13_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime",
+                            "name": "Recording.UploadDateTime"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_12_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_14_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Day",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Day",
+                            "name": "Recording.UploadDateTime_Day"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_13_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_15_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Hour",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Hour",
+                            "name": "Recording.UploadDateTime_Hour"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_14_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_16_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Minute",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Minute",
+                            "name": "Recording.UploadDateTime_Minute"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_15_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_17_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Month",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Month",
+                            "name": "Recording.UploadDateTime_Month"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_16_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_18_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Month_Fiscal",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Month_Fiscal",
+                            "name": "Recording.UploadDateTime_Month_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_17_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_19_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Quarter",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Quarter",
+                            "name": "Recording.UploadDateTime_Quarter"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_18_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_20_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Quarter_Fiscal",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Quarter_Fiscal",
+                            "name": "Recording.UploadDateTime_Quarter_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_19_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_21_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Second",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Second",
+                            "name": "Recording.UploadDateTime_Second"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_20_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_22_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Week",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Week",
+                            "name": "Recording.UploadDateTime_Week"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_21_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_23_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Week_Fiscal",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Week_Fiscal",
+                            "name": "Recording.UploadDateTime_Week_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_22_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_24_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Year",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Year",
+                            "name": "Recording.UploadDateTime_Year"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_23_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_25_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_Year_Fiscal",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_Year_Fiscal",
+                            "name": "Recording.UploadDateTime_Year_Fiscal"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_24_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_26_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_day_epoch",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_day_epoch",
+                            "name": "Recording.UploadDateTime_day_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_25_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_27_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RecordingZUploadDateTime_sec_epoch",
+                        "newProperties": {
+                            "label": "Recording.UploadDateTime_sec_epoch",
+                            "name": "Recording.UploadDateTime_sec_epoch"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_26_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_28_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZName",
+                        "newProperties": {
+                            "label": "Related Record",
+                            "name": "RelatedRecord.Name"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_27_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_29_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZAccountId",
+                        "newProperties": {
+                            "label": "RelatedRecord.AccountId",
+                            "name": "RelatedRecord.AccountId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_28_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_30_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZAmount",
+                        "newProperties": {
+                            "label": "RelatedRecord.Amount",
+                            "name": "RelatedRecord.Amount"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_29_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_31_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZContactId",
+                        "newProperties": {
+                            "label": "RelatedRecord.ContactId",
+                            "name": "RelatedRecord.ContactId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_30_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_32_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZId",
+                        "newProperties": {
+                            "label": "RelatedRecord.Id",
+                            "name": "RelatedRecord.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_31_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_33_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZStageName",
+                        "newProperties": {
+                            "label": "RelatedRecord.StageName",
+                            "name": "RelatedRecord.StageName"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_32_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_34_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZStatus",
+                        "newProperties": {
+                            "label": "RelatedRecord.Status",
+                            "name": "RelatedRecord.Status"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_33_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_35_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "RelatedRecordZType",
+                        "newProperties": {
+                            "label": "RelatedRecord.Type",
+                            "name": "RelatedRecord.Type"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_34_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_36_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "UserZId",
+                        "newProperties": {
+                            "label": "User.Id",
+                            "name": "User.Id"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_35_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_37_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "UserZManagerId",
+                        "newProperties": {
+                            "label": "User.ManagerId",
+                            "name": "User.ManagerId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_36_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_38_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "UserZName",
+                        "newProperties": {
+                            "label": "User.Name",
+                            "name": "User.Name"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_37_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "NODE_39_CI_VoiceCall_GMX_FUY": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "UserZProfileId",
+                        "newProperties": {
+                            "label": "User.ProfileId",
+                            "name": "User.ProfileId"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "NODE_38_CI_VoiceCall_GMX_FUY"
+            ]
+        },
+        "SAVE_CI_VoiceCall_GMX_FUY": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "TechIDO_Conversation_Insights_FUY",
+                    "label": "CI_VoiceCall",
+                    "name": "CI_VoiceCall_GMX_FUY",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "NODE_39_CI_VoiceCall_GMX_FUY"
+            ]
+        }
+    },
+    "ui": {
+        "nodes": {
+            "NODE_0_CI_Mentions_GMX_FUY": {
+                "label": "Load CI_Mentions",
+                "type": "LOAD_DATASET",
+                "top": 250.3,
+                "left": 250.2,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM_CI_Mentions_GMX_FUY": {
+                "label": "POST-MIGRATION DATASET UPDATES",
+                "type": "TRANSFORM",
+                "top": 110.19999999999999,
+                "left": 390.2,
+                "graph": {
+                    "NODE_1_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_2_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_3_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_4_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_5_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_6_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_7_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_8_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_9_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_10_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_11_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_12_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_13_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_14_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_15_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_16_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_17_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_18_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_19_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_20_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_21_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_22_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_23_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_24_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_25_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_26_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_27_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_28_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_29_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_30_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_31_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_32_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_33_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_34_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_35_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_36_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_37_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_38_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_39_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_40_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_41_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_42_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_43_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_44_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_45_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_46_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_47_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_48_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_49_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_50_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_51_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_52_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_53_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_54_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_55_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_56_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_57_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_58_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_59_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_60_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_61_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_62_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_63_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_64_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_65_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_66_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_67_CI_Mentions_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "NODE_1_CI_Mentions_GMX_FUY",
+                        "target": "NODE_2_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_2_CI_Mentions_GMX_FUY",
+                        "target": "NODE_3_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_3_CI_Mentions_GMX_FUY",
+                        "target": "NODE_4_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_4_CI_Mentions_GMX_FUY",
+                        "target": "NODE_5_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_5_CI_Mentions_GMX_FUY",
+                        "target": "NODE_6_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_6_CI_Mentions_GMX_FUY",
+                        "target": "NODE_7_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_7_CI_Mentions_GMX_FUY",
+                        "target": "NODE_8_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_8_CI_Mentions_GMX_FUY",
+                        "target": "NODE_9_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_9_CI_Mentions_GMX_FUY",
+                        "target": "NODE_10_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_10_CI_Mentions_GMX_FUY",
+                        "target": "NODE_11_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_11_CI_Mentions_GMX_FUY",
+                        "target": "NODE_12_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_12_CI_Mentions_GMX_FUY",
+                        "target": "NODE_13_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_13_CI_Mentions_GMX_FUY",
+                        "target": "NODE_14_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_14_CI_Mentions_GMX_FUY",
+                        "target": "NODE_15_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_15_CI_Mentions_GMX_FUY",
+                        "target": "NODE_16_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_16_CI_Mentions_GMX_FUY",
+                        "target": "NODE_17_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_17_CI_Mentions_GMX_FUY",
+                        "target": "NODE_18_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_18_CI_Mentions_GMX_FUY",
+                        "target": "NODE_19_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_19_CI_Mentions_GMX_FUY",
+                        "target": "NODE_20_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_20_CI_Mentions_GMX_FUY",
+                        "target": "NODE_21_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_21_CI_Mentions_GMX_FUY",
+                        "target": "NODE_22_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_22_CI_Mentions_GMX_FUY",
+                        "target": "NODE_23_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_23_CI_Mentions_GMX_FUY",
+                        "target": "NODE_24_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_24_CI_Mentions_GMX_FUY",
+                        "target": "NODE_25_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_25_CI_Mentions_GMX_FUY",
+                        "target": "NODE_26_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_26_CI_Mentions_GMX_FUY",
+                        "target": "NODE_27_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_27_CI_Mentions_GMX_FUY",
+                        "target": "NODE_28_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_28_CI_Mentions_GMX_FUY",
+                        "target": "NODE_29_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_29_CI_Mentions_GMX_FUY",
+                        "target": "NODE_30_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_30_CI_Mentions_GMX_FUY",
+                        "target": "NODE_31_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_31_CI_Mentions_GMX_FUY",
+                        "target": "NODE_32_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_32_CI_Mentions_GMX_FUY",
+                        "target": "NODE_33_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_33_CI_Mentions_GMX_FUY",
+                        "target": "NODE_34_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_34_CI_Mentions_GMX_FUY",
+                        "target": "NODE_35_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_35_CI_Mentions_GMX_FUY",
+                        "target": "NODE_36_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_36_CI_Mentions_GMX_FUY",
+                        "target": "NODE_37_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_37_CI_Mentions_GMX_FUY",
+                        "target": "NODE_38_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_38_CI_Mentions_GMX_FUY",
+                        "target": "NODE_39_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_39_CI_Mentions_GMX_FUY",
+                        "target": "NODE_40_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_40_CI_Mentions_GMX_FUY",
+                        "target": "NODE_41_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_41_CI_Mentions_GMX_FUY",
+                        "target": "NODE_42_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_42_CI_Mentions_GMX_FUY",
+                        "target": "NODE_43_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_43_CI_Mentions_GMX_FUY",
+                        "target": "NODE_44_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_44_CI_Mentions_GMX_FUY",
+                        "target": "NODE_45_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_45_CI_Mentions_GMX_FUY",
+                        "target": "NODE_46_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_46_CI_Mentions_GMX_FUY",
+                        "target": "NODE_47_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_47_CI_Mentions_GMX_FUY",
+                        "target": "NODE_48_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_48_CI_Mentions_GMX_FUY",
+                        "target": "NODE_49_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_49_CI_Mentions_GMX_FUY",
+                        "target": "NODE_50_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_50_CI_Mentions_GMX_FUY",
+                        "target": "NODE_51_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_51_CI_Mentions_GMX_FUY",
+                        "target": "NODE_52_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_52_CI_Mentions_GMX_FUY",
+                        "target": "NODE_53_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_53_CI_Mentions_GMX_FUY",
+                        "target": "NODE_54_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_54_CI_Mentions_GMX_FUY",
+                        "target": "NODE_55_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_55_CI_Mentions_GMX_FUY",
+                        "target": "NODE_56_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_56_CI_Mentions_GMX_FUY",
+                        "target": "NODE_57_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_57_CI_Mentions_GMX_FUY",
+                        "target": "NODE_58_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_58_CI_Mentions_GMX_FUY",
+                        "target": "NODE_59_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_59_CI_Mentions_GMX_FUY",
+                        "target": "NODE_60_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_60_CI_Mentions_GMX_FUY",
+                        "target": "NODE_61_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_61_CI_Mentions_GMX_FUY",
+                        "target": "NODE_62_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_62_CI_Mentions_GMX_FUY",
+                        "target": "NODE_63_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_63_CI_Mentions_GMX_FUY",
+                        "target": "NODE_64_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_64_CI_Mentions_GMX_FUY",
+                        "target": "NODE_65_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_65_CI_Mentions_GMX_FUY",
+                        "target": "NODE_66_CI_Mentions_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_66_CI_Mentions_GMX_FUY",
+                        "target": "NODE_67_CI_Mentions_GMX_FUY"
+                    }
+                ]
+            },
+            "SAVE_CI_Mentions_GMX_FUY": {
+                "label": "Save CI_Mentions",
+                "type": "OUTPUT",
+                "top": 250.3,
+                "left": 530.2
+            },
+            "NODE_0_CI_VoiceCall_GMX_FUY": {
+                "label": "Load CI_VoiceCall",
+                "type": "LOAD_DATASET",
+                "top": 250.3,
+                "left": 110.19999999999999,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM_CI_VoiceCall_GMX_FUY": {
+                "label": "POST-MIGRATION DATASET UPDATES",
+                "type": "TRANSFORM",
+                "top": 250.2,
+                "left": 390.2,
+                "graph": {
+                    "NODE_1_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_2_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_3_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_4_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_5_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_6_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_7_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_8_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_9_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_10_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_11_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_12_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_13_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_14_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_15_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_16_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_17_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_18_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_19_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_20_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_21_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_22_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_23_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_24_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_25_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_26_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_27_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_28_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_29_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_30_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_31_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_32_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_33_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_34_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_35_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_36_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_37_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_38_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    },
+                    "NODE_39_CI_VoiceCall_GMX_FUY": {
+                        "label": "Edit Attributes - Add special characters back to this field's API name"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "NODE_1_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_2_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_2_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_3_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_3_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_4_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_4_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_5_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_5_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_6_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_6_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_7_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_7_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_8_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_8_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_9_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_9_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_10_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_10_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_11_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_11_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_12_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_12_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_13_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_13_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_14_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_14_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_15_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_15_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_16_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_16_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_17_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_17_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_18_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_18_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_19_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_19_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_20_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_20_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_21_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_21_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_22_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_22_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_23_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_23_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_24_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_24_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_25_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_25_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_26_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_26_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_27_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_27_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_28_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_28_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_29_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_29_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_30_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_30_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_31_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_31_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_32_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_32_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_33_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_33_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_34_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_34_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_35_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_35_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_36_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_36_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_37_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_37_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_38_CI_VoiceCall_GMX_FUY"
+                    },
+                    {
+                        "source": "NODE_38_CI_VoiceCall_GMX_FUY",
+                        "target": "NODE_39_CI_VoiceCall_GMX_FUY"
+                    }
+                ]
+            },
+            "SAVE_CI_VoiceCall_GMX_FUY": {
+                "label": "Save CI_VoiceCall",
+                "type": "OUTPUT",
+                "top": 250.3,
+                "left": 670.2
+            }
+        },
+        "connectors": [
+            {
+                "source": "NODE_0_CI_Mentions_GMX_FUY",
+                "target": "TRANSFORM_CI_Mentions_GMX_FUY"
+            },
+            {
+                "source": "TRANSFORM_CI_Mentions_GMX_FUY",
+                "target": "SAVE_CI_Mentions_GMX_FUY"
+            },
+            {
+                "source": "NODE_0_CI_VoiceCall_GMX_FUY",
+                "target": "TRANSFORM_CI_VoiceCall_GMX_FUY"
+            },
+            {
+                "source": "TRANSFORM_CI_VoiceCall_GMX_FUY",
+                "target": "SAVE_CI_VoiceCall_GMX_FUY"
+            }
+        ],
+        "hiddenColumns": []
+    }
+}

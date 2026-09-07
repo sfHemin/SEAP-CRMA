@@ -1,0 +1,837 @@
+{
+  "allowPreview": true,
+  "assetSharingUrl": "https://computing-innovation-7984--tpmdev2.sandbox.my.salesforce.com/analytics/wave/dashboard?assetId=0FKWB0000006SPr4AM&orgId=00DWB000009lhsL&loginHost=usa754s.sfdc-8tgtt5.salesforce.com&urlType=sharing",
+  "createdBy": {
+    "id": "005a500001oHHs1AAG",
+    "name": "Manivannan Sugumar",
+    "profilePhotoUrl": "https://computing-innovation-7984--tpmdev2.sandbox.file.force.com/profilephoto/005/T"
+  },
+  "createdDate": "2026-08-12T23:29:26.000Z",
+  "datasets": [],
+  "dateVersion": 1,
+  "files": [],
+  "folder": {
+    "id": "00lWB000006tiEfYAI",
+    "label": "TPM Accrual Reports",
+    "name": "TPM_Accrual_Reports",
+    "url": "/services/data/v62.0/wave/folders/00lWB000006tiEfYAI"
+  },
+  "historiesUrl": "/services/data/v62.0/wave/dashboards/0FKWB0000006SPr4AM/histories",
+  "id": "0FKWB0000006SPr4AM",
+  "label": "CHT Promotion Tactic Accrual Summary",
+  "lastAccessedDate": "2026-09-02T04:41:47.000Z",
+  "lastModifiedBy": {
+    "id": "005WB00000RsO9JYAV",
+    "name": "Rajasingh Ramasamy",
+    "profilePhotoUrl": "https://computing-innovation-7984--tpmdev2.sandbox.file.force.com/profilephoto/005/T"
+  },
+  "lastModifiedDate": "2026-08-26T13:06:11.000Z",
+  "layoutAutoSync": "true",
+  "mobileDisabled": false,
+  "name": "Promotion_Tactic_Accrual_Summary",
+  "permissions": {
+    "create": true,
+    "manage": true,
+    "modify": true,
+    "view": true
+  },
+  "state": {
+    "dataSourceLinksInfo": {
+      "enableAutomaticLinking": true,
+      "excludeRelationships": [],
+      "links": []
+    },
+    "filters": [
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "CategoryLabel__c"
+        ],
+        "label": "Category",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "BrandLabel__c"
+        ],
+        "label": "Brand",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "ProductLabel__c"
+        ],
+        "label": "Product",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "TacticName__c"
+        ],
+        "label": "Tactic",
+        "locked": false,
+        "operator": "in"
+      },
+      {
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default",
+        "dependent": true,
+        "fields": [
+          "Source2Id__c"
+        ],
+        "locked": false,
+        "operator": "in"
+      }
+    ],
+    "gridLayouts": [
+      {
+        "name": "Default",
+        "numColumns": 12,
+        "pages": [
+          {
+            "label": "Untitled",
+            "name": "e527c8bc-156c-4ec4-a151-6066faff10f5",
+            "navigationHidden": false,
+            "widgets": [
+              {
+                "colspan": 8,
+                "column": 4,
+                "name": "table_1",
+                "row": 1,
+                "rowspan": 8,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 4,
+                "column": 0,
+                "name": "chart_1",
+                "row": 1,
+                "rowspan": 8,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 2,
+                "column": 0,
+                "name": "filterpanel_1",
+                "row": 0,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#747474",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 2,
+                "column": 2,
+                "name": "filterpanel_2",
+                "row": 0,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#747474",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 2,
+                "column": 4,
+                "name": "filterpanel_3",
+                "row": 0,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#747474",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 6,
+                "column": 6,
+                "name": "text_2",
+                "row": 0,
+                "rowspan": 1,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              }
+            ]
+          }
+        ],
+        "rowHeight": "normal",
+        "selectors": [],
+        "style": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "backgroundColor": "#F2F6FA",
+          "cellSpacingX": 8,
+          "cellSpacingY": 8,
+          "fit": "original",
+          "gutterColor": "#C5D3E0"
+        },
+        "version": 1
+      }
+    ],
+    "layouts": [],
+    "steps": {
+      "lens_1": {
+        "broadcastFacet": true,
+        "cdpObjects": [
+          "accrualoutput_decorated__dlm"
+        ],
+        "datasets": [],
+        "dataspace": "default",
+        "isGlobal": false,
+        "query": {
+          "aggregateFilters": [],
+          "columnGroups": [],
+          "columnTotals": [],
+          "limit": 250,
+          "orders": [
+            {
+              "name": "CategoryLabel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "BrandLabel__c",
+              "filters": [],
+              "ascending": true
+            },
+            {
+              "name": "ProductLabel__c",
+              "filters": [],
+              "ascending": true
+            }
+          ],
+          "rowTotals": [],
+          "sourceFilters": {},
+          "sources": [
+            {
+              "columns": [
+                {
+                  "field": [
+                    "sum",
+                    "PlannedSpend__c"
+                  ],
+                  "name": "B"
+                },
+                {
+                  "field": [
+                    "sum",
+                    "Value__c"
+                  ],
+                  "name": "C"
+                },
+                {
+                  "field": [
+                    "sum",
+                    "PaidAmount__c"
+                  ],
+                  "name": "D"
+                },
+                {
+                  "field": [
+                    "sum",
+                    "OpenAccrual__c"
+                  ],
+                  "name": "E"
+                },
+                {
+                  "field": [
+                    "sum",
+                    "OpenLiability__c"
+                  ],
+                  "name": "F"
+                }
+              ],
+              "filters": [],
+              "groups": [
+                "CategoryLabel__c",
+                "BrandLabel__c",
+                "ProductLabel__c"
+              ],
+              "joins": [],
+              "name": "accrualoutput_decorated__dlm"
+            }
+          ]
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "sync",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [
+                "CategoryLabel__c",
+                "BrandLabel__c",
+                "ProductLabel__c"
+              ],
+              "plots": [
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "lens_2": {
+        "broadcastFacet": true,
+        "cdpObjects": [
+          "accrualoutput_decorated__dlm"
+        ],
+        "datasets": [],
+        "dataspace": "default",
+        "isGlobal": false,
+        "query": {
+          "aggregateFilters": [],
+          "columnGroups": [],
+          "columnTotals": [],
+          "limit": 250,
+          "orders": [
+            {
+              "name": "ProductLabel__c",
+              "filters": [],
+              "ascending": true
+            }
+          ],
+          "rowTotals": [],
+          "sourceFilters": {},
+          "sources": [
+            {
+              "columns": [
+                {
+                  "field": [
+                    "sum",
+                    "OpenAccrual__c"
+                  ],
+                  "name": "B"
+                }
+              ],
+              "filters": [],
+              "groups": [
+                "ProductLabel__c"
+              ],
+              "joins": [],
+              "name": "accrualoutput_decorated__dlm"
+            }
+          ]
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "sync",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [
+                "ProductLabel__c"
+              ],
+              "plots": [
+                "B"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      }
+    },
+    "widgetStyle": {
+      "backgroundColor": "#FFFFFF",
+      "borderColor": "#747474",
+      "borderEdges": [],
+      "borderRadius": 0,
+      "borderWidth": 1
+    },
+    "widgets": {
+      "table_1": {
+        "parameters": {
+          "borderColor": "#e0e5ee",
+          "borderWidth": 1,
+          "cell": {
+            "backgroundColor": "#ffffff",
+            "fontColor": "#16325c",
+            "fontSize": 12,
+            "textWrap": true
+          },
+          "columnProperties": {},
+          "columns": [
+            "CategoryLabel__c",
+            "BrandLabel__c",
+            "ProductLabel__c",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          "customBulkActions": [],
+          "exploreLink": true,
+          "header": {
+            "alignment": "left",
+            "backgroundColor": "#f4f6f9",
+            "fontColor": "#16325c",
+            "fontSize": 12,
+            "italic": false,
+            "textWrap": true,
+            "underline": false
+          },
+          "innerMajorBorderColor": "#a8b7c7",
+          "innerMinorBorderColor": "#e0e5ee",
+          "interactions": [],
+          "maxColumnWidth": 300,
+          "minColumnWidth": 40,
+          "mode": "variable",
+          "numberOfLines": 1,
+          "pivoted": false,
+          "showActionMenu": true,
+          "showRowIndexColumn": false,
+          "step": "lens_1",
+          "verticalPadding": 8
+        },
+        "type": "table"
+      },
+      "filterpanel_3": {
+        "parameters": {
+          "filterItemOptions": {
+            "propertyColor": "#54698D",
+            "valueColor": "#16325C"
+          },
+          "filters": [
+            {
+              "cdpObject": "accrualoutput_decorated__dlm",
+              "dataspace": "default",
+              "field": "ProductLabel__c"
+            }
+          ],
+          "showAllFilters": false
+        },
+        "type": "filterpanel"
+      },
+      "filterpanel_2": {
+        "parameters": {
+          "filterItemOptions": {
+            "propertyColor": "#54698D",
+            "valueColor": "#16325C"
+          },
+          "filters": [
+            {
+              "cdpObject": "accrualoutput_decorated__dlm",
+              "dataspace": "default",
+              "field": "BrandLabel__c"
+            }
+          ],
+          "showAllFilters": false
+        },
+        "type": "filterpanel"
+      },
+      "filterpanel_1": {
+        "parameters": {
+          "filterItemOptions": {
+            "propertyColor": "#54698D",
+            "valueColor": "#16325C"
+          },
+          "filters": [
+            {
+              "cdpObject": "accrualoutput_decorated__dlm",
+              "dataspace": "default",
+              "field": "CategoryLabel__c"
+            }
+          ],
+          "showAllFilters": false
+        },
+        "type": "filterpanel"
+      },
+      "text_2": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#e74340",
+                  "size": "16px",
+                  "bold": true
+                },
+                "insert": "Note: Accrual Summary requires a successful accrual calculation to show updated values."
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "chart_1": {
+        "parameters": {
+          "autoFitMode": "keepLabels",
+          "bins": {
+            "breakpoints": {
+              "high": 100,
+              "low": 0
+            },
+            "bands": {
+              "high": {
+                "color": "#008000",
+                "label": ""
+              },
+              "low": {
+                "color": "#B22222",
+                "label": ""
+              },
+              "medium": {
+                "color": "#ffa500",
+                "label": ""
+              }
+            }
+          },
+          "legend": {
+            "descOrder": false,
+            "showHeader": true,
+            "show": true,
+            "customSize": "auto",
+            "position": "right-top",
+            "inside": false
+          },
+          "axisMode": "sync",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "visualizationType": "hbar",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "",
+            "align": "center",
+            "subtitleLabel": ""
+          },
+          "binValues": false,
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "columnMap": {
+            "trellis": [],
+            "dimensionAxis": [
+              "ProductLabel__c"
+            ],
+            "plots": [
+              "B"
+            ]
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "valueType": "compactNumber",
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "theme": "wave",
+          "step": "lens_2",
+          "compactDecimalDigits": -1,
+          "dimensionAxis": {
+            "showTitle": true,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true
+        },
+        "type": "chart"
+      }
+    }
+  },
+  "type": "dashboard",
+  "url": "/services/data/v62.0/wave/dashboards/0FKWB0000006SPr4AM",
+  "visibility": "All"
+}

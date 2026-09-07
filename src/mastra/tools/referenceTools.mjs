@@ -11,7 +11,7 @@
 
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
-import { searchReference, readReference, listReference } from "../reference.mjs";
+import { searchReference, readReference, listReference, writeReferenceNote } from "../reference.mjs";
 
 // ---- search ---------------------------------------------------------------
 export const searchReferenceTool = createTool({
@@ -36,6 +36,8 @@ export const searchReferenceTool = createTool({
       label: z.string(),
       score: z.number(),
       chars: z.number(),
+      isChunk: z.boolean().optional(),
+      fullDocPath: z.string().optional(),
       snippet: z.string(),
     })),
     note: z.string().optional(),
@@ -58,6 +60,8 @@ export const readReferenceTool = createTool({
     section: z.string().optional(),
     label: z.string().optional(),
     chars: z.number().optional(),
+    isChunk: z.boolean().optional(),
+    fullDocPath: z.string().optional(),
     text: z.string(),
     note: z.string().optional(),
   }),
@@ -80,8 +84,31 @@ export const listReferenceTool = createTool({
   execute: async () => listReference(),
 });
 
+// ---- write (self-healing) -------------------------------------------------
+export const writeReferenceTool = createTool({
+  id: "write-reference",
+  description:
+    "Append a VERIFIED pattern note to the recipe/dashboard cheat-sheet after you successfully " +
+    "deployed+ran an asset using a shape that was previously unclear or that you had to debug. " +
+    "This is the self-healing loop: record what worked so the next build finds it instantly. " +
+    "Only call this AFTER a confirmed successful deploy/run — never for unverified guesses. " +
+    "Keep the note short and concrete (the exact JSON key/value that fixed it).",
+  inputSchema: z.object({
+    title: z.string().describe("Short pattern title, e.g. 'LEFT_OUTER join on composite keys'."),
+    note: z.string().describe("The verified working shape — exact JSON keys/values + one line of when to use it."),
+    category: z.enum(["recipe", "dashboard"]).describe("Which cheat-sheet to append to."),
+  }),
+  outputSchema: z.object({
+    written: z.boolean(),
+    file: z.string(),
+    note: z.string().optional(),
+  }),
+  execute: async (context) => writeReferenceNote(context.title, context.note, context.category),
+});
+
 export const referenceTools = {
   searchReference: searchReferenceTool,
   readReference: readReferenceTool,
   listReference: listReferenceTool,
+  writeReference: writeReferenceTool,
 };

@@ -1,0 +1,207 @@
+JOIN Nodes
+
+Join Node: Add Related Columns of Data to the Recipe
+Use a join node in CRM Analytics to add columns of data from related objects to existing data in a recipe. When working with CRM Analytics datasets and external objects, add a join node on the recipe canvas. When working with Salesforce objects, you can either create a join on the recipe canvas or join the data when you first create your dataset on the Add Input Data screen.
+
+Use a Join Node in the Recipe Canvas
+In CRM Analytics, create joins between Salesforce objects, external objects, and CRM Analytics datasets in a recipe.
+Use a Join Node on the Add Input Data Screen (Salesforce Objects Only)
+When working with Salesforce objects in CRM Analytics, you can create your dataset and join data source in one step on the Input Data screen. Add Input Data also recommends columns that match each of your data sources and can serve as join keys.
+Join Operations
+Data Prep supports these join operations.
+
+
+Join Operations
+Data Prep supports these join operations.
+
+Lookup
+In CRM Analytics, a lookup returns all rows from the left data stream (recipe data) and only matching rows from the right data stream (lookup source). If multiple matches are found in the right data stream, you can set the lookup to return either a single row or all matching rows. To ensure that the grain of the results doesn’t change, the lookup outputs one row for each row in the left data stream.
+Left Join
+Like a lookup, a left join in CRM Analytics includes all rows from the left (recipe data) and only matching rows from the right. Unlike a lookup, a join includes all matched rows in the target when multiple rows match.
+Right Join
+A right join in CRM Analytics includes all rows from the right and only matching rows from the left (recipe data). The join includes all matched rows in the target when multiple rows match.
+Inner Join
+In CRM Analytics, an inner join includes only matching rows from the left (recipe data) and right. The join includes all matched rows in the target when multiple rows match.
+Full Outer Join
+In CRM Analytics, a full outer join includes all rows from the left (recipe data) and right, regardless of whether they have matches. The join includes all matched rows in the target when multiple rows match.
+Cross Join
+In CRM Analytics, a cross join combines unrelated records and includes all rows from the left (recipe data) and the right. Unlike other joins that use keys to find matches, the cross join pairs every row from one dataset with every row of another dataset (known as the Cartesian Product).
+Considerations When Using Joins
+In CRM Analytics, unlike a lookup, a join creates a separate record for each match in the target dataset when multiple rows match. Before using a join, ensure that you understand the implications of duplicate rows.
+
+Lookup
+In CRM Analytics, a lookup returns all rows from the left data stream (recipe data) and only matching rows from the right data stream (lookup source). If multiple matches are found in the right data stream, you can set the lookup to return either a single row or all matching rows. To ensure that the grain of the results doesn’t change, the lookup outputs one row for each row in the left data stream.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Example
+
+Our company's marketing team captures demographic data in an external data source for opportunities stored in Salesforce. To help create more targeted campaigns, the team is building a dashboard that segments our current opportunities by the customer demographics. Let’s use a lookup to add the demographic data to each opportunity record.
+
+Consider the following two data streams. The left data stream contains opportunity records. The right contains demographic data. To illustrate how the lookup handles special cases, both data streams contain unmatched rows and duplicate keys.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+If the lookup is configured to return a single match when multiple matches are found, the lookup produces the following results based on the matching keys.
+
+The new dataset contains columns from both data streams.
+All rows from the left, including rows without a match, are included in the results. Although Cust_ID 1 has two matches on the right, the lookup returns only the first matching record. Also, because Cust_ID 4 doesn’t have a match, the Cust_id and Education Level columns are null and Average Income is 0 for that record. Unmatched dimensions are set to null. Unmatched measures are set to 0.
+
+If the lookup is configured to return all matching values when multiple matches are found, the lookup produces the following results based on the matching keys.
+
+The new dataset contains columns from all matched values for each left row.
+A multiple-match lookup returns the same results as the single-match lookup, except for left rows that have multiple matches. Unlike a single-match lookup, a multiple-match lookup returns all matches and combines them. For dimension columns, it generates a multivalue column with all dimension values—notice how High School and Secondary School are both in the Education Level column for Cust_ID 1. For measure columns, it adds the measure values from all matched records. For Cust_ID 1, the Avg Income column is 98,000 (50,000 + 48,000).
+
+Note
+Note The Preview tab doesn’t show all values in a multivalue column. Instead, it shows the first value only. Keep this behavior in mind when you preview the results of a multiple-match lookup. In the example, notice that the Preview tab shows only High School in the Education Level column even though the column contains High School and Secondary School.
+The new dataset contains columns from all matched values for each left row.
+
+Left Join
+Like a lookup, a left join in CRM Analytics includes all rows from the left (recipe data) and only matching rows from the right. Unlike a lookup, a join includes all matched rows in the target when multiple rows match.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Example
+
+Our company's marketing team captures demographic data in an external data source for opportunities stored in Salesforce. To help create more targeted campaigns, the team is segmenting our current opportunities by the Education Level demographic. Let’s use a left join to add demographic data to the opportunity data.
+
+Consider the following two data streams that feed the recipe’s target dataset. To illustrate how this recipe function handles unmatched rows and duplicate keys, we included them in both data streams.
+
+The new dataset contains columns from both data streams.
+After performing the left join based on the matching keys, the recipe produces the following target dataset.
+
+The new dataset contains columns from both data streams.
+All rows from the left, including rows without a match and rows with multiple matches, are included in the target. Because Opp_ID 1 has two matches on the right (High School and Secondary School), the target contains a separate record for each education level. Also, because Opp_ID 4 doesn’t have a match, the Opp_id and Education Level columns are null for that record.
+
+Right Join
+A right join in CRM Analytics includes all rows from the right and only matching rows from the left (recipe data). The join includes all matched rows in the target when multiple rows match.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Example
+
+Our company's marketing team captures demographic data in an external data source for opportunities stored in Salesforce. To help create more targeted campaigns, the team is segmenting our current opportunities by the Education Level demographic. Let’s use a right join to add the opportunity data to the demographic data.
+
+Consider the following two data streams that feed the recipe’s target dataset. To illustrate how this recipe function handles unmatched rows and duplicate keys, we included them in both data streams.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+After performing the right join based on the matching keys, the recipe produces the following target dataset.
+
+The new dataset contains columns from both data streams.
+All rows from the right, including rows without a match and rows with multiple matches, are included in the target. Because Opp_id 2 has two matches on the left (Amy and Bob), the target contains a separate record for each of them. Also, because Opp_id 5 doesn’t have a match, the Opp_ID and Customer Name columns are null for that record.
+
+Warning
+Warning If duplicate records contain measures (as shown for Opp_id 1 in the following screenshot), don’t double count the measures when aggregating the records. To prevent duplicate records, use a lookup instead of a join.
+The new dataset contains duplicate records for Alice, which makes it possible to doublecount her annual income.
+
+Inner Join
+In CRM Analytics, an inner join includes only matching rows from the left (recipe data) and right. The join includes all matched rows in the target when multiple rows match.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Example
+
+Our company's marketing team captures demographic data in an external data source for opportunities stored in Salesforce. To compare opportunities by education level of the customer, let’s first combine both sets of data into a dataset using an inner join.
+
+Consider the following two data streams that feed the recipe’s target dataset. To illustrate how this recipe function handles unmatched rows and duplicate keys, we included them in both data streams.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+After performing the inner join based on the matching keys, the recipe produces the following target dataset.
+
+The new dataset contains columns from both data streams.
+All rows that have a match are included in the target. Because of multiple matches, you see two records with Opp_ID 2 (Amy and Bob) and two records with Opp_id 1 (High School and Secondary School). Notice also that Opp_ID 4 and Opp_id 5 are excluded from the target because neither have a match.
+
+Full Outer Join
+In CRM Analytics, a full outer join includes all rows from the left (recipe data) and right, regardless of whether they have matches. The join includes all matched rows in the target when multiple rows match.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+Example
+Example
+Our company's marketing team captures demographic data in Redshift for opportunities stored in Salesforce. To help create more targeted campaigns, the team is segmenting our current opportunities by the Education Level demographic. Let’s use a full outer join to combine the opportunity and demographic data.
+
+Consider the following two data streams that feed the recipe’s target dataset. To illustrate how this recipe function handles unmatched rows and duplicate keys, we included them in both data streams.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+After performing the full outer join based on the matching the keys, the recipe produces the following target dataset.
+
+The new dataset contains columns from both data streams.
+All rows—matched or not—are included in the target. Because of multiple matches, you see two records with Opp_ID 2 (Amy and Bob) and two more records with Opp_id 1 (High School and Secondary School). Opp_ID 4 and Opp_id 5 are also included despite not having a match.
+
+By including unmatched left records, we now know that we have to find out David’s education level to complete this dataset. By including unmatched right records, we see that no customers have a PhD.
+
+
+
+Cross Join
+In CRM Analytics, a cross join combines unrelated records and includes all rows from the left (recipe data) and the right. Unlike other joins that use keys to find matches, the cross join pairs every row from one dataset with every row of another dataset (known as the Cartesian Product).
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Tip
+Tip When designing a cross join, use the larger dataset first (left) and then join the smaller dataset (right). For example, join a:
+10,000-row dataset (left) with a 1,000-row dataset (right)
+20,000-row dataset (left) with a 500-row dataset (right)
+40,000-row dataset (left) with a 250-row dataset (right)
+100,000-row dataset (left) with a 100-row dataset (right)
+Example
+
+A company sells products at various locations. To assist with stock tracking, use a cross join to combine the product and store datasets to find all the possible pairs of product and store.
+
+Consider the following two data streams that feed the recipe’s target dataset. To illustrate how this join combines unrelated records, row number is included for reference but isn’t needed in the data.
+
+The left data stream shows the row number and product. The right data stream shows the row number and store.
+After performing the cross join, the recipe produces this target dataset.
+
+The new dataset contains columns from both data streams.
+
+Limitations for Cross Join
+Because a cross join creates a larger dataset than either of the source datasets, it has some limitations. Keep these points in mind when designing and testing your cross join.
+
+Only one cross join per recipe
+Cross join results maximum of 10 million
+Left dataset column maximum of 8 and row maximum of 100,000
+Right dataset column maximum of 8 and row maximum of 1,000
+Doesn’t support mulit-value columns
+
+
+Considerations When Using Joins
+In CRM Analytics, unlike a lookup, a join creates a separate record for each match in the target dataset when multiple rows match. Before using a join, ensure that you understand the implications of duplicate rows.
+
+Required Editions
+Available in Salesforce Classic and Lightning Experience.
+Available with CRM Analytics, which is available for an extra cost in Enterprise, Performance, and Unlimited Editions. Also available in Developer Edition.
+
+Review the following tips.
+
+Don’t double count measures when aggregating records from a join.
+
+Consider the following two data streams that feed the recipe’s target dataset. Both input data streams have duplicate key values.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+A left join duplicates the Opp_ID 1 record in the left data stream because it has multiple matches in the right data stream.
+
+The new dataset contains columns from both data streams.
+Notice that the duplicated records repeat the opportunity amount for Alice. If you added all opportunity amounts to get the total, double count the amount for Alice. To prevent duplicate records, use a lookup instead of a join.
+
+Refrain from using joins when the join keys have a many-to-many relationship.
+
+When the join keys have a many-to-many relationship, the target dataset can become significantly larger than the input data streams. For instance, if four records on the left and five records on the right have the same key value, the join adds 20 (4*5) records to the target dataset. In a more extreme case, if 10,000 records on the left and 5,000 on the right share a key value, the join creates 50 million records in the target dataset.
+
+To illustrate why this occurs, consider the following two data streams that feed the recipe’s target dataset. Both input data streams have duplicate key values.
+
+The left data stream shows the opportunity ID, customer name, and opportunity amount. The right data stream shows the opportunity ID and educational level.
+A left join duplicates each record in the left data stream five times because it has five matches in the right data stream.
+
+The new dataset contains columns from both data streams.
+To prevent duplicate records, use a lookup instead of a join. If you must use a join, try adding more key fields to make the keys have more unique values.
+

@@ -11,12 +11,17 @@
 // Design goals:
 //   - No new npm deps. Pure Node fs + a small TF-style keyword scorer.
 //   - Built lazily and cached: first search reads + chunks every text file once.
+//   - Large files (>20KB) are split into overlapping chunks so a keyword in the
+//     middle of an 8000-line doc is actually findable. Each chunk is a separate
+//     index entry with a virtual path "file#chunk-N". read-reference on the
+//     original path returns the full text; read-reference on a chunk path returns
+//     just that chunk so the agent can read it without consuming huge context.
 //   - Robust to the folder moving: RAG_REFERENCE_DIR env overrides the path.
 //   - Never crashes the agent if the folder is missing — returns empty results
 //     with a clear note so the agent can fall back to its own knowledge.
 // ---------------------------------------------------------------------------
 
-import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, existsSync, appendFileSync } from "node:fs";
 import { join, relative, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -41,7 +46,12 @@ const STOP = new Set(
    "which who where why into out over under more most such per each any all some other").split(" ")
 );
 
-let INDEX = null; // [{ path, label, section, text, tokens: Map<term,count>, len }]
+let INDEX = null; // [{ path, label, section, text, tokens: Map<term,count>, len, chunkOf? }]
+
+// Files larger than this are split into overlapping chunks for better search precision.
+const CHUNK_THRESHOLD = 20 * 1024;   // 20 KB
+const CHUNK_SIZE      = 8 * 1024;    // ~8 KB per chunk
+const CHUNK_OVERLAP   = 1 * 1024;    // 1 KB overlap between chunks
 
 function walk(dir, acc = []) {
   let entries;
@@ -68,6 +78,37 @@ function firstMeaningfulLine(text) {
   return "";
 }
 
+function makeEntry(path, label, section, text, chunkOf = null) {
+  const toks = tokenize(text);
+  const tf = new Map();
+  for (const t of toks) if (!STOP.has(t)) tf.set(t, (tf.get(t) || 0) + 1);
+  return { path, label, section, text, tokens: tf, len: toks.length, chunkOf };
+}
+
+/**
+ * Split a large text into overlapping character-boundary chunks.
+ * Tries to break at newlines so chunks start at clean line boundaries.
+ */
+function chunkText(text) {
+  const chunks = [];
+  let start = 0;
+  while (start < text.length) {
+    let end = Math.min(start + CHUNK_SIZE, text.length);
+    // snap forward to next newline so chunks start cleanly
+    if (end < text.length) {
+      const nl = text.indexOf("\n", end);
+      if (nl >= 0 && nl - end < 200) end = nl + 1;
+    }
+    chunks.push(text.slice(start, end));
+    if (end >= text.length) break;
+    start = end - CHUNK_OVERLAP;
+    // snap start back to previous newline
+    const prevNl = text.lastIndexOf("\n", start);
+    if (prevNl >= 0 && start - prevNl < 200) start = prevNl + 1;
+  }
+  return chunks;
+}
+
 /** Build (once) the in-memory index of every reference doc. */
 function buildIndex() {
   if (INDEX) return INDEX;
@@ -79,10 +120,20 @@ function buildIndex() {
     if (!text.trim()) continue;
     const rel = relative(REFERENCE_DIR, file);
     const section = rel.includes("/") ? rel.slice(0, rel.indexOf("/")) : "(root)";
-    const toks = tokenize(text);
-    const tf = new Map();
-    for (const t of toks) if (!STOP.has(t)) tf.set(t, (tf.get(t) || 0) + 1);
-    INDEX.push({ path: rel, label: firstMeaningfulLine(text), section, text, tokens: tf, len: toks.length });
+
+    if (text.length > CHUNK_THRESHOLD) {
+      // Large file — index as overlapping chunks for precise retrieval.
+      // Also keep the full-text entry (chunkOf=null) so read-reference still works.
+      INDEX.push(makeEntry(rel, firstMeaningfulLine(text), section, text, null));
+      const chunks = chunkText(text);
+      chunks.forEach((chunk, i) => {
+        const chunkPath = `${rel}#chunk-${i + 1}of${chunks.length}`;
+        const chunkLabel = `${firstMeaningfulLine(chunk)} [${rel} chunk ${i + 1}/${chunks.length}]`;
+        INDEX.push(makeEntry(chunkPath, chunkLabel, section, chunk, rel));
+      });
+    } else {
+      INDEX.push(makeEntry(rel, firstMeaningfulLine(text), section, text, null));
+    }
   }
   return INDEX;
 }
@@ -104,6 +155,11 @@ function bestSnippet(text, queryTerms) {
  * Search the reference corpus. Returns the top-N docs by a simple TF score
  * (sum of query-term frequencies, length-normalized, with a small bonus for
  * matches in the file path/label so "widget json" finds the Widget doc).
+ * Chunks of large files score independently — a chunk that densely matches
+ * beats the whole-file entry, so the agent reads a targeted slice rather than
+ * a 200KB document.
+ * Whole-file entries for chunked files are suppressed in results when a chunk
+ * of that same file already ranks in the top results (avoids duplicates).
  */
 export function searchReference(query, limit = 6) {
   const idx = buildIndex();
@@ -119,55 +175,112 @@ export function searchReference(query, limit = 6) {
     const pathL = doc.path.toLowerCase(), labelL = doc.label.toLowerCase();
     for (const t of terms) {
       const tf = doc.tokens.get(t) || 0;
-      if (tf) score += tf / Math.sqrt(doc.len || 1);          // length-normalized TF
-      if (pathL.includes(t)) score += 2.5;                    // title/path match is a strong signal
+      if (tf) score += tf / Math.sqrt(doc.len || 1);   // length-normalized TF
+      if (pathL.includes(t)) score += 2.5;             // path match strong signal
       if (labelL.includes(t)) score += 1.5;
     }
     return { doc, score };
   }).filter((s) => s.score > 0)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => b.score - a.score);
+
+  // Suppress whole-file entries when a chunk of the same file already appears
+  // in the top results — the chunk is more targeted.
+  const chunkParentsInTop = new Set(
+    scored.slice(0, limit * 2)
+      .filter(s => s.doc.chunkOf)
+      .map(s => s.doc.chunkOf)
+  );
+  const filtered = scored
+    .filter(s => !(s.doc.chunkOf === null && chunkParentsInTop.has(s.doc.path)))
     .slice(0, limit);
 
   return {
     available: true,
     dir: REFERENCE_DIR,
-    results: scored.map(({ doc, score }) => ({
+    results: filtered.map(({ doc, score }) => ({
       path: doc.path,
       section: doc.section,
       label: doc.label,
       score: Number(score.toFixed(3)),
       chars: doc.text.length,
+      isChunk: !!doc.chunkOf,
+      fullDocPath: doc.chunkOf || doc.path,
       snippet: bestSnippet(doc.text, terms),
     })),
   };
 }
 
-/** Return the full text of one reference doc by its path (as returned by search). */
+/**
+ * Return the text of a reference doc (or chunk) by its path.
+ * - Pass the exact path from a search result to get the chunk text.
+ * - Pass the base file path (no #chunk) to get the full document text.
+ * Accepts exact path, suffix match, or basename match.
+ */
 export function readReference(path) {
   const idx = buildIndex();
-  // Accept exact rel path, a suffix match, or a basename match — the agent may
-  // pass any of these back from a search result.
   const wanted = String(path).replace(/^\.?\//, "");
   let doc =
     idx.find((d) => d.path === wanted) ||
     idx.find((d) => d.path.toLowerCase() === wanted.toLowerCase()) ||
     idx.find((d) => d.path.toLowerCase().endsWith("/" + wanted.toLowerCase())) ||
-    idx.find((d) => d.path.split("/").pop().toLowerCase() === wanted.toLowerCase());
+    idx.find((d) => d.path.split("/").pop().toLowerCase() === wanted.toLowerCase().replace(/#.*$/, ""));
   if (!doc) {
     return { found: false, path: wanted, text: "",
       note: `No reference doc matches "${path}". Use search-reference first and pass back its exact path.` };
   }
-  return { found: true, path: doc.path, section: doc.section, label: doc.label, chars: doc.text.length, text: doc.text };
+  return {
+    found: true,
+    path: doc.path,
+    section: doc.section,
+    label: doc.label,
+    chars: doc.text.length,
+    isChunk: !!doc.chunkOf,
+    fullDocPath: doc.chunkOf || doc.path,
+    text: doc.text,
+  };
 }
 
-/** A compact catalog of everything indexed (path + section + label + size). */
+/**
+ * Self-healing: append a VERIFIED pattern note to the cheat-sheet and invalidate
+ * the in-memory index so the note is immediately searchable this session.
+ * category "recipe" → "Recipe node cheat-sheet"; "dashboard" → "CRMA_BUILD_KNOWLEDGE.md".
+ * Robust: if the target file is absent, writes to a VERIFIED-PATTERNS.md fallback.
+ */
+export function writeReferenceNote(title, note, category = "recipe") {
+  const fileName = category === "dashboard" ? "CRMA_BUILD_KNOWLEDGE.md" : "Recipe node cheat-sheet";
+  let target = join(REFERENCE_DIR, fileName);
+  if (!existsSync(target)) target = join(REFERENCE_DIR, "VERIFIED-PATTERNS.md");
+  const block = `\n\n---\n## VERIFIED PATTERN — ${title}\n${note}\n`;
+  try {
+    appendFileSync(target, block, "utf8");
+    INDEX = null; // invalidate cache so the new note is searchable immediately
+    return { written: true, file: relative(REFERENCE_DIR, target) };
+  } catch (e) {
+    return { written: false, file: fileName, note: `Failed to write: ${e.message}` };
+  }
+}
+
+/**
+ * A compact catalog of everything indexed.
+ * Chunks are omitted from the listing to keep it readable — they surface via search.
+ */
 export function listReference() {
   const idx = buildIndex();
+  const wholeDocs = idx.filter((d) => !d.chunkOf);
+  const chunkedFiles = new Set(idx.filter(d => d.chunkOf).map(d => d.chunkOf));
   return {
-    available: idx.length > 0,
+    available: wholeDocs.length > 0,
     dir: REFERENCE_DIR,
-    count: idx.length,
-    docs: idx.map((d) => ({ path: d.path, section: d.section, label: d.label, chars: d.text.length }))
-             .sort((a, b) => a.path.localeCompare(b.path)),
+    count: wholeDocs.length,
+    chunkedFiles: [...chunkedFiles].sort(),
+    docs: wholeDocs
+      .map((d) => ({
+        path: d.path,
+        section: d.section,
+        label: d.label,
+        chars: d.text.length,
+        chunked: chunkedFiles.has(d.path),
+      }))
+      .sort((a, b) => a.path.localeCompare(b.path)),
   };
 }

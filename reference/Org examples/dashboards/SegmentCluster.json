@@ -1,0 +1,2548 @@
+{
+  "allowPreview": true,
+  "assetSharingUrl": "https://storm-b937d15ac2e285.my.salesforce.com/analytics/wave/dashboard?assetId=0FKId000000XsYZOA0&orgId=00DId000000JHxU&loginHost=ind172.sfdc-ppgy19.salesforce.com&urlType=sharing",
+  "createdBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "https://storm-b937d15ac2e285.file.force.com/profilephoto/005/T"
+  },
+  "createdDate": "2026-08-04T03:20:51.000Z",
+  "datasets": [
+    {
+      "id": "0FbId000000c7nUKAQ",
+      "label": "Clustered Accounts",
+      "name": "Clustered_Accounts",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+    },
+    {
+      "id": "0FbId000000c7nVKAQ",
+      "label": "Clustered Opp Products",
+      "name": "Clustered_Opp_Products",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nVKAQ"
+    }
+  ],
+  "dateVersion": 1,
+  "files": [
+    {
+      "contentType": "image/png",
+      "fileLength": 58221,
+      "fileName": "assetPreviewThumb",
+      "id": "0FJId000000PBwZOAW",
+      "lastModifiedDate": "2026-08-25T06:32:20.000Z",
+      "url": "/services/data/v62.0/wave/lenses/0FKId000000XsYZOA0/files/0FJId000000PBwZOAW"
+    }
+  ],
+  "folder": {
+    "id": "00lId000000WsiZIAS",
+    "label": "Shared App",
+    "name": "SharedApp",
+    "url": "/services/data/v62.0/wave/folders/00lId000000WsiZIAS"
+  },
+  "historiesUrl": "/services/data/v62.0/wave/dashboards/0FKId000000XsYZOA0/histories",
+  "id": "0FKId000000XsYZOA0",
+  "label": "Segment/Cluster Comparison Dashboard",
+  "lastAccessedDate": "2026-08-31T14:45:47.000Z",
+  "lastModifiedBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "https://storm-b937d15ac2e285.file.force.com/profilephoto/005/T"
+  },
+  "lastModifiedDate": "2026-08-04T03:24:30.000Z",
+  "mobileDisabled": false,
+  "name": "Segment_Cluster_Comparison_Base",
+  "permissions": {
+    "create": true,
+    "manage": true,
+    "modify": true,
+    "view": true
+  },
+  "refreshDate": "2026-08-02T03:24:18.000Z",
+  "state": {
+    "dataSourceLinksInfo": {
+      "enableAutomaticLinking": false,
+      "excludeRelationships": [],
+      "links": [
+        {
+          "fields": [
+            {
+              "dataSourceName": "Clustered_Accounts",
+              "dataSourceNamespace": "",
+              "dataSourceType": "dataset",
+              "fieldName": "Cluster"
+            },
+            {
+              "dataSourceName": "Clustered_Opp_Products",
+              "dataSourceNamespace": "",
+              "dataSourceType": "dataset",
+              "fieldName": "Account.Cluster"
+            }
+          ],
+          "label": "cluster",
+          "name": "Link_11055"
+        },
+        {
+          "fields": [
+            {
+              "dataSourceName": "Clustered_Accounts",
+              "dataSourceNamespace": "",
+              "dataSourceType": "dataset",
+              "fieldName": "Industry"
+            },
+            {
+              "dataSourceName": "Clustered_Opp_Products",
+              "dataSourceNamespace": "",
+              "dataSourceType": "dataset",
+              "fieldName": "Account.Industry"
+            }
+          ],
+          "label": "industry",
+          "name": "Link_585"
+        }
+      ]
+    },
+    "filters": [],
+    "gridLayouts": [
+      {
+        "maxWidth": 1200,
+        "name": "Default",
+        "numColumns": 49,
+        "pages": [
+          {
+            "label": "Main",
+            "name": "13529e05-26cf-4374-b584-36b1439a1f04",
+            "navigationHidden": false,
+            "widgets": [
+              {
+                "colspan": 18,
+                "column": 3,
+                "name": "chart_1",
+                "row": 36,
+                "rowspan": 27,
+                "widgetStyle": {
+                  "backgroundColor": "rgb(24, 42, 82)",
+                  "borderColor": "rgba(230, 236, 242, 0)",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 0,
+                  "borderWidth": 8
+                }
+              },
+              {
+                "colspan": 23,
+                "column": 22,
+                "name": "chart_4",
+                "row": 16,
+                "rowspan": 18,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 16,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 23,
+                "column": 23,
+                "name": "chart_9",
+                "row": 36,
+                "rowspan": 27,
+                "widgetStyle": {
+                  "backgroundColor": "rgb(24, 42, 82)",
+                  "borderColor": "rgba(230, 236, 242, 0)",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 0,
+                  "borderWidth": 8
+                }
+              },
+              {
+                "colspan": 43,
+                "column": 3,
+                "name": "chart_12",
+                "row": 67,
+                "rowspan": 26,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0.96)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 16,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 43,
+                "column": 3,
+                "name": "chart_13",
+                "row": 99,
+                "rowspan": 26,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 16,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 25,
+                "column": 21,
+                "name": "pillbox_2",
+                "row": 11,
+                "rowspan": 3,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "rgb(77, 143, 224)",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 17,
+                "column": 15,
+                "name": "text_1",
+                "row": 2,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 45,
+                "column": 2,
+                "name": "container_1",
+                "row": 9,
+                "rowspan": 27,
+                "widgetStyle": {
+                  "backgroundColor": "#091A3E",
+                  "borderColor": "rgba(51, 87, 121, 0.49)",
+                  "borderEdges": [
+                    "bottom"
+                  ],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 9,
+                "column": 3,
+                "name": "text_2",
+                "row": 10,
+                "rowspan": 3,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 16,
+                "column": 3,
+                "name": "text_3",
+                "row": 14,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 16,
+                "column": 3,
+                "name": "text_6",
+                "row": 21,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 16,
+                "column": 3,
+                "name": "text_7",
+                "row": 27,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 45,
+                "column": 2,
+                "name": "container_2",
+                "row": 36,
+                "rowspan": 27,
+                "widgetStyle": {
+                  "backgroundColor": "rgb(24, 42, 82)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 3,
+                "column": 2,
+                "name": "image_1",
+                "row": 2,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 45,
+                "column": 2,
+                "name": "container_3",
+                "row": 65,
+                "rowspan": 30,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 45,
+                "column": 2,
+                "name": "container_4",
+                "row": 97,
+                "rowspan": 30,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 45,
+                "column": 2,
+                "name": "container_5",
+                "row": 129,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "backgroundColor": "rgba(255, 255, 255, 0)",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              }
+            ]
+          }
+        ],
+        "rowHeight": "fine",
+        "selectors": [],
+        "style": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "backgroundColor": "#E6ECF2",
+          "cellSpacingX": 0,
+          "cellSpacingY": 0,
+          "fit": "original",
+          "gutterColor": "#C6D3E1"
+        },
+        "version": 1
+      }
+    ],
+    "layouts": [],
+    "steps": {
+      "Product2_Name_Accoun_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nVKAQ",
+            "label": "Clustered Opp Products",
+            "name": "Clustered_Opp_Products",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nVKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Product2_Name_Accoun_1",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;avg&quot;,&quot;Quantity&quot;]],&quot;groups&quot;:[&quot;Product2.Name&quot;,&quot;Account.Cluster&quot;],&quot;filters&quot;:[[&quot;Account.Cluster&quot;,[&quot;N/A&quot;],&quot;not in&quot;],[&quot;Opp.IsWon&quot;,[&quot;true&quot;],&quot;in&quot;],[&quot;Opp.IsClosed&quot;,[&quot;true&quot;],&quot;in&quot;]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "highColor": "#009DDF",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "lowColor": "#E2F4FC",
+            "visualizationType": "matrix",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Cluster-Product Purchase Preference",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "columnMap": {
+              "r": [
+                "avg_Quantity"
+              ],
+              "color": [
+                "avg_Quantity"
+              ],
+              "x": [
+                "Product2.Name"
+              ],
+              "y": [
+                "Account.Cluster"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "x": {
+              "showTitle": true,
+              "showAxis": true,
+              "title": ""
+            },
+            "y": {
+              "showTitle": true,
+              "showAxis": true,
+              "title": ""
+            },
+            "theme": "wave",
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "clustermap_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nUKAQ",
+            "label": "Clustered Accounts",
+            "name": "Clustered_Accounts",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "clustermap",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;avg&quot;,&quot;AverageDealSize&quot;],[&quot;avg&quot;,&quot;DealCount&quot;],[&quot;sum&quot;,&quot;AccountLifetimeValue&quot;]],&quot;groups&quot;:[&quot;Cluster&quot;]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "scatter",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Accounts by Clusters",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "radiusRatio": 5,
+            "columnMap": {
+              "r": [
+                "sum_AccountLifetimeValue"
+              ],
+              "x": [
+                "avg_DealCount"
+              ],
+              "y": [
+                "avg_AverageDealSize"
+              ],
+              "trellis": [],
+              "plots": [
+                "Cluster"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "x": {
+              "sqrtScale": false,
+              "showZero": true,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "y": {
+              "sqrtScale": false,
+              "showZero": true,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "theme": "light",
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "Cluster_Measures_Lis_1": {
+        "broadcastFacet": true,
+        "columns": {
+          "Measure2": {
+            "aggregateFunction": "Measure2__func",
+            "dataset": {
+              "id": "0FbId000000c7nUKAQ",
+              "name": "Clustered_Accounts",
+              "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+            },
+            "field": "Measure2__field",
+            "type": "aggregate"
+          },
+          "Display": {
+            "type": "string"
+          }
+        },
+        "label": "Cluster Measures List",
+        "selectMode": "singlerequired",
+        "type": "staticflex",
+        "values": [
+          "{&quot;Display&quot;:&quot;# Accounts&quot;,&quot;Measure2__field&quot;:&quot;*&quot;,&quot;Measure2__func&quot;:&quot;count&quot;}",
+          "{&quot;Display&quot;:&quot;# Deals&quot;,&quot;Measure2__field&quot;:&quot;DealCount&quot;,&quot;Measure2__func&quot;:&quot;sum&quot;}",
+          "{&quot;Display&quot;:&quot;Avg Account Value&quot;,&quot;Measure2__field&quot;:&quot;AccountLifetimeValue&quot;,&quot;Measure2__func&quot;:&quot;avg&quot;}",
+          "{&quot;Display&quot;:&quot;Avg Deals/Account&quot;,&quot;Measure2__field&quot;:&quot;DealCount&quot;,&quot;Measure2__func&quot;:&quot;avg&quot;}",
+          "{&quot;Display&quot;:&quot;Avg Deal Size&quot;,&quot;Measure2__field&quot;:&quot;AverageDealSize&quot;,&quot;Measure2__func&quot;:&quot;avg&quot;}",
+          "{&quot;Display&quot;:&quot;Win Rate&quot;,&quot;Measure2__field&quot;:&quot;WinRateByRow&quot;,&quot;Measure2__func&quot;:&quot;avg&quot;}"
+        ]
+      },
+      "Closed_Deals_with_Hi_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nVKAQ",
+            "label": "Clustered Opp Products",
+            "name": "Clustered_Opp_Products",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nVKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Closed Deals with Highest # of Products by Cluster",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;unique&quot;,&quot;Product2.Name&quot;,&quot;A&quot;]],&quot;columns&quot;:[{&quot;query&quot;:{&quot;measures&quot;:[[&quot;unique&quot;,&quot;Product2.Name&quot;]],&quot;groups&quot;:[&quot;Account.Cluster&quot;],&quot;order&quot;:[[-1,{&quot;ascending&quot;:false,&quot;inner&quot;:false}]]}}],&quot;groups&quot;:[&quot;Account.Cluster&quot;],&quot;filters&quot;:[[&quot;Account.Cluster&quot;,[&quot;N/A&quot;],&quot;not in&quot;],[&quot;Opp.IsWon&quot;,[&quot;true&quot;],&quot;in&quot;],[&quot;Opp.IsClosed&quot;,[&quot;true&quot;],&quot;in&quot;]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Cluster-Product Purchase Preference",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "binValues": false,
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [
+                "Account.Cluster"
+              ],
+              "plots": [
+                "A"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "Closed_Deals_and___P_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nVKAQ",
+            "label": "Clustered Opp Products",
+            "name": "Clustered_Opp_Products",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nVKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Closed Deals by Cluster",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;unique&quot;,&quot;OpportunityId&quot;,&quot;A&quot;]],&quot;columns&quot;:[{&quot;query&quot;:{&quot;measures&quot;:[[&quot;unique&quot;,&quot;OpportunityId&quot;]],&quot;groups&quot;:[&quot;Account.Cluster&quot;],&quot;order&quot;:[[-1,{&quot;ascending&quot;:false}]]}}],&quot;groups&quot;:[&quot;Account.Cluster&quot;],&quot;filters&quot;:[[&quot;Account.Cluster&quot;,[&quot;N/A&quot;],&quot;not in&quot;],[&quot;Opp.IsWon&quot;,[&quot;true&quot;],&quot;in&quot;],[&quot;Opp.IsClosed&quot;,[&quot;true&quot;],&quot;in&quot;]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Cluster-Product Purchase Preference",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "binValues": false,
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [
+                "Account.Cluster"
+              ],
+              "plots": [
+                "A"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "Opp_CloseDate_Year_O_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nVKAQ",
+            "label": "Clustered Opp Products",
+            "name": "Clustered_Opp_Products",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nVKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Opp_CloseDate_Year_O_1",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;avg&quot;,&quot;Quantity&quot;]],&quot;groups&quot;:[[&quot;Opp.CloseDate_Year&quot;,&quot;Opp.CloseDate_Month&quot;],&quot;Product2.Family&quot;],&quot;filters&quot;:[[&quot;Opp.IsClosed&quot;,[&quot;true&quot;],&quot;in&quot;],[&quot;Opp.IsWon&quot;,[&quot;true&quot;],&quot;in&quot;],[&quot;Account.Cluster&quot;,[&quot;N/A&quot;],&quot;not in&quot;]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "showPoints": false,
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "time",
+            "missingValue": "connect",
+            "dashLine": {
+              "measures": "",
+              "showDashLine": false
+            },
+            "timeAxis": {
+              "showTitle": true,
+              "showAxis": true,
+              "title": ""
+            },
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Monthly Purchase Volume by Product Family",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "fillArea": true,
+            "columnMap": {
+              "split": [
+                "Product2.Family"
+              ],
+              "timeAxis": [
+                "Opp.CloseDate_Year~~~Opp.CloseDate_Month"
+              ],
+              "trellis": [],
+              "plots": [
+                "avg_Quantity"
+              ]
+            },
+            "showActionMenu": true,
+            "showZero": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "none",
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "theme": "light",
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true,
+            "drawArea": {
+              "measure": "",
+              "showDrawArea": false,
+              "bounding1": "",
+              "bounding2": ""
+            }
+          },
+          "type": "chart"
+        }
+      },
+      "Cluster_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nUKAQ",
+            "label": "Clustered Accounts",
+            "name": "Clustered_Accounts",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Cluster_1",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;{{cell(Cluster_Measures_Lis_1.selection, 0, &#92;&quot;Measure2__func&#92;&quot;).asString()}}&quot;,&quot;{{cell(Cluster_Measures_Lis_1.selection, 0, &#92;&quot;Measure2__field&#92;&quot;).asString()}}&quot;]],&quot;groups&quot;:[&quot;Cluster&quot;]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": false,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "vbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "theme": "light",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "Industry_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nUKAQ",
+            "label": "Clustered Accounts",
+            "name": "Clustered_Accounts",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "Industry_1",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;count&quot;,&quot;*&quot;],[&quot;sum&quot;,&quot;AccountLifetimeValue&quot;],[&quot;avg&quot;,&quot;WinRateByRow&quot;]],&quot;groups&quot;:[&quot;Industry&quot;],&quot;order&quot;:[[&quot;Industry&quot;,{&quot;ascending&quot;:true}]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": false,
+              "show": false,
+              "customSize": "auto",
+              "position": "bottom-center",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "Breakdown by Industry",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [
+                "Industry"
+              ],
+              "plots": [
+                "count",
+                "sum_AccountLifetimeValue",
+                "avg_WinRateByRow"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": true,
+              "showTitle": true,
+              "showAxis": false,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": false,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      },
+      "__Unique_Clusters_mi_1": {
+        "broadcastFacet": true,
+        "datasets": [
+          {
+            "id": "0FbId000000c7nUKAQ",
+            "label": "Clustered Accounts",
+            "name": "Clustered_Accounts",
+            "url": "/services/data/v62.0/wave/datasets/0FbId000000c7nUKAQ"
+          }
+        ],
+        "isGlobal": false,
+        "label": "# Unique Clusters min and max of deal size",
+        "query": {
+          "query": "{&quot;measures&quot;:[[&quot;unique&quot;,&quot;Cluster&quot;],[&quot;min&quot;,&quot;AverageDealSize&quot;],[&quot;max&quot;,&quot;AverageDealSize&quot;]]}",
+          "version": -1
+        },
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "type": "aggregateflex",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "autoFitMode": "keepLabels",
+            "bins": {
+              "breakpoints": {
+                "high": 100,
+                "low": 0
+              },
+              "bands": {
+                "high": {
+                  "color": "#008000",
+                  "label": ""
+                },
+                "low": {
+                  "color": "#B22222",
+                  "label": ""
+                },
+                "medium": {
+                  "color": "#ffa500",
+                  "label": ""
+                }
+              }
+            },
+            "legend": {
+              "descOrder": false,
+              "showHeader": true,
+              "show": true,
+              "customSize": "auto",
+              "position": "right-top",
+              "inside": false
+            },
+            "axisMode": "multi",
+            "tooltip": {
+              "content": {
+                "legend": {
+                  "showBinLabel": true,
+                  "measures": [],
+                  "showNullValues": true,
+                  "customizeLegend": false,
+                  "showPercentage": true,
+                  "showDimensions": true,
+                  "showMeasures": true,
+                  "dimensions": []
+                }
+              }
+            },
+            "visualizationType": "hbar",
+            "title": {
+              "fontSize": 14,
+              "subtitleFontSize": 11,
+              "label": "",
+              "align": "center",
+              "subtitleLabel": ""
+            },
+            "binValues": false,
+            "trellis": {
+              "flipLabels": false,
+              "showGridLines": true,
+              "size": [
+                100,
+                100
+              ],
+              "enable": false,
+              "type": "x",
+              "chartsPerLine": 4
+            },
+            "columnMap": {
+              "trellis": [],
+              "dimensionAxis": [],
+              "plots": [
+                "unique_Cluster",
+                "min_AverageDealSize",
+                "max_AverageDealSize"
+              ]
+            },
+            "showActionMenu": true,
+            "measureAxis2": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "measureAxis1": {
+              "sqrtScale": false,
+              "showTitle": true,
+              "showAxis": true,
+              "title": "",
+              "customDomain": {
+                "showDomain": false
+              }
+            },
+            "valueType": "compactNumber",
+            "theme": "wave",
+            "compactDecimalDigits": -1,
+            "dimensionAxis": {
+              "showTitle": true,
+              "customSize": "auto",
+              "showAxis": true,
+              "title": "",
+              "icons": {
+                "useIcons": false,
+                "iconProps": {
+                  "fit": "cover",
+                  "column": "",
+                  "type": "round"
+                }
+              }
+            },
+            "applyConditionalFormatting": true
+          },
+          "type": "chart"
+        }
+      }
+    },
+    "widgetStyle": {
+      "backgroundColor": "#FFFFFF",
+      "borderColor": "#E6ECF2",
+      "borderEdges": [],
+      "borderRadius": 0,
+      "borderWidth": 1
+    },
+    "widgets": {
+      "text_1": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#16325c",
+                  "size": "24px"
+                },
+                "insert": "Account Segmentation Explorer"
+              },
+              {
+                "attributes": {
+                  "align": "center"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "container_1": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "pillbox_2": {
+        "parameters": {
+          "compact": false,
+          "exploreLink": false,
+          "fontSize": 12,
+          "selectedTab": {
+            "backgroundColor": "rgb(77, 143, 224)",
+            "borderColor": "#C6D3E1",
+            "borderEdges": [
+              "all"
+            ],
+            "borderWidth": 1,
+            "textColor": "#FFFFFF"
+          },
+          "showActionMenu": true,
+          "step": "Cluster_Measures_Lis_1",
+          "textColor": "rgb(0, 112, 210)"
+        },
+        "type": "pillbox"
+      },
+      "container_2": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "chart_9": {
+        "parameters": {
+          "autoFitMode": "keepLabels",
+          "legend": {
+            "descOrder": false,
+            "showHeader": true,
+            "show": true,
+            "customSize": "auto",
+            "position": "right-top",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "highColor": "#009DDF",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "lowColor": "#E2F4FC",
+          "visualizationType": "stackvbar",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "Product Demand by Cluster",
+            "align": "left",
+            "subtitleLabel": ""
+          },
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "columnMap": {
+            "r": [
+              "avg_Quantity"
+            ],
+            "color": [
+              "avg_Quantity"
+            ],
+            "x": [
+              "Product2.Name"
+            ],
+            "y": [
+              "Account.Cluster"
+            ]
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "x": {
+            "showTitle": false,
+            "showAxis": true,
+            "title": ""
+          },
+          "y": {
+            "showTitle": false,
+            "showAxis": true,
+            "title": ""
+          },
+          "theme": "dark",
+          "step": "Product2_Name_Accoun_1",
+          "dimensionAxis": {
+            "showTitle": true,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true
+        },
+        "type": "chart"
+      },
+      "container_3": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "container_4": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "container_5": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "text_3": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#3ea2fa",
+                  "size": "18px"
+                },
+                "insert": "\u2666"
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "16px"
+                },
+                "insert": " "
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": "You have "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "[Unique_of_Cluster] "
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": "clusters ranging from a minimum Avg Deal Size of "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "$[Min_of_Average_Deal_]"
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": " to a maximum Avg Deal Size of "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "$[Max_of_Average_Deal_]"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ],
+            "values": {
+              "Max_of_Average_Deal_": {
+                "field": "max_AverageDealSize",
+                "sourceType": "result",
+                "step": "__Unique_Clusters_mi_1"
+              },
+              "Min_of_Average_Deal_": {
+                "field": "min_AverageDealSize",
+                "sourceType": "result",
+                "step": "__Unique_Clusters_mi_1"
+              },
+              "Unique_of_Cluster": {
+                "field": "unique_Cluster",
+                "sourceType": "result",
+                "step": "__Unique_Clusters_mi_1"
+              }
+            }
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "image_1": {
+        "parameters": {
+          "alignmentX": "center",
+          "alignmentY": "center",
+          "fit": "fitheight",
+          "image": {
+            "name": "tableau_logopng",
+            "namespace": ""
+          },
+          "interactions": []
+        },
+        "type": "image"
+      },
+      "text_2": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#7d98b3",
+                  "size": "16px"
+                },
+                "insert": "HIGHLIGHTS"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "chart_13": {
+        "parameters": {
+          "showPoints": false,
+          "legend": {
+            "descOrder": false,
+            "showHeader": true,
+            "show": true,
+            "customSize": "auto",
+            "position": "right-top",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "missingValue": "connect",
+          "visualizationType": "time",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "When was Demand for each Product Family the Highest?",
+            "align": "left",
+            "subtitleLabel": "Monthly Purchase Volume by Product Family"
+          },
+          "binValues": false,
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "showZero": true,
+          "valueType": "none",
+          "theme": "light",
+          "dimensionAxis": {
+            "showTitle": true,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true,
+          "drawArea": {
+            "measure": "",
+            "showDrawArea": false,
+            "bounding1": "",
+            "bounding2": ""
+          },
+          "autoFitMode": "keepLabels",
+          "bins": {
+            "breakpoints": {
+              "high": 100,
+              "low": 0
+            },
+            "bands": {
+              "high": {
+                "color": "#008000",
+                "label": ""
+              },
+              "low": {
+                "color": "#B22222",
+                "label": ""
+              },
+              "medium": {
+                "color": "#ffa500",
+                "label": ""
+              }
+            }
+          },
+          "dashLine": {
+            "measures": [
+              "avg_Quantity"
+            ],
+            "showDashLine": false
+          },
+          "timeAxis": {
+            "showTitle": true,
+            "showAxis": true,
+            "title": ""
+          },
+          "fillArea": true,
+          "columnMap": {
+            "split": [
+              "Product2.Family"
+            ],
+            "timeAxis": [
+              "Opp.CloseDate_Year~~~Opp.CloseDate_Month"
+            ],
+            "trellis": [],
+            "plots": [
+              "avg_Quantity"
+            ]
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": true,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "step": "Opp_CloseDate_Year_O_1"
+        },
+        "type": "chart"
+      },
+      "text_7": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#3ea2fa",
+                  "size": "18px"
+                },
+                "insert": "\u2666"
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff"
+                },
+                "insert": " "
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": "You sold the most types of products with "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "[Cluster_1]"
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": " at "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "[Unique_of_Product_Na]"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ],
+            "values": {
+              "Cluster_1": {
+                "field": "Account.Cluster",
+                "sourceType": "result",
+                "step": "Closed_Deals_with_Hi_1"
+              },
+              "Unique_of_Product_Na": {
+                "field": "A",
+                "sourceType": "result",
+                "step": "Closed_Deals_with_Hi_1"
+              }
+            }
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "chart_1": {
+        "parameters": {
+          "autoFitMode": "keepLabels",
+          "bins": {
+            "breakpoints": {
+              "high": 100,
+              "low": 0
+            },
+            "bands": {
+              "high": {
+                "color": "#008000",
+                "label": ""
+              },
+              "low": {
+                "color": "#B22222",
+                "label": ""
+              },
+              "medium": {
+                "color": "#ffa500",
+                "label": ""
+              }
+            }
+          },
+          "legend": {
+            "descOrder": false,
+            "showHeader": true,
+            "show": true,
+            "customSize": "auto",
+            "position": "right-top",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "visualizationType": "scatter",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "Account Clusters by Segment (V1)",
+            "align": "left",
+            "subtitleLabel": "By Avg Deal Size &amp; Lifetime Value"
+          },
+          "binValues": false,
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "radiusRatio": 4,
+          "columnMap": {
+            "r": [
+              "sum_AccountLifetimeValue"
+            ],
+            "x": [
+              "avg_DealCount"
+            ],
+            "y": [
+              "avg_AverageDealSize"
+            ],
+            "trellis": [],
+            "plots": [
+              "Cluster"
+            ]
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "x": {
+            "sqrtScale": false,
+            "showZero": true,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "y": {
+            "sqrtScale": false,
+            "showZero": true,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "theme": "dark",
+          "step": "clustermap_1",
+          "dimensionAxis": {
+            "showTitle": true,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true
+        },
+        "type": "chart"
+      },
+      "chart_12": {
+        "parameters": {
+          "autoFitMode": "keepLabels",
+          "bins": {
+            "breakpoints": {
+              "high": 100,
+              "low": 0
+            },
+            "bands": {
+              "high": {
+                "color": "#008000",
+                "label": ""
+              },
+              "low": {
+                "color": "#B22222",
+                "label": ""
+              },
+              "medium": {
+                "color": "#ffa500",
+                "label": ""
+              }
+            }
+          },
+          "legend": {
+            "descOrder": false,
+            "showHeader": false,
+            "show": false,
+            "customSize": "auto",
+            "position": "bottom-center",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "visualizationType": "hbar",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 16,
+            "subtitleFontSize": 11,
+            "label": "Which Industry should we focus our Account Planning on?",
+            "align": "left",
+            "subtitleLabel": "Click a Cluster above to filter &amp; analyze"
+          },
+          "binValues": false,
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "columnMap": {
+            "trellis": [],
+            "dimensionAxis": [
+              "Industry"
+            ],
+            "plots": [
+              "count",
+              "sum_AccountLifetimeValue",
+              "avg_WinRateByRow"
+            ]
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": true,
+            "showTitle": true,
+            "showAxis": false,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "valueType": "compactNumber",
+          "theme": "light",
+          "step": "Industry_1",
+          "compactDecimalDigits": -1,
+          "dimensionAxis": {
+            "showTitle": false,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true
+        },
+        "type": "chart"
+      },
+      "text_6": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "color": "#3ea2fa",
+                  "size": "18px"
+                },
+                "insert": "\u2666"
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff"
+                },
+                "insert": " "
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": "You closed the highest # of Deals with "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "[Cluster] "
+              },
+              {
+                "attributes": {
+                  "color": "#ffffff",
+                  "size": "14px"
+                },
+                "insert": "at "
+              },
+              {
+                "attributes": {
+                  "color": "#c6d3e1",
+                  "size": "14px"
+                },
+                "insert": "[Unique_of_Opportunit]"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ],
+            "values": {
+              "Unique_of_Opportunit": {
+                "field": "A",
+                "sourceType": "result",
+                "step": "Closed_Deals_and___P_1"
+              },
+              "Cluster": {
+                "field": "Account.Cluster",
+                "sourceType": "result",
+                "step": "Closed_Deals_and___P_1"
+              }
+            }
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "chart_4": {
+        "parameters": {
+          "autoFitMode": "keepLabels",
+          "bins": {
+            "breakpoints": {
+              "high": 100,
+              "low": 0
+            },
+            "bands": {
+              "high": {
+                "color": "#008000",
+                "label": ""
+              },
+              "low": {
+                "color": "#B22222",
+                "label": ""
+              },
+              "medium": {
+                "color": "#ffa500",
+                "label": ""
+              }
+            }
+          },
+          "legend": {
+            "descOrder": false,
+            "showHeader": true,
+            "show": false,
+            "customSize": "auto",
+            "position": "right-top",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": true,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "visualizationType": "vbar",
+          "exploreLink": true,
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "{{cell(Cluster_Measures_Lis_1.selection, 0, &quot;Display&quot;).asString()}} by Cluster",
+            "align": "center",
+            "subtitleLabel": ""
+          },
+          "binValues": false,
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "size": [
+              100,
+              100
+            ],
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "showActionMenu": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": false,
+            "showAxis": false,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "valueType": "compactNumber",
+          "theme": "dark",
+          "step": "Cluster_1",
+          "compactDecimalDigits": -1,
+          "dimensionAxis": {
+            "showTitle": false,
+            "customSize": "auto",
+            "showAxis": true,
+            "title": "",
+            "icons": {
+              "useIcons": false,
+              "iconProps": {
+                "fit": "cover",
+                "column": "",
+                "type": "round"
+              }
+            }
+          },
+          "applyConditionalFormatting": true
+        },
+        "type": "chart"
+      }
+    }
+  },
+  "type": "dashboard",
+  "url": "/services/data/v62.0/wave/dashboards/0FKId000000XsYZOA0",
+  "visibility": "All"
+}

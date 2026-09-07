@@ -1,0 +1,2773 @@
+# Widget visualizationType Skeletons
+Complete verified JSON for every CRM Analytics chart type, extracted from a live reference dashboard in the org.
+
+**Rules that apply to ALL chart widgets:**
+- Widget `type` is always `"chart"` (number tiles use `"number"`, tables use `"table"`)
+- Step `type` is always `aggregateflex` for standard queries; use `saql` only for complex custom queries
+- `columnMap` keys vary per `visualizationType` — use the exact keys shown for each type below
+- Step `sources[0].groups` → `columnMap.dimensionAxis` (or `dimension`/`x`/`y` depending on type)
+- Step `sources[0].columns[].name` aliases → `columnMap.plots` (or `r`, `color`, `x`, `y` etc.)
+- `trellis.enable: false` unless you explicitly need small multiples
+
+Replace `<datasetName>`, `<dim1>`, `<measureAlias>` etc. with real values from the org.
+
+⛔⛔ **DEPLOY-SHAPE WARNING — these skeletons show the REST/Studio `query` shape (a nested object).
+METADATA DEPLOY (`sf project deploy WaveDashboard`, how this agent deploys) requires the aggregateflex
+`query` to be a STRINGIFIED wrapper, NOT the nested object shown below.** Convert it:
+
+- ❌ AS SHOWN HERE (REST shape — will NOT deploy via metadata):
+  `"query": { "limit":2000, "sources":[{ "name":"<ds>", "groups":[...], "columns":[...] }] }`
+- ✅ FOR METADATA DEPLOY (what you must author):
+  `"query": { "query": "{\"measures\":[[\"sum\",\"<alias>\"]],\"groups\":[\"<dim>\"]}", "version": -1 }`
+  measures/groups/filters live INSIDE the stringified inner JSON string.
+
+Use these skeletons for the **widget `parameters` shape (visualizationType, columnMap, measureAxis,
+legend, trellis)** — those are correct as-is. But when you build the STEP, wrap the query per
+DASHBOARD_PATTERNS.md rule #4 (aggregateflex stringified query). ALWAYS `validate-dashboard` (dry-run)
+then `diagnose-dashboard` (live query execution) after deploy — a wrong query shape passes authoring
+but renders a red "can't be displayed" widget.
+
+
+---
+
+## Bar charts
+
+### hbar
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "hbar",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "dimensionAxis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### vbar
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "vbar",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "dimensionAxis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### stackhbar
+
+**columnMap keys:** `split` (secondary dimension for colour split), `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Type-specific parameters:** `normalize: false`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>",
+          "<Occupied__c>",
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<C_field>"
+            ],
+            "name": "C"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "stackhbar",
+    "step": "<stepId>",
+    "columnMap": {
+      "split": [],
+      "trellis": [],
+      "dimensionAxis": [
+        "Apt_Location__c",
+        "Occupied__c",
+        "Name"
+      ],
+      "plots": [
+        "A",
+        "C"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "normalize": false
+  }
+}
+```
+
+---
+
+## Line & dot
+
+### line
+
+**columnMap keys:** `split` (secondary dimension for colour split), `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "line",
+    "step": "<stepId>",
+    "columnMap": {
+      "split": [
+        "Occupied__c"
+      ],
+      "trellis": [],
+      "dimensionAxis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### hdot
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `split` (secondary dimension for colour split), `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "hdot",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "B"
+      ],
+      "split": [
+        "Occupied__c"
+      ],
+      "trellis": [],
+      "dimensionAxis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### vdot
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `split` (secondary dimension for colour split), `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>",
+          "<Occupied__c>",
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "vdot",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "B"
+      ],
+      "split": [
+        "Occupied__c"
+      ],
+      "trellis": [],
+      "dimensionAxis": [
+        "Apt_Location__c",
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Pie & donut
+
+### pie
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `dimension` (dimension field name(s) from step groups (pie, treemap, parallelcoords)), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "pie",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "dimension": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Scatter
+
+### scatter
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `x` (x-axis field alias), `y` (y-axis field alias(es)), `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Occupied__c>",
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          },
+          {
+            "field": [
+              "sum",
+              "<C_field>"
+            ],
+            "name": "C"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Occupied__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "scatter",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "B"
+      ],
+      "x": [
+        "C"
+      ],
+      "y": [
+        "A"
+      ],
+      "trellis": [],
+      "plots": [
+        "Occupied__c",
+        "Name"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Gauge charts
+
+### gauge
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "gauge",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Apt_Location__c"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### flatgauge
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "flatgauge",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### polargauge
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "polargauge",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### bullet
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "bullet",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### rating
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "rating",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Name"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Map charts
+
+### choropleth
+
+**columnMap keys:** `color` (colour-encoding measure alias), `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Type-specific parameters:** `map: "World Countries"`, `projectionType: "Mercator"`, `highColor: "#1674D9"`, `lowColor: "#C5DBF7"`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "choropleth",
+    "step": "<stepId>",
+    "columnMap": {
+      "color": [
+        "A"
+      ],
+      "trellis": [],
+      "plots": [
+        "Apt_Location__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "map": "World Countries",
+    "projectionType": "Mercator",
+    "highColor": "#1674D9",
+    "lowColor": "#C5DBF7"
+  }
+}
+```
+
+### geomap
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `color` (colour-encoding measure alias), `location` (location dimension alias (geomap)), `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Type-specific parameters:** `map: "World Countries"`, `projectionType: "Mercator"`, `highColor: "#1674D9"`, `lowColor: "#C5DBF7"`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          },
+          {
+            "field": [
+              "sum",
+              "<C_field>"
+            ],
+            "name": "C"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "geomap",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "B"
+      ],
+      "color": [
+        "C"
+      ],
+      "location": [
+        "A"
+      ],
+      "trellis": [],
+      "plots": [
+        "Apt_Location__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "map": "World Countries",
+    "projectionType": "Mercator",
+    "highColor": "#1674D9",
+    "lowColor": "#C5DBF7"
+  }
+}
+```
+
+### bubblemap
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `color` (colour-encoding measure alias), `trellis` (always `[]` unless using small multiples), `plots` (measure aliases from step columns)
+
+**Type-specific parameters:** `map: "World Countries"`, `projectionType: "Mercator"`, `highColor: "#1674D9"`, `lowColor: "#C5DBF7"`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "bubblemap",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "B"
+      ],
+      "color": [
+        "A"
+      ],
+      "trellis": [],
+      "plots": [
+        "Apt_Location__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "map": "World Countries",
+    "projectionType": "Mercator",
+    "highColor": "#1674D9",
+    "lowColor": "#C5DBF7"
+  }
+}
+```
+
+---
+
+## Advanced charts
+
+### combo
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "combo",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "dimensionAxis": [
+        "Name",
+        "Apt_Location__c"
+      ],
+      "plots": [
+        "A",
+        "B"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### pyramid
+
+**columnMap keys:** `measureAxis2` (secondary y-axis measure alias), `measureAxis1` (primary y-axis measure alias), `trellis` (always `[]` unless using small multiples), `dimensionAxis` (dimension field names from step groups), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          },
+          {
+            "field": [
+              "sum",
+              "<C_field>"
+            ],
+            "name": "C"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "pyramid",
+    "step": "<stepId>",
+    "columnMap": {
+      "measureAxis2": [
+        "B"
+      ],
+      "measureAxis1": [
+        "C"
+      ],
+      "trellis": [],
+      "dimensionAxis": [
+        "Apt_Location__c"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### treemap
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `dimension` (dimension field name(s) from step groups (pie, treemap, parallelcoords)), `plots` (measure aliases from step columns)
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "treemap",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "dimension": [
+        "Name",
+        "Occupied__c"
+      ],
+      "plots": [
+        "A"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### matrix
+
+**columnMap keys:** `r` (bubble/dot size measure alias), `color` (colour-encoding measure alias), `x` (x-axis field alias), `y` (y-axis field alias(es))
+
+**Type-specific parameters:** `highColor: "#009DDF"`, `lowColor: "#E2F4FC"`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Apt_Location__c>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "matrix",
+    "step": "<stepId>",
+    "columnMap": {
+      "r": [
+        "A"
+      ],
+      "color": [
+        "B"
+      ],
+      "x": [
+        "Name"
+      ],
+      "y": [
+        "Apt_Location__c",
+        "Occupied__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "highColor": "#009DDF",
+    "lowColor": "#E2F4FC"
+  }
+}
+```
+
+### heatmap
+
+**columnMap keys:** `color` (colour-encoding measure alias), `x` (x-axis field alias), `y` (y-axis field alias(es))
+
+**Type-specific parameters:** `highColor: "#009DDF"`, `lowColor: "#E2F4FC"`
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>",
+          "<Apt_Location__c>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "heatmap",
+    "step": "<stepId>",
+    "columnMap": {
+      "color": [
+        "A"
+      ],
+      "x": [
+        "Name"
+      ],
+      "y": [
+        "Apt_Location__c",
+        "Occupied__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    },
+    "highColor": "#009DDF",
+    "lowColor": "#E2F4FC"
+  }
+}
+```
+
+### metricsradar
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `measureAxes` (list of measure aliases, one per radar/parallel axis), `dimension` (dimension field name(s) from step groups (pie, treemap, parallelcoords))
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Name>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          },
+          {
+            "field": [
+              "sum",
+              "<C_field>"
+            ],
+            "name": "C"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Name>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "metricsradar",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [],
+      "measureAxes": [
+        "A",
+        "B",
+        "C"
+      ],
+      "dimension": [
+        "Name"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```
+
+### parallelcoords
+
+**columnMap keys:** `trellis` (always `[]` unless using small multiples), `measureAxes` (list of measure aliases, one per radar/parallel axis), `dimension` (dimension field name(s) from step groups (pie, treemap, parallelcoords))
+
+**Step JSON:**
+```json
+{
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [
+    {
+      "id": "<datasetId>",
+      "label": "<Label>",
+      "name": "<datasetName>",
+      "url": "<url>"
+    }
+  ],
+  "receiveFacetSource": {
+    "mode": "all",
+    "steps": []
+  },
+  "query": {
+    "limit": 2000,
+    "sources": [
+      {
+        "name": "<datasetName>",
+        "groups": [
+          "<Apt_Location__c>",
+          "<Occupied__c>"
+        ],
+        "columns": [
+          {
+            "field": [
+              "sum",
+              "<A_field>"
+            ],
+            "name": "A"
+          },
+          {
+            "field": [
+              "sum",
+              "<B_field>"
+            ],
+            "name": "B"
+          }
+        ],
+        "filters": [],
+        "joins": []
+      }
+    ],
+    "orders": [
+      {
+        "name": "<Apt_Location__c>",
+        "ascending": true,
+        "filters": []
+      }
+    ],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": {},
+    "type": "chart"
+  }
+}
+```
+
+**Widget JSON:**
+```json
+{
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "parallelcoords",
+    "step": "<stepId>",
+    "columnMap": {
+      "trellis": [
+        "Occupied__c"
+      ],
+      "measureAxes": [
+        "A",
+        "B"
+      ],
+      "dimension": [
+        "Apt_Location__c"
+      ]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [
+        100,
+        100
+      ]
+    }
+  }
+}
+```

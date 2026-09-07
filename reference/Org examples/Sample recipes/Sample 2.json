@@ -1,0 +1,1419 @@
+{
+    "version": "67.0",
+    "nodes": {
+        "LOAD_DATASET3": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "Forecasted Baseline Sales Units Dataset",
+                    "name": "Forecast_Dataset4",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "LOAD_DATASET2": {
+            "action": "load",
+            "parameters": {
+                "dataset": {
+                    "label": "Weekly Calendars",
+                    "name": "TPO_Calendar",
+                    "type": "analyticsDataset"
+                },
+                "fields": [],
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "sortBy": [],
+                    "type": "TopN"
+                }
+            },
+            "sources": []
+        },
+        "DROP_FIELDS2": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "AvgSales",
+                        "Year-WeekNumber",
+                        "DatasetCreatedDate",
+                        "WeekNumber",
+                        "NegativeForecastFlag",
+                        "Forecast_SaleUnits",
+                        "Month_Week",
+                        "Year_Month"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "LOAD_DATASET3"
+            ]
+        },
+        "FORMULA24": {
+            "action": "computeRelative",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "row_number()",
+                        "label": "Rno",
+                        "name": "Rno",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ],
+                "orderBy": [
+                    {
+                        "direction": "ASC",
+                        "fieldName": "Forecast_Date"
+                    }
+                ],
+                "partitionBy": [
+                    "CompositeKey"
+                ]
+            },
+            "sources": [
+                "FORMULA28"
+            ]
+        },
+        "FORMULA25": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "concat(year(Forecast_Date),'-',month(Forecast_Date),'-W',Rno)",
+                        "label": "Week PartitionKey",
+                        "name": "Week_PartitionKey",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA24"
+            ]
+        },
+        "FORMULA28": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "concat(AccountId,'-',ProductId,'-',year(Forecast_Date), '-', month(Forecast_Date))",
+                        "label": "CompositeKey",
+                        "name": "CompositeKey",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS2"
+            ]
+        },
+        "FORMULA0": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "concat(cgcloud__Account__c,ProductId)",
+                        "label": "AccountProductKey",
+                        "name": "AccountProductKey",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "FILTER0"
+            ]
+        },
+        "FORMULA1": {
+            "action": "computeRelative",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "lag(Final_Forecast_SaleUnits)",
+                        "label": "ForecastSalesUnitsW-1",
+                        "name": "ForecastSalesUnitsW-1",
+                        "precision": 10,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ],
+                "orderBy": [
+                    {
+                        "direction": "ASC",
+                        "fieldName": "Forecast_Date"
+                    }
+                ],
+                "partitionBy": [
+                    "AccountProductKey"
+                ]
+            },
+            "sources": [
+                "FORMULA0"
+            ]
+        },
+        "FILL0": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "formulaExpression": "coalesce(\"ForecastSalesUnitsW-1\", null, 0)",
+                        "label": "ForecastSalesUnitsW-1",
+                        "name": "ForecastSalesUnitsW-1_fill",
+                        "precision": 18,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "ForecastSalesUnitsW-1_fill",
+                        "newProperties": {
+                            "name": "ForecastSalesUnitsW-1"
+                        }
+                    }
+                ],
+                "slice": {
+                    "fields": [
+                        "ForecastSalesUnitsW-1"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA1"
+            ]
+        },
+        "FORMULA2": {
+            "action": "computeRelative",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "lag(\"ForecastSalesUnitsW-1\")",
+                        "label": "ForecastSalesUnitsW-2",
+                        "name": "ForecastSalesUnitsW-2",
+                        "precision": 10,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ],
+                "orderBy": [
+                    {
+                        "direction": "ASC",
+                        "fieldName": "Forecast_Date"
+                    }
+                ],
+                "partitionBy": [
+                    "AccountProductKey"
+                ]
+            },
+            "sources": [
+                "FILL0"
+            ]
+        },
+        "FILL1": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "formulaExpression": "coalesce(\"ForecastSalesUnitsW-2\", null, 0)",
+                        "label": "ForecastSalesUnitsW-2",
+                        "name": "ForecastSalesUnitsW-2_fill",
+                        "precision": 18,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "ForecastSalesUnitsW-2_fill",
+                        "newProperties": {
+                            "name": "ForecastSalesUnitsW-2"
+                        }
+                    }
+                ],
+                "slice": {
+                    "fields": [
+                        "ForecastSalesUnitsW-2"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA2"
+            ]
+        },
+        "FORMULA3": {
+            "action": "computeRelative",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "lag(\"ForecastSalesUnitsW-2\")",
+                        "label": "ForecastSalesUnitsW-3",
+                        "name": "ForecastSalesUnitsW-3",
+                        "precision": 10,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ],
+                "orderBy": [
+                    {
+                        "direction": "ASC",
+                        "fieldName": "Forecast_Date"
+                    }
+                ],
+                "partitionBy": [
+                    "AccountProductKey"
+                ]
+            },
+            "sources": [
+                "FILL1"
+            ]
+        },
+        "FILL2": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "formulaExpression": "coalesce(\"ForecastSalesUnitsW-3\", null, 0)",
+                        "label": "ForecastSalesUnitsW-3",
+                        "name": "ForecastSalesUnitsW-3_fill",
+                        "precision": 18,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "ForecastSalesUnitsW-3_fill",
+                        "newProperties": {
+                            "name": "ForecastSalesUnitsW-3"
+                        }
+                    }
+                ],
+                "slice": {
+                    "fields": [
+                        "ForecastSalesUnitsW-3"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA3"
+            ]
+        },
+        "EXTRACT0": {
+            "action": "extractGrains",
+            "parameters": {
+                "grainExtractions": []
+            },
+            "sources": [
+                "FILL2"
+            ]
+        },
+        "AGGREGATE1": {
+            "action": "aggregate",
+            "parameters": {
+                "aggregations": [
+                    {
+                        "action": "SUM",
+                        "label": "Sum of ForecastSalesUnitsW-1",
+                        "name": "SUM_ForecastSalesUnitsW-1",
+                        "source": "ForecastSalesUnitsW-1"
+                    },
+                    {
+                        "action": "SUM",
+                        "label": "Sum of ForecastSalesUnitsW-2",
+                        "name": "SUM_ForecastSalesUnitsW-2",
+                        "source": "ForecastSalesUnitsW-2"
+                    },
+                    {
+                        "action": "SUM",
+                        "label": "Sum of ForecastSalesUnitsW-3",
+                        "name": "SUM_ForecastSalesUnitsW-3",
+                        "source": "ForecastSalesUnitsW-3"
+                    }
+                ],
+                "groupings": [
+                    "cgcloud__Account__c",
+                    "ProductId",
+                    "ForecastDateString"
+                ],
+                "nodeType": "STANDARD",
+                "pivots": []
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "SUM_ForecastSalesUnitsW-1",
+                        "newProperties": {
+                            "typeProperties": {
+                                "precision": 18,
+                                "scale": 2,
+                                "type": "NUMBER"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SUM_ForecastSalesUnitsW-2",
+                        "newProperties": {
+                            "typeProperties": {
+                                "precision": 18,
+                                "scale": 2,
+                                "type": "NUMBER"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SUM_ForecastSalesUnitsW-3",
+                        "newProperties": {
+                            "typeProperties": {
+                                "precision": 18,
+                                "scale": 2,
+                                "type": "NUMBER"
+                            }
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "EXTRACT0"
+            ]
+        },
+        "FORMULA4": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when \"SUM_ForecastSalesUnitsW-1\" = 0 then 0 else 1 end",
+                        "label": "ForecastSalesUnitsW-1 Flag",
+                        "name": "ForecastSalesUnitsW-1_Flag",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "AGGREGATE1"
+            ]
+        },
+        "FORMULA5": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when \"SUM_ForecastSalesUnitsW-2\" = 0 then 0 else 1 end",
+                        "label": "ForecastSalesUnitsW-2 Flag",
+                        "name": "ForecastSalesUnitsW-2_Flag",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA4"
+            ]
+        },
+        "FORMULA6": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when \"SUM_ForecastSalesUnitsW-3\" = 0 then 0 else 1 end",
+                        "label": "ForecastSalesUnitsW-3 Flag",
+                        "name": "ForecastSalesUnitsW-3_Flag",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA5"
+            ]
+        },
+        "FORMULA7": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when\n ((\"SUM_ForecastSalesUnitsW-1\" = 0) and (\"SUM_ForecastSalesUnitsW-2\" = 0) and (\"SUM_ForecastSalesUnitsW-3\" = 0)) then 0\nelse \n(\"SUM_ForecastSalesUnitsW-1\"+\"SUM_ForecastSalesUnitsW-2\"+\"SUM_ForecastSalesUnitsW-3\")/(\"ForecastSalesUnitsW-1_Flag\"+\"ForecastSalesUnitsW-2_Flag\"+\"ForecastSalesUnitsW-3_Flag\")\nend",
+                        "label": "Last 3 week Non Promotion SalesUnits",
+                        "name": "Last_3_Week_Non_Promotion_SalesUnits",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA6"
+            ]
+        },
+        "DROP_FIELDS4": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "ForecastSalesUnitsW-1_Flag",
+                        "ForecastSalesUnitsW-2_Flag",
+                        "ForecastSalesUnitsW-3_Flag",
+                        "SUM_ForecastSalesUnitsW-1",
+                        "SUM_ForecastSalesUnitsW-2",
+                        "SUM_ForecastSalesUnitsW-3"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA7"
+            ]
+        },
+        "JOIN1": {
+            "action": "join",
+            "parameters": {
+                "joinType": "LEFT_OUTER",
+                "leftKeys": [
+                    "cgcloud__Account__c",
+                    "ProductId",
+                    "ForecastDateString"
+                ],
+                "rightKeys": [
+                    "cgcloud__Account__c",
+                    "ProductId",
+                    "ForecastDateString"
+                ],
+                "rightQualifier": "NonPromo"
+            },
+            "schema": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "NonPromo.cgcloud__Account__c",
+                        "NonPromo.ProductId",
+                        "NonPromo.ForecastDateString"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FILTER0",
+                "DROP_FIELDS4"
+            ]
+        },
+        "OUTPUT1": {
+            "action": "save",
+            "parameters": {
+                "dataset": {
+                    "folderName": "CR_sampleForecastBaselineIndirectNew_V1",
+                    "label": "Forecasted Baseline Sales Units Dataset",
+                    "name": "Forecast_Dataset4",
+                    "type": "analyticsDataset"
+                },
+                "dateConfigurationName": "sample_Date_Configuration",
+                "fields": [],
+                "measuresToCurrencies": []
+            },
+            "sources": [
+                "EDIT_ATTRIBUTES9"
+            ]
+        },
+        "FORMULA12": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                        "formulaExpression": "now()",
+                        "label": "Dataset Created Date",
+                        "name": "DatasetCreatedDate",
+                        "type": "DATETIME"
+                    }
+                ]
+            },
+            "sources": [
+                "JOIN3"
+            ]
+        },
+        "FORMULA15": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when Final_Forecast_SaleUnits < 0 then 'Yes'\nelse 'No' end",
+                        "label": "Negative Forecast Flag",
+                        "name": "NegativeForecastFlag",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA12"
+            ]
+        },
+        "FORMULA16": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when Final_Forecast_SaleUnits < 0 then null\nelse Final_Forecast_SaleUnits\nend",
+                        "label": "Forecast SaleUnits",
+                        "name": "Forecast_SaleUnits",
+                        "precision": 10,
+                        "scale": 2,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA15"
+            ]
+        },
+        "EDIT_ATTRIBUTES5": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "Final_Forecast_SaleUnits",
+                        "newProperties": {
+                            "label": "Final Forecast SaleUnits(Includes Negative Values)",
+                            "name": "Final_Forecast_SaleUnits"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA16"
+            ]
+        },
+        "FORMULA30": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when char_length(\"TPOCalendar.Year_WeekNumber\") = '7'\nthen replace(\"TPOCalendar.Year_WeekNumber\", '-W', '0')\nelse replace(\"TPOCalendar.Year_WeekNumber\", '-W', '')\nend",
+                        "label": "WeekNumber",
+                        "name": "WeekNumber",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "EDIT_ATTRIBUTES5"
+            ]
+        },
+        "TO_MEASURE0": {
+            "action": "typeCast",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "WeekNumber",
+                        "newProperties": {
+                            "label": "WeekNumber",
+                            "name": "WeekNumber_to_measure",
+                            "typeProperties": {
+                                "precision": 18,
+                                "scale": 0,
+                                "type": "NUMBER"
+                            }
+                        }
+                    }
+                ]
+            },
+            "schema": {
+                "fields": [
+                    {
+                        "name": "WeekNumber_to_measure",
+                        "newProperties": {
+                            "name": "WeekNumber"
+                        }
+                    }
+                ],
+                "slice": {
+                    "fields": [
+                        "WeekNumber"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA30"
+            ]
+        },
+        "FORMULA31": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "case when char_length(\"TPOCalendar.Year_WeekNumber\") = '7'\nthen replace(\"TPOCalendar.Year_WeekNumber\", '-W', '/0')\nelse replace(\"TPOCalendar.Year_WeekNumber\", '-W', '/')\nend",
+                        "label": "Year/WeekNumber",
+                        "name": "Year-WeekNumber",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "TO_MEASURE0"
+            ]
+        },
+        "DROP_FIELDS3": {
+            "action": "schema",
+            "parameters": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "TPOCalendar.Year_WeekNumber",
+                        "Forecast_Date",
+                        "ForecastDateString"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA31"
+            ]
+        },
+        "EDIT_ATTRIBUTES6": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "TPOCalendar.WeekStart",
+                        "newProperties": {
+                            "label": "Date",
+                            "name": "Forecast_Date"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "DROP_FIELDS3"
+            ]
+        },
+        "FORMULA34": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "date_format(Forecast_Date, 'yyyy-MM-dd')",
+                        "label": "Forecast Date",
+                        "name": "ForecastDateString",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "EDIT_ATTRIBUTES6"
+            ]
+        },
+        "EDIT_ATTRIBUTES7": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "TPOCalendar.Month_Week",
+                        "newProperties": {
+                            "label": "Month Week",
+                            "name": "Month_Week"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA34"
+            ]
+        },
+        "EDIT_ATTRIBUTES8": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "TPOCalendar.Year_Month",
+                        "newProperties": {
+                            "label": "Year Month",
+                            "name": "Year_Month"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "EDIT_ATTRIBUTES7"
+            ]
+        },
+        "FILTER0": {
+            "action": "filter",
+            "parameters": {
+                "filterExpressions": [
+                    {
+                        "field": "Year-WeekNumber",
+                        "operands": [],
+                        "operator": "IS_NOT_NULL",
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "EDIT_ATTRIBUTES8"
+            ]
+        },
+        "EDIT_ATTRIBUTES9": {
+            "action": "schema",
+            "parameters": {
+                "fields": [
+                    {
+                        "name": "NonPromo.Last_3_Week_Non_Promotion_SalesUnits",
+                        "newProperties": {
+                            "label": "Average Last 3 Weeks Sales for Non-Promotional Products",
+                            "name": "AvgSales"
+                        }
+                    }
+                ]
+            },
+            "sources": [
+                "JOIN1"
+            ]
+        },
+        "JOIN3": {
+            "action": "join",
+            "parameters": {
+                "joinType": "LOOKUP",
+                "leftKeys": [
+                    "Week_PartitionKey"
+                ],
+                "rightKeys": [
+                    "Week_PartitionKey"
+                ],
+                "rightQualifier": "TPOCalendar"
+            },
+            "schema": {
+                "fields": [],
+                "slice": {
+                    "fields": [
+                        "CompositeKey",
+                        "Rno",
+                        "Week_PartitionKey",
+                        "TPOCalendar.WeekEnd",
+                        "TPOCalendar.Month",
+                        "TPOCalendar.Partition_Key",
+                        "TPOCalendar.Rno",
+                        "TPOCalendar.Week_PartitionKey"
+                    ],
+                    "ignoreMissingFields": true,
+                    "mode": "DROP"
+                }
+            },
+            "sources": [
+                "FORMULA25",
+                "FORMULA27"
+            ]
+        },
+        "FORMULA27": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "concat(year(WeekStart),'-',month(WeekStart),'-W',Rno)",
+                        "label": "Week PartitionKey",
+                        "name": "Week_PartitionKey",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA33"
+            ]
+        },
+        "FORMULA29": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "year(WeekStart)",
+                        "label": "Month",
+                        "name": "Month",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ]
+            },
+            "sources": [
+                "LOAD_DATASET2"
+            ]
+        },
+        "FORMULA32": {
+            "action": "formula",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "concat(year(WeekStart),'-',month(WeekStart))",
+                        "label": "Partition_Key",
+                        "name": "Partition_Key",
+                        "precision": 255,
+                        "type": "TEXT"
+                    }
+                ]
+            },
+            "sources": [
+                "FORMULA29"
+            ]
+        },
+        "FORMULA33": {
+            "action": "computeRelative",
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "defaultValue": "",
+                        "formulaExpression": "row_number()",
+                        "label": "Rno",
+                        "name": "Rno",
+                        "precision": 10,
+                        "scale": 0,
+                        "type": "NUMBER"
+                    }
+                ],
+                "orderBy": [
+                    {
+                        "direction": "ASC",
+                        "fieldName": "WeekStart"
+                    }
+                ],
+                "partitionBy": [
+                    "Partition_Key"
+                ]
+            },
+            "sources": [
+                "FORMULA32"
+            ]
+        }
+    },
+    "ui": {
+        "nodes": {
+            "LOAD_DATASET3": {
+                "label": "Forecasted Baseline Sales Units Dataset",
+                "description": "Contains the details of the forecasted baseline sales units.",
+                "type": "LOAD_DATASET",
+                "top": 391.6,
+                "left": 112,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "LOAD_DATASET2": {
+                "label": "Weekly Calendars",
+                "description": "Contains the start and end dates of each week, and the related IDs.",
+                "type": "LOAD_DATASET",
+                "top": 530.3,
+                "left": 112,
+                "parameters": {
+                    "sampleSize": 2000
+                }
+            },
+            "TRANSFORM7": {
+                "label": "Create Forecast Sales Identifier",
+                "description": "Creates an identifier by combining account ID, product ID, and forecast month, and concatenating it with the forecast date's year and month.",
+                "type": "TRANSFORM",
+                "top": 390.3,
+                "left": 252,
+                "graph": {
+                    "DROP_FIELDS2": {
+                        "label": "Drop Columns"
+                    },
+                    "FORMULA24": {
+                        "label": "Formula"
+                    },
+                    "FORMULA25": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA28": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA24",
+                        "target": "FORMULA25"
+                    },
+                    {
+                        "source": "FORMULA28",
+                        "target": "FORMULA24"
+                    },
+                    {
+                        "source": "DROP_FIELDS2",
+                        "target": "FORMULA28"
+                    }
+                ]
+            },
+            "TRANSFORM0": {
+                "label": "Get Weekly Forecasted Baseline Sales Units",
+                "description": "Concatenates account and product IDs, and gets the forecasted baseline sales units for each of the last 3 weeks.",
+                "type": "TRANSFORM",
+                "top": 392.2,
+                "left": 812.2,
+                "graph": {
+                    "FORMULA0": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA1": {
+                        "label": "Formula"
+                    },
+                    "FILL0": {
+                        "parameters": {
+                            "type": "FILL_UI"
+                        },
+                        "label": "Fill"
+                    },
+                    "FORMULA2": {
+                        "label": "Formula"
+                    },
+                    "FILL1": {
+                        "parameters": {
+                            "type": "FILL_UI"
+                        },
+                        "label": "Fill"
+                    },
+                    "FORMULA3": {
+                        "label": "Formula"
+                    },
+                    "FILL2": {
+                        "parameters": {
+                            "type": "FILL_UI"
+                        },
+                        "label": "Fill"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA0",
+                        "target": "FORMULA1"
+                    },
+                    {
+                        "source": "FORMULA1",
+                        "target": "FILL0"
+                    },
+                    {
+                        "source": "FILL0",
+                        "target": "FORMULA2"
+                    },
+                    {
+                        "source": "FORMULA2",
+                        "target": "FILL1"
+                    },
+                    {
+                        "source": "FILL1",
+                        "target": "FORMULA3"
+                    },
+                    {
+                        "source": "FORMULA3",
+                        "target": "FILL2"
+                    }
+                ]
+            },
+            "AGGREGATE0": {
+                "label": "Aggregate Weekly Forecasted Baseline Sales Units",
+                "description": "Calculates the sum of forecasted baseline sales units for each of the last 3 weeks and groups these values by account ID, product ID, and forecasted date.",
+                "type": "AGGREGATE",
+                "top": 392.2,
+                "left": 952.2,
+                "graph": {
+                    "EXTRACT0": null,
+                    "AGGREGATE1": null
+                },
+                "connectors": [
+                    {
+                        "source": "EXTRACT0",
+                        "target": "AGGREGATE1"
+                    }
+                ]
+            },
+            "TRANSFORM1": {
+                "label": "Calculate Average Forecasted Baseline Sales Units",
+                "description": "Adds a column with 0 as the value for rows without forecasted baseline sales units for any and all of the last 3 weeks. It calculates average forecasted baseline sales units for the last 3 weeks for the remaining rows.",
+                "type": "TRANSFORM",
+                "top": 392.2,
+                "left": 1092.2,
+                "graph": {
+                    "FORMULA4": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA5": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA6": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA7": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "DROP_FIELDS4": {
+                        "label": "Drop Columns"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA4",
+                        "target": "FORMULA5"
+                    },
+                    {
+                        "source": "FORMULA5",
+                        "target": "FORMULA6"
+                    },
+                    {
+                        "source": "FORMULA6",
+                        "target": "FORMULA7"
+                    },
+                    {
+                        "source": "FORMULA7",
+                        "target": "DROP_FIELDS4"
+                    }
+                ]
+            },
+            "JOIN1": {
+                "label": "Join Average Forecasted Baseline Sales Units",
+                "description": "Joins forecasted baseline sales units details with the matching average forecasted baseline sales units for the last 3 weeks based on account IDs, product IDs, and forecasted dates.",
+                "type": "JOIN",
+                "top": 392.2,
+                "left": 1232.2
+            },
+            "OUTPUT1": {
+                "label": "Forecasted Baseline Sales Units Dataset",
+                "description": "Writes the forecasted baseline sales units with the average forecasted baseline sales units to the Forecasted Baseline Sales Units Dataset.",
+                "type": "OUTPUT",
+                "top": 392.3,
+                "left": 1652
+            },
+            "TRANSFORM6": {
+                "label": "Identify Rows with Final Forecasted Baseline Sales Units",
+                "description": "Changes the labels and API names of attributes storing the average and final forecasted baseline sales units, and concatenated values. It also identifies rows with the final forecasted baseline sales units.",
+                "type": "TRANSFORM",
+                "top": 392.4,
+                "left": 532.2,
+                "graph": {
+                    "FORMULA12": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA15": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA16": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "EDIT_ATTRIBUTES5": {
+                        "label": "Edit Attributes"
+                    },
+                    "FORMULA30": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "TO_MEASURE0": {
+                        "label": "To Number"
+                    },
+                    "FORMULA31": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "DROP_FIELDS3": {
+                        "label": "Drop Columns"
+                    },
+                    "EDIT_ATTRIBUTES6": {
+                        "label": "Edit Attributes"
+                    },
+                    "FORMULA34": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "EDIT_ATTRIBUTES7": {
+                        "label": "Edit Attributes"
+                    },
+                    "EDIT_ATTRIBUTES8": {
+                        "label": "Edit Attributes"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA15",
+                        "target": "FORMULA16"
+                    },
+                    {
+                        "source": "FORMULA16",
+                        "target": "EDIT_ATTRIBUTES5"
+                    },
+                    {
+                        "source": "FORMULA12",
+                        "target": "FORMULA15"
+                    },
+                    {
+                        "source": "EDIT_ATTRIBUTES5",
+                        "target": "FORMULA30"
+                    },
+                    {
+                        "source": "FORMULA30",
+                        "target": "TO_MEASURE0"
+                    },
+                    {
+                        "source": "TO_MEASURE0",
+                        "target": "FORMULA31"
+                    },
+                    {
+                        "source": "FORMULA31",
+                        "target": "DROP_FIELDS3"
+                    },
+                    {
+                        "source": "DROP_FIELDS3",
+                        "target": "EDIT_ATTRIBUTES6"
+                    },
+                    {
+                        "source": "EDIT_ATTRIBUTES6",
+                        "target": "FORMULA34"
+                    },
+                    {
+                        "source": "FORMULA34",
+                        "target": "EDIT_ATTRIBUTES7"
+                    },
+                    {
+                        "source": "EDIT_ATTRIBUTES7",
+                        "target": "EDIT_ATTRIBUTES8"
+                    }
+                ]
+            },
+            "FILTER0": {
+                "label": "Filter Year-WeekNumber Rows",
+                "description": "Removes rows where Year-WeekNumber is null.",
+                "type": "FILTER",
+                "top": 392.2,
+                "left": 672.4
+            },
+            "TRANSFORM10": {
+                "label": "Edit Attributes",
+                "description": "Changes the label and API name of the data.",
+                "type": "TRANSFORM",
+                "top": 392.2,
+                "left": 1372.1,
+                "graph": {
+                    "EDIT_ATTRIBUTES9": {
+                        "label": "Edit Attributes"
+                    }
+                },
+                "connectors": []
+            },
+            "JOIN3": {
+                "label": "Join Weekly Calendar",
+                "description": "Joins forecasted baseline sales units with the Calendar Year-WeekNumber.",
+                "type": "JOIN",
+                "top": 392.1,
+                "left": 392.2
+            },
+            "TRANSFORM9": {
+                "label": "Create Unique Calendar Identifier",
+                "description": "Creates an identifier based on the year, month, week of month in the calendar.",
+                "type": "TRANSFORM",
+                "top": 532,
+                "left": 252.10000000000002,
+                "graph": {
+                    "FORMULA27": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA29": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA32": {
+                        "parameters": {
+                            "type": "BASE_FORMULA_UI"
+                        },
+                        "label": "Formula"
+                    },
+                    "FORMULA33": {
+                        "label": "Formula"
+                    }
+                },
+                "connectors": [
+                    {
+                        "source": "FORMULA29",
+                        "target": "FORMULA32"
+                    },
+                    {
+                        "source": "FORMULA33",
+                        "target": "FORMULA27"
+                    },
+                    {
+                        "source": "FORMULA32",
+                        "target": "FORMULA33"
+                    }
+                ]
+            }
+        },
+        "connectors": [
+            {
+                "source": "FILTER0",
+                "target": "JOIN1"
+            },
+            {
+                "source": "TRANSFORM0",
+                "target": "AGGREGATE0"
+            },
+            {
+                "source": "AGGREGATE0",
+                "target": "TRANSFORM1"
+            },
+            {
+                "source": "TRANSFORM7",
+                "target": "JOIN3"
+            },
+            {
+                "source": "TRANSFORM9",
+                "target": "JOIN3"
+            },
+            {
+                "source": "JOIN1",
+                "target": "TRANSFORM10"
+            },
+            {
+                "source": "LOAD_DATASET2",
+                "target": "TRANSFORM9"
+            },
+            {
+                "source": "JOIN3",
+                "target": "TRANSFORM6"
+            },
+            {
+                "source": "TRANSFORM6",
+                "target": "FILTER0"
+            },
+            {
+                "source": "FILTER0",
+                "target": "TRANSFORM0"
+            },
+            {
+                "source": "LOAD_DATASET3",
+                "target": "TRANSFORM7"
+            },
+            {
+                "source": "TRANSFORM1",
+                "target": "JOIN1"
+            },
+            {
+                "source": "TRANSFORM10",
+                "target": "OUTPUT1"
+            }
+        ],
+        "hiddenColumns": []
+    }
+}

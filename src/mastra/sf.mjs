@@ -8,7 +8,7 @@
 //
 // Metadata ops need a DX project on disk; we lazily create a scratch one under
 // .sfdx-work/ and reuse it. All shell calls are promise-wrapped with captured
-// stdout/stderr so tools can surface clean errors to Claude.
+// stdout/stderr so tools can surface clean errors to the agent.
 // ---------------------------------------------------------------------------
 
 import { execFile } from "node:child_process";
@@ -29,8 +29,11 @@ function run(cmd, args, opts = {}) {
   return new Promise((resolve, reject) => {
     execFile(cmd, args, { maxBuffer: 64 * 1024 * 1024, cwd: opts.cwd, env: process.env }, (err, stdout, stderr) => {
       if (err) {
+        // Surface the full stdout/stderr in the error so callers can see API response bodies.
+        const detail = [stdout, stderr].filter(Boolean).join("\n").trim();
         err.stdout = stdout;
         err.stderr = stderr;
+        err.message = `${err.message}${detail ? `\n--- CLI output ---\n${detail}` : ""}`;
         return reject(err);
       }
       resolve({ stdout, stderr });
@@ -95,6 +98,12 @@ export async function sfRestSend(method, path, body) {
 
 /** Create a new recipe. Returns the created recipe (with id + targetDataflowId). */
 export async function waveCreateRecipe(name, label, definitionObj, format = "R3") {
+  if (!definitionObj || typeof definitionObj !== "object") {
+    throw new Error(`waveCreateRecipe: recipeDefinition must be a plain object, got ${typeof definitionObj}. Do not pass a JSON string.`);
+  }
+  if (!definitionObj.nodes || !definitionObj.ui) {
+    throw new Error(`waveCreateRecipe: recipeDefinition is missing required fields. Must have: nodes, ui, version, runMode. Got keys: ${Object.keys(definitionObj).join(", ")}`);
+  }
   return sfRestSend("POST", "/wave/recipes", { name, label, format, recipeDefinition: definitionObj });
 }
 
@@ -179,23 +188,42 @@ export async function checkIntegrationUserFieldAccess(objectApi, fields) {
   );
   const integrationUserId = users[0]?.Id || null;
 
-  // 2. Pull every FieldPermissions row for this object that the user gets,
-  //    via their profile's PermissionSet or any assigned permission set.
-  //    (Every profile has an implicit PermissionSet; assignments cover both.)
-  let granted = new Set();
+  // 2. Pull explicit FieldPermissions grants (covers custom fields __c).
+  //    Standard fields often have NO FieldPermissions row — they're readable by
+  //    default via the profile. We must NOT treat absence-of-row as blocked.
+  let explicitlyGranted = new Set();
   if (integrationUserId) {
     const esc = String(objectApi).replace(/'/g, "\\'");
     const rows = await sfSoql(
       `SELECT Field FROM FieldPermissions WHERE SobjectType='${esc}' AND PermissionsRead=true ` +
       `AND ParentId IN (SELECT PermissionSetId FROM PermissionSetAssignment WHERE AssigneeId='${integrationUserId}')`
     );
-    granted = new Set(rows.map((r) => r.Field)); // e.g. "Apartment__c.Rent__c"
+    explicitlyGranted = new Set(rows.map((r) => r.Field));
   }
 
-  const results = fields.map((f) => {
+  // 3. For any field NOT in explicitlyGranted, test access with a live SOQL
+  //    query — if it returns without error the field is readable regardless of
+  //    whether a FieldPermissions row exists (standard fields work this way).
+  const results = [];
+  for (const f of fields) {
     const full = f.includes(".") ? f : `${objectApi}.${f}`;
-    return { field: full, readable: granted.has(full), grantedBy: granted.has(full) ? "assigned" : "" };
-  });
+    const fieldOnly = full.includes(".") ? full.split(".")[1] : full;
+
+    if (explicitlyGranted.has(full)) {
+      results.push({ field: full, readable: true, grantedBy: "permission-set" });
+      continue;
+    }
+
+    // SOQL probe — query 1 row selecting only this field.
+    // If it succeeds → readable. If it throws → blocked.
+    try {
+      await sfSoql(`SELECT ${fieldOnly} FROM ${objectApi} LIMIT 1`);
+      results.push({ field: full, readable: true, grantedBy: "profile-default" });
+    } catch {
+      results.push({ field: full, readable: false, grantedBy: "" });
+    }
+  }
+
   return { integrationUserId, results };
 }
 
@@ -363,22 +391,56 @@ export async function checkReplicationStatus(objectNames) {
     (c) => c.connectorType === "SfdcLocal" || c.name === "SFDC_LOCAL"
   );
   if (!local) {
-    return { connectorId: null, results: objectNames.map((o) => ({ object: o, replicated: false })), unreplicated: objectNames };
+    return { connectorId: null, results: objectNames.map((o) => ({ object: o, replicated: false, dataPresent: false })), unreplicated: objectNames, staleData: [] };
   }
+
+  // Pull recent datasync jobs so we can tell "enabled" apart from "data actually synced".
+  // The `replicated` flag only means replication is ENABLED — it can be true while the
+  // materialized data snapshot is stale/absent, in which case a recipe run fails with
+  // "Replicated dataset was not found". A completed datasync job is the real proof.
+  let syncByObject = {};
+  try {
+    const jobs = await sfRestGet("/wave/dataflowjobs?pageSize=100");
+    const list = jobs.dataflowjobs || jobs.dataflowJobs || [];
+    for (const j of list) {
+      if ((j.jobType || "") !== "datasync") continue;
+      // label looks like "Opportunity (Replication)" — extract the object name
+      const label = String(j.label || "");
+      const m = label.match(/^(\w+)\s*\(Replication\)/i) || label.match(/^(\w+)/);
+      const obj = m ? m[1] : null;
+      if (!obj) continue;
+      // keep the most recent job per object (list is newest-first)
+      if (!syncByObject[obj]) syncByObject[obj] = { status: j.status, startDate: j.startDate };
+    }
+  } catch { /* job history unavailable — fall back to flag only */ }
+
   const results = [];
   const unreplicated = [];
+  const staleData = [];
   for (const obj of objectNames) {
     try {
       const so = await sfRestGet(`/wave/dataConnectors/${local.id}/sourceObjects/${obj}`);
-      const rep = so.replicated === true;
-      results.push({ object: obj, replicated: rep });
-      if (!rep) unreplicated.push(obj);
+      const enabled = so.replicated === true;
+      const sync = syncByObject[obj];
+      // dataPresent = a datasync job for this object completed successfully.
+      // If we have no job record, we can't confirm — mark unknown (null) rather than false.
+      const dataPresent = sync ? sync.status === "Success" : null;
+      results.push({
+        object: obj,
+        replicated: enabled,           // enabled/configured
+        dataPresent,                   // true=synced, false=last sync failed, null=no job record found
+        lastSyncStatus: sync?.status || "unknown",
+        lastSyncDate: sync?.startDate || null,
+      });
+      if (!enabled) unreplicated.push(obj);
+      // Enabled but last sync did not succeed → data is stale; recipe run will fail.
+      if (enabled && dataPresent === false) staleData.push(obj);
     } catch {
-      results.push({ object: obj, replicated: false });
+      results.push({ object: obj, replicated: false, dataPresent: false, lastSyncStatus: "unknown", lastSyncDate: null });
       unreplicated.push(obj);
     }
   }
-  return { connectorId: local.id, results, unreplicated };
+  return { connectorId: local.id, results, unreplicated, staleData };
 }
 
 function tail(s, n = 1200) {

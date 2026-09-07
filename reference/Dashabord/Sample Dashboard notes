@@ -1,0 +1,395 @@
+# Sample Dashboard — Annotated Reference
+
+These notes explain the patterns found in the verified production dashboards
+(Promotion_Tactic_Accrual_Summary.json, Promotion_Tactic_Accrual_Dashboard.json,
+Accrued_Month_End_Report.json). Use these patterns when authoring dashboards for
+orgs that use Data Cloud datasets or aggregateflex-style steps.
+
+---
+
+## Key differences from storm-org style dashboards
+
+| Thing | storm-org style | Standard production style |
+|---|---|---|
+| Step type | `saql` | `aggregateflex` (compact form 2.0) |
+| Query format | SAQL string in `query` field | Structured `query.sources[]` array |
+| Dataset reference | `datasets:[{id, name, url}]` | `cdpObjects:["datasetApiName"]` + `datasets:[]` |
+| Data source | CRMA datasets | Data Cloud (DLM) objects |
+| numColumns | 49 (storm anomaly) | **12** (real-world default) |
+| text widget body | plain `text` string | `richTextContent` array |
+
+---
+
+## gridLayout — numColumns is 12
+
+Production CRMA dashboards use `numColumns: 12`. This is the CRMA canvas default.
+Column positions (0–11) and colspans must add up within 12.
+
+```json
+"gridLayouts": [{
+  "name": "Default",
+  "numColumns": 12,
+  "rowHeight": "normal",
+  "style": {
+    "backgroundColor": "#F2F6FA",
+    "cellSpacingX": 8,
+    "cellSpacingY": 8,
+    "gutterColor": "#C5D3E0",
+    "fit": "original",
+    "alignmentX": "left",
+    "alignmentY": "top"
+  },
+  "pages": [{
+    "label": "Untitled",
+    "name": "<uuid>",
+    "navigationHidden": false,
+    "widgets": [
+      { "name": "chart_1",  "row": 1, "column": 0, "rowspan": 8, "colspan": 4,
+        "widgetStyle": { "borderEdges": [] } },
+      { "name": "table_1",  "row": 1, "column": 4, "rowspan": 8, "colspan": 8,
+        "widgetStyle": { "borderEdges": [] } },
+      { "name": "filterpanel_1", "row": 0, "column": 0, "rowspan": 1, "colspan": 2,
+        "widgetStyle": {
+          "backgroundColor": "#FFFFFF", "borderColor": "#747474",
+          "borderEdges": ["all"], "borderRadius": 4, "borderWidth": 1
+        }}
+    ]
+  }],
+  "version": 1,
+  "selectors": []
+}]
+```
+
+---
+
+## aggregateflex step — compact form 2.0
+
+This is the step type CRMA generates when building via the canvas drag-and-drop.
+Use this for all standard aggregate queries.
+
+### Simple single-source step (one dataset, one measure)
+
+```json
+"lens_2": {
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [],
+  "cdpObjects": ["accrualoutput_decorated__dlm"],
+  "dataspace": "default",
+  "receiveFacetSource": { "mode": "all", "steps": [] },
+  "query": {
+    "limit": 250,
+    "sources": [{
+      "name": "accrualoutput_decorated__dlm",
+      "groups": ["ProductLabel__c"],
+      "columns": [
+        { "field": ["sum", "OpenAccrual__c"], "name": "B" }
+      ],
+      "filters": [],
+      "joins": []
+    }],
+    "orders": [{ "name": "ProductLabel__c", "ascending": true, "filters": [] }],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  },
+  "visualizationParameters": {
+    "parameters": { <copy widget parameters here> },
+    "type": "chart"
+  }
+}
+```
+
+**columnMap wiring:** `sources[0].groups` → `columnMap.dimensionAxis`, `sources[0].columns[].name` → `columnMap.plots`
+So for the above: `{ "trellis": [], "dimensionAxis": ["ProductLabel__c"], "plots": ["B"] }`
+
+### Multi-source step (multiple measures with different filters)
+
+Used when you need measures from the same dataset but with different date/condition filters
+(e.g. opening balance uses last 18 months, accrued uses current month):
+
+```json
+"lens_1": {
+  "type": "aggregateflex",
+  "broadcastFacet": true,
+  "selectMode": "single",
+  "useGlobal": true,
+  "isGlobal": false,
+  "datasets": [],
+  "cdpObjects": ["accrualoutput_decorated__dlm"],
+  "dataspace": "default",
+  "receiveFacetSource": { "mode": "all", "steps": [] },
+  "query": {
+    "limit": 250,
+    "sources": [
+      {
+        "name": "accrualoutput_decorated__dlm",
+        "groups": ["AccountLabel__c", "PromotionLabel__c"],
+        "columns": [{ "field": ["sum", "PaidAmount__c"], "name": "Paid" }],
+        "filters": [],
+        "joins": []
+      },
+      {
+        "name": "accrualoutput_decorated__dlm",
+        "groups": ["AccountLabel__c", "PromotionLabel__c"],
+        "columns": [{ "field": ["sum", "OpenAccrual__c"], "name": "Opening_Balance" }],
+        "filters": [
+          ["EffectiveDate__c", [["month", -18], ["month", -1]], "between"]
+        ],
+        "joins": []
+      },
+      {
+        "name": "accrualoutput_decorated__dlm",
+        "groups": ["AccountLabel__c", "PromotionLabel__c"],
+        "columns": [{ "field": ["sum", "Value__c"], "name": "Accrued" }],
+        "filters": [
+          ["EffectiveDate__c", [["month", 0], ["day", 0]], "between"]
+        ],
+        "joins": []
+      },
+      {
+        "groups": [],
+        "joins": [],
+        "columns": [
+          { "formula": "coalesce(Opening_Balance,0) + coalesce(Accrued,0) - coalesce(Paid,0)", "name": "Closing_Balance" },
+          { "formula": "coalesce(Closing_Balance,0) - coalesce(Opening_Balance,0)", "name": "Change_In_Month" }
+        ],
+        "filters": []
+      }
+    ],
+    "orders": [{ "name": "AccountLabel__c", "ascending": true, "filters": [] }],
+    "aggregateFilters": [],
+    "columnGroups": [],
+    "columnTotals": [],
+    "rowTotals": [],
+    "sourceFilters": {}
+  }
+}
+```
+
+Note: the last source has no `name` — this is a formula-only source that computes
+derived columns from the previously named measure aliases.
+
+---
+
+## chart widget — hbar (verified from production org)
+
+```json
+"chart_1": {
+  "type": "chart",
+  "parameters": {
+    "visualizationType": "hbar",
+    "step": "lens_2",
+    "columnMap": {
+      "trellis": [],
+      "dimensionAxis": ["ProductLabel__c"],
+      "plots": ["B"]
+    },
+    "autoFitMode": "keepLabels",
+    "axisMode": "sync",
+    "valueType": "compactNumber",
+    "compactDecimalDigits": -1,
+    "applyConditionalFormatting": true,
+    "showActionMenu": true,
+    "exploreLink": true,
+    "binValues": false,
+    "theme": "wave",
+    "title": {
+      "fontSize": 14,
+      "subtitleFontSize": 11,
+      "label": "",
+      "align": "center",
+      "subtitleLabel": ""
+    },
+    "legend": {
+      "descOrder": false,
+      "showHeader": true,
+      "show": true,
+      "customSize": "auto",
+      "position": "right-top",
+      "inside": false
+    },
+    "trellis": {
+      "enable": false,
+      "type": "x",
+      "chartsPerLine": 4,
+      "flipLabels": false,
+      "showGridLines": true,
+      "size": [100, 100]
+    },
+    "dimensionAxis": {
+      "showTitle": true,
+      "showAxis": true,
+      "title": "",
+      "customSize": "auto",
+      "icons": { "useIcons": false, "iconProps": { "fit": "cover", "column": "", "type": "round" } }
+    },
+    "measureAxis1": {
+      "sqrtScale": false,
+      "showTitle": true,
+      "showAxis": true,
+      "title": "",
+      "customDomain": { "showDomain": false }
+    },
+    "measureAxis2": {
+      "sqrtScale": false,
+      "showTitle": true,
+      "showAxis": true,
+      "title": "",
+      "customDomain": { "showDomain": false }
+    },
+    "tooltip": {
+      "content": {
+        "legend": {
+          "showBinLabel": true,
+          "showNullValues": true,
+          "customizeLegend": false,
+          "showPercentage": true,
+          "showDimensions": true,
+          "showMeasures": true,
+          "measures": [],
+          "dimensions": []
+        }
+      }
+    },
+    "bins": {
+      "breakpoints": { "high": 100, "low": 0 },
+      "bands": {
+        "high": { "color": "#008000", "label": "" },
+        "low":  { "color": "#B22222", "label": "" },
+        "medium": { "color": "#ffa500", "label": "" }
+      }
+    }
+  }
+}
+```
+
+---
+
+## table widget — verified from production org
+
+```json
+"table_1": {
+  "type": "table",
+  "parameters": {
+    "step": "lens_1",
+    "columns": ["CategoryLabel__c", "BrandLabel__c", "ProductLabel__c", "B", "C", "D"],
+    "borderColor": "#e0e5ee",
+    "borderWidth": 1,
+    "cell": {
+      "backgroundColor": "#ffffff",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "textWrap": true
+    },
+    "header": {
+      "alignment": "left",
+      "backgroundColor": "#f4f6f9",
+      "fontColor": "#16325c",
+      "fontSize": 12,
+      "italic": false,
+      "textWrap": true,
+      "underline": false
+    },
+    "innerMajorBorderColor": "#a8b7c7",
+    "innerMinorBorderColor": "#e0e5ee",
+    "maxColumnWidth": 300,
+    "minColumnWidth": 40,
+    "mode": "variable",
+    "numberOfLines": 1,
+    "pivoted": false,
+    "showActionMenu": true,
+    "showRowIndexColumn": false,
+    "totals": true,
+    "verticalPadding": 8,
+    "interactions": [],
+    "customBulkActions": [],
+    "columnProperties": {},
+    "exploreLink": true
+  }
+}
+```
+
+The `columns` array lists the field/alias names to display, in order.
+These must match either raw dataset field names or the `name` aliases from the step's `sources[].columns`.
+
+---
+
+## filterpanel widget — verified from production org
+
+For Data Cloud (DLM) datasets, use `cdpObject` + `dataspace`:
+
+```json
+"filterpanel_1": {
+  "type": "filterpanel",
+  "parameters": {
+    "showAllFilters": false,
+    "filterItemOptions": {
+      "propertyColor": "#54698D",
+      "valueColor": "#16325C"
+    },
+    "filters": [
+      {
+        "field": "CategoryLabel__c",
+        "cdpObject": "accrualoutput_decorated__dlm",
+        "dataspace": "default"
+      }
+    ]
+  }
+}
+```
+
+For standard CRMA datasets (non-Data Cloud), use `dataset` instead of `cdpObject`:
+
+```json
+"filters": [
+  { "field": "StageName", "dataset": "opportunity" }
+]
+```
+
+---
+
+## text widget — verified richTextContent shape
+
+```json
+"text_1": {
+  "type": "text",
+  "parameters": {
+    "showActionMenu": true,
+    "interactions": [],
+    "content": {
+      "richTextContent": [
+        {
+          "insert": "Note: This dashboard requires a successful accrual calculation.",
+          "attributes": { "bold": true, "size": "16px", "color": "#e74340" }
+        },
+        {
+          "insert": "\n",
+          "attributes": { "align": "left" }
+        }
+      ]
+    }
+  }
+}
+```
+
+NEVER use `"text": "..."` — CRMA requires the `richTextContent` array format.
+Each segment is `{ "insert": "text", "attributes": { style props } }`.
+Always end with a newline segment `{ "insert": "\n", "attributes": { "align": "left" } }`.
+
+---
+
+## cdpObjects vs datasets — when to use which
+
+| Dataset type | Step field to use | Example |
+|---|---|---|
+| Data Cloud (DLM) object | `cdpObjects: ["name__dlm"]` + `datasets: []` + `dataspace: "default"` | `"cdpObjects": ["accrualoutput_decorated__dlm"]` |
+| Standard CRMA dataset | `datasets: [{ "id": "...", "name": "...", "url": "..." }]` + no cdpObjects | `"datasets": [{ "id": "0FbB...", "name": "opportunity" }]` |
+
+If you don't know which type the org uses, call get-dataset-fields or list-dashboards and check
+an existing dashboard's step definition.

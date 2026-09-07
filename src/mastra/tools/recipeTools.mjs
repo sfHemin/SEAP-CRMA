@@ -428,33 +428,47 @@ export const runSoql = createTool({
 export const checkReplication = createTool({
   id: "check-replication",
   description:
-    "Check whether source objects have replication enabled on the SFDC_LOCAL connector. " +
-    "A recipe CANNOT run until its source objects are replicated. Call this BEFORE run-recipe " +
-    "on any custom object. If objects are unreplicated, tell the user the Data Manager steps " +
-    "to enable it (this cannot be done via API).",
+    "Check whether source objects are replicated on SFDC_LOCAL — BOTH enabled AND data-present. " +
+    "A recipe CANNOT run until its source objects have a COMPLETED data sync. The 'replicated' flag " +
+    "only means replication is ENABLED — it can be true while the data snapshot is stale/absent, which " +
+    "makes a recipe run fail with 'Replicated dataset was not found'. This tool also checks the last " +
+    "datasync job per object: dataPresent=true means a sync succeeded (safe to run), false means the last " +
+    "sync failed (STALE — must re-sync), null means no sync job record was found (unknown — proceed with " +
+    "caution). Call this BEFORE run-recipe. Treat staleData objects as blockers just like unreplicated ones.",
   inputSchema: z.object({
-    objects: z.array(z.string()).describe("Object API names to check, e.g. ['Apartment__c']"),
+    objects: z.array(z.string()).describe("Object API names to check, e.g. ['Opportunity','Account']"),
   }),
   outputSchema: z.object({
     connectorId: z.string().nullable(),
-    results: z.array(z.object({ object: z.string(), replicated: z.boolean() })),
+    results: z.array(z.object({
+      object: z.string(),
+      replicated: z.boolean(),
+      dataPresent: z.boolean().nullable(),
+      lastSyncStatus: z.string().optional(),
+      lastSyncDate: z.string().nullable().optional(),
+    })),
     unreplicated: z.array(z.string()),
+    staleData: z.array(z.string()),
     allReady: z.boolean(),
     fixInstructions: z.string().nullable(),
   }),
   execute: async (context) => {
-    const { connectorId, results, unreplicated } = await checkReplicationStatus(context.objects);
-    const allReady = unreplicated.length === 0;
-    const fixInstructions = allReady
-      ? null
-      : `The following objects need replication enabled before the recipe can run: ${unreplicated.join(", ")}.\n` +
-        `Steps:\n` +
-        `1. Open Analytics Studio → Data Manager → Connect tab\n` +
-        `2. Click the SFDC Local connection\n` +
-        `3. Find each object listed above and toggle it ON\n` +
-        `4. Save and run the connection sync\n` +
-        `5. After sync completes, re-run the recipe.`;
-    return { connectorId, results, unreplicated, allReady, fixInstructions };
+    const { connectorId, results, unreplicated, staleData } = await checkReplicationStatus(context.objects);
+    const allReady = unreplicated.length === 0 && staleData.length === 0;
+    let fixInstructions = null;
+    if (!allReady) {
+      const parts = [];
+      if (unreplicated.length) parts.push(`NOT ENABLED: ${unreplicated.join(", ")} — replication must be turned on.`);
+      if (staleData.length) parts.push(`STALE DATA: ${staleData.join(", ")} — replication is enabled but the last data sync did NOT succeed. A recipe loading these WILL fail with "Replicated dataset was not found" even though the flag says replicated=true.`);
+      fixInstructions =
+        parts.join("\n") + `\n\n` +
+        `Fix in Analytics Studio → Data Manager → Data Sync (Connect) tab:\n` +
+        `1. Click the SFDC Local connection\n` +
+        `2. For each object above: ensure it's toggled ON, then click Run Data Sync (or the ⋮ → Run) for that object\n` +
+        `3. Wait for the datasync job to reach Success\n` +
+        `4. Re-run the SAME recipe unchanged — do NOT edit the recipe JSON; this is an org-state issue, not a definition bug.`;
+    }
+    return { connectorId, results, unreplicated, staleData, allReady, fixInstructions };
   },
 });
 

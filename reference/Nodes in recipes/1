@@ -1,0 +1,268 @@
+Nodes for Data Prep Recipes
+In CRM Analytics, Data Prep provides nodes that allow you to bring in data, transform it, and write the results to a target. For example, you can use a Join node to add columns from a related object to a recipe. You add nodes in the Graph area of Data Prep. You can string together multiple nodes to sequentially change the flow of the data.
+
+
+A recipe can have multiple Input, Append, Aggregate, Filter, Join, Transform, Update, and Output nodes.
+
+The large recipe is a lot easier to read because transformations don't appear in the graph.
+Input Node: Add Data to the Recipe
+Although you choose input data when you create a recipe, if needed, you can add more data to an existing recipe. In CRM Analytics, Data Prep shows a separate Input node for each set of data that you add to the recipe.
+Aggregate Node
+Use an Aggregate node in CRM Analytics to roll up data. You can aggregate to a higher level of granularity or roll up hierarchical data.
+Append Node: Stack Rows from Different Sets of Data
+Use an Append node in a Data Prep recipe in CRM Analytics to stack rows from multiple sets of input data into one dataset. For example, use this node to combine sales records from two different Salesforce orgs, each containing sales transactions from a specific region.
+Filter Node: Filter Rows
+In CRM Analytics, use a Filter node to remove rows that you don’t need in your target. For example, you can filter case records to focus on escalated cases only. Filter values are case-sensitive. Filter nodes next to a direct data input node speed up recipe runs by reducing the number of records pulled into the recipe.
+Join Node: Add Related Columns of Data to the Recipe
+Use a join node in CRM Analytics to add columns of data from related objects to existing data in a recipe. When working with CRM Analytics datasets and external objects, add a join node on the recipe canvas. When working with Salesforce objects, you can either create a join on the recipe canvas or join the data when you first create your dataset on the Add Input Data screen.
+Transform Node: Transform the Data Before Loading It Into a Target
+Use a Transform node in CRM Analytics to manipulate data based on the transformations added to the node. You can add one or more transformations to each Transform node. For example, you can add transformations to concatenate two columns, standardize the formats in a date column, and detect the sentiments of comments in a Feedback column. Each transformation modifies the data in a unique way. To manipulate data at multiple stages of a recipe, add a separate Transform node at each stage.
+Update Node: Swap Column Values
+In CRM Analytics, you can swap column values with data from another data source when key pairs match with the Update node. For example, to update selected account names after a series of recent acquisitions and mergers, replace the name from an uploaded spreadsheet based on matching account IDs. Processing time is minimized by only changing column values with matching key pairs, instead of every value in the column.
+Output Node: Write Recipe Results to a Dataset or External System
+In CRM Analytics, use Output nodes with Data Prep recipes to write recipe results to a target, such as a dataset, staged data, .csv, a Data 360 data lake object, or remote location like Amazon S3. A recipe can have more than one Output node. If the recipe writes to a dataset, you can change the API name and label of the dataset in the Output node. If an existing dataset uses the specified API name, the recipe overwrites the existing dataset when it runs.
+Input Node: Add Data to the Recipe
+Although you choose input data when you create a recipe, if needed, you can add more data to an existing recipe. In CRM Analytics, Data Prep shows a separate Input node for each set of data that you add to the recipe.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+In the recipe, select the Add Data button (Add Data button).
+Select the input data (1) and then choose which columns to include (2). You can select a CRM Analytics dataset, external connected objects, or Salesforce objects as the input data.
+Direct data refers to all Salesforce objects that aren’t synced. If you bypass the sync step, the recipe can still access the data directly from the Salesforce object. All Salesforce objects and fields that aren’t synced are available as direct data. A field added as direct data uses its API name as its label. To use the defined label, add the field to sync. You can’t use a trended dataset as input data for a recipe.
+
+By default, the Custom Columns option is selected from the dropdown next to the list of column names. Custom Columns allows you to manually select which columns to include in your recipe. If you select multiple sets of input data, select each row, one at a time, to choose its columns. The Selected Columns area shows columns for the selected row only. For instances when you want to automatically update every available column, use the All Columns option.
+
+Select the data on the left and then choose the columns you want to include in the recipe on the right.
+Click Next.
+Data Prep adds a separate Input node to the graph for each input data selection. If an input source has more than 100 columns, the first 100 columns are automatically shown in preview by default. If needed, you can show more columns in preview.
+
+Save the recipe.
+When you add an Input node to a Data Prep recipe, all columns after the first 100 are hidden from preview, by default. If needed, you can unhide them to preview them.
+
+Data Preview Sampling
+In CRM Analytics, use data preview sampling to see a more accurate picture of your data at each node in Preview. By widening the sample size and selecting the mode to arrange your data, data sampling helps prevent working without preview data. Select Filtered Rows to isolate specific values. Select All Column Values to populate a sample when you need to see all column values, such as when creating a bucket.
+Pull Data Directly into Recipes
+Direct data for recipes in CRM Analytics lets your recipes access data in Salesforce objects that you don’t sync. When you use direct data, the latest data is pulled directly from the Salesforce object with each recipe run, bypassing the data sync step. Direct data is designed to access a small number of objects instead of optimizing for performance as is the case with data sync connected objects. After you decide to use direct data, you can use it in recipes, add filtering, and switch the data to be connected instead.
+Preserve Original Currency Values for Salesforce Direct Data
+By default, all currency fields are converted to the default org currency on all data syncs. With Salesforce direct data objects, use the preserveCurrencyFields in your recipe JSON to specify which fields you want to preserve the original currency value for on data sync. This process allows you to use unconverted currencies in some workflows and converted currencies in others, even within the same Salesforce direct data object.
+
+
+Aggregate Node
+Use an Aggregate node in CRM Analytics to roll up data. You can aggregate to a higher level of granularity or roll up hierarchical data.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+Aggregate Node: Roll Up Data to a Higher Level
+Use an Aggregate node to roll up data to a higher granularity in CRM Analytics. You can aggregate using: unique, sum, average, count, maximum, and minimum. You can group by any dimension or date column. You can also pivot dimensions as columns. For example, you can group opportunities by account to get account-level details, like total opportunity amount, average number of cases, and the average days to close an opportunity for each account. You can then pivot on account type to analyze each combination of account and account type.
+Aggregate Node: Hierarchical Aggregation
+Use Hierarchical Aggregation in CRM Analytics to sum measures across multilevel data. For example, you can roll up revenues, assets, or liabilities for companies and their subsidiaries. Or, you can roll salesperson data up the management chain to see aggregates by team, region, area, and beyond. Hierarchical Aggregation requires rows with an ID and a parent ID. Many rows can have the same parent ID, or the parent ID can be empty. Some rows can even share an ID, such as a record with multiple parents. You can also use the optional roll up percentage to apply percentage splits to allocate portions to different parents, such as commission among members of the sales team.
+
+Aggregate Node: Hierarchical Aggregation
+Use Hierarchical Aggregation in CRM Analytics to sum measures across multilevel data. For example, you can roll up revenues, assets, or liabilities for companies and their subsidiaries. Or, you can roll salesperson data up the management chain to see aggregates by team, region, area, and beyond. Hierarchical Aggregation requires rows with an ID and a parent ID. Many rows can have the same parent ID, or the parent ID can be empty. Some rows can even share an ID, such as a record with multiple parents. You can also use the optional roll up percentage to apply percentage splits to allocate portions to different parents, such as commission among members of the sales team.
+
+
+Note
+Note
+If the data has duplicate rows with the same record ID and parent ID, you must clean the data. Run a standard aggregation before running the hierarchical aggregation.
+
+For the same record, the amount should be consistent for all parents.
+
+The Roll-up percentage should sum up <= 1.
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+In a Data Prep recipe that already has at least one Input node, select the Add Node button (Add Node button) between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node dialog box, select Aggregate.
+The Add Node modal shows all possible nodes that you can add, including the Aggregate node.
+In the Aggregate settings panel, turn on Hierarchical Aggregation.
+Select Hierarchical Aggregation in the Aggregate node.
+Add at least one Aggregate, such as the sum of a measure or count of rows.
+The Add Node modal shows all possible nodes that you can add, including the Aggregate node.
+Select the Record ID Column. The record ID can be any dimension in the dataset that defines the row, such as salesperson or account name.
+Select a record ID column from the list of dimensions in the dataset.
+Specify the Parent ID Column. The parent ID identifies which record each row rolls up to. This can be any dimension in the dataset that has not been selected as the record ID, such as the manager or parent account. Not every record needs to have a parent, for instance if it’s at the top of a hierarchy.
+Select a parent ID column from the list of dimensions in the dataset.
+Note
+Note Null values are accepted in the parent ID column.
+Optionally, select a Roll-Up Percentage Column to apply a percentage split. The aggregated value is multiplied by the number in this column. For example, your records have more than one parent, and you want to roll them up differently based on the parent.
+Select a Roll-Up Percentage column from the list of measures in the dataset.
+To add the Hierarchical Aggregation to the recipe, click Apply.
+Completed Hierarchical Aggregation setup, showing Apply button.
+Save the recipe.
+With hierarchical aggregation you can automatically sum values at each level of the relationship instead of calculating values manually.
+Note
+Note In the following examples, Amount is the aggregated column.
+Example 1: Simple hierarchy such as region and country.
+
+This example shows:
+
+Multiple records with the same parent
+Mix of records with and without a parent
+A record outside of the hierarchy
+Parent with individual value
+Diagram showing hierarchy example one.
+Without Hierarchical Aggregation	 	With Hierarchical Aggregation
+Record ID	Parent ID	Amount	 	Record ID	Amount
+A01	 	100	A01	600
+A02	A01	200	A02	200
+A03	A01	300	A03	300
+A04	 	400	A04	400
+Example 2 Intermediate hierarchy such as an org chart.
+
+This example shows:
+
+Multiple records with the same parent
+Mix of records with and without a parent
+A record outside of the hierarchy
+Parent with individual value
+Parent without individual value
+Multiple hierarchies
+Diagram showing hierarchy example two.
+Without Hierarchical Aggregation	 	With Hierarchical Aggregation
+Record ID	Parent ID	Amount	 	Record ID	Amount
+A01	 	100	A01	1200
+A02	A01	200	A02	800
+A03	A01	300	A03	300
+A04	A05	400	A04	400
+A06	A02	600	A05	400
+A07	 	700	A06	600
+ 	 	 	A07	700
+Example 3 Complex hierarchy such as subsidiary ownership with split percentages.
+
+This example shows:
+
+Multiple records with the same parent
+Mix of records with and without a parent
+A record outside of the hierarchy
+Parent with individual value
+Parent without individual value
+Multiple hierarchies
+Records with multiple parents
+Note
+Note A record has a row per each parent.
+Roll-up percentage values (percentage splits)
+Diagram showing hierarchy example three.
+Without Hierarchical Aggregation	 	With Hierarchical Aggregation
+Record ID	Parent ID	Amount	Percentage	 	Record ID	Amount
+A01	 	100	 	A01	1375
+A02	A01	200	1.00	A02	350
+A03	A01	300	0.50	A03	1850
+A03	A10	300	0.50	A04	1290
+A04	A05	400	1.00	A05	1290
+A06	A02	600	0.25	A06	600
+A06	A03	600	0.75	A07	700
+A07	 	700	 	A08	890
+A08	A04	800	1.00	A09	900
+A09	A08	900	0.10	A10	1925
+A10	 	 	 	A11	1100
+A11	A03	 	1.00	 	 
+
+
+Aggregate Node: Roll Up Data to a Higher Level
+Use an Aggregate node to roll up data to a higher granularity in CRM Analytics. You can aggregate using: unique, sum, average, count, maximum, and minimum. You can group by any dimension or date column. You can also pivot dimensions as columns. For example, you can group opportunities by account to get account-level details, like total opportunity amount, average number of cases, and the average days to close an opportunity for each account. You can then pivot on account type to analyze each combination of account and account type.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+In a Data Prep recipe that already has at least one Input node, select the Add Node button (Add Node button) between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node dialog box, select Aggregate.
+The Add Node modal shows all possible nodes that you can add, including the Aggregate node.
+Add at least one aggregate.
+Before you can add a grouping, add an aggregate. You can select one of the following aggregate functions.
+
+Aggregate Function	Description
+Unique	Counts only unique values in the selected column.
+Sum	Calculates the total by adding all values in the selected column.
+Average	Calculates the average value of the selected column.
+Count	Counts all values in the selected column.
+Maximum	Calculates the maximum value of the selected column.
+Minimum	Calculates the minimum value of the selected column.
+Stddevp	Calculates the population standard deviation. Population standard deviation measures the spread of data distribution—the typical distance between each data point and the average.
+Stddev	Calculates the sample standard deviation. Sample standard deviation measures the spread of data distribution for a given sample. Use sample standard deviation to estimate the population standard deviation based on a sample.
+Varp	Calculates the population variance. Population variance indicates how spread out data points are in a specific population.
+Var	Calculates the sample variance. Sample variance indicates how spread out data points are for a given sample. Use sample variance to estimate the population variance based on a sample.
+The aggregate functions appear in the Select Aggregate dialog box.
+To group rows, add one or more dimension or date columns in the Group Rows field.
+For example, you can group by account name.
+
+The Aggregate node calculates the average opportunity amount for each account.
+To pivot dimensions as columns, add up to two dimension columns in the Group Columns field, select the values for each dimension column, and click Apply. For direct datasets and datasets, you can search for all column values. Otherwise, you are limited to preview data. If a value doesn’t appear in the list, adjust your sample size or refine your search. Then, click Add new value and enter the value.
+For example, you can group columns by opportunity type. Each combination of opportunity type and aggregate appears as a separate column.
+
+The Aggregate node calculates the average opportunity amount for each account and pivots the results by opportunity type.
+To add the Aggregate node to the recipe, click Apply.
+Save the recipe.
+Note
+Note Because pivoting increases the number of columns, keep in mind that the Aggregate node can create up to 5,000 columns. If the node exceeds the maximum, you can reduce the number of columns by changing the aggregates or row and column groupings.
+Your values that aren’t picked are automatically included in an Other column when you pivot with the Data Prep aggregate node. For example, you can group columns by opportunity type, select your most important types, and let the rest be grouped as Other.
+
+Append Node: Stack Rows from Different Sets of Data
+Use an Append node in a Data Prep recipe in CRM Analytics to stack rows from multiple sets of input data into one dataset. For example, use this node to combine sales records from two different Salesforce orgs, each containing sales transactions from a specific region.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+Let’s look at an example of how you can use append in a recipe. Imagine you’re a company that uses separate Salesforce orgs for your APAC and Africa sales, but you want to report on worldwide sales. You sync the APAC opportunities to CRM Analytics, add the data to a recipe, then use an Append node to combine it with the Africa sales data. After you match the columns from both sets of input data, both sets of sales records are combined into the same worldwide opportunity dataset.
+
+The recipe appends data from two sources, Opportunities - APAC and Opportunities - Africa, and writes the results to a dataset.
+Tip
+Tip If a recipe column contains unique IDs that identify each row, you must ensure that the appended data doesn't duplicate the IDs. The Append node doesn't remove duplicate records or validate the uniqueness of columns.
+In a Data Prep recipe that already has at least one Input node, select the Add Node button (Add Node button) between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node box, select Append.
+The Add Node modal shows all possible nodes that you can add, including the Append node.
+Select the data to append (1), and then choose which columns to include (2).
+Select the input data and then the corresponding columns to append.
+Click Next.
+Data Prep automatically maps columns from both sets of input data based on matching column names. These mappings are based on API names. You can change the mappings, manually map unmapped columns, or leave columns unmapped. To continuously map all columns as your recipe updates, turn on Map all columns in the node details section. To map all columns that don't have corresponding API names, select Allow schema merge.
+
+Note
+Note Map all columns is available for datasets only. It is not available for direct data, staged, or connected datasets.
+If a column is mapped for one source and not the other, the Append node inserts null values for all source rows to which the column doesn’t apply. For example, the Product ID and Region columns aren’t mapped to Legacy Sales Data source. As a result, the preview shows nulls for these columns for all rows coming from Legacy Sales Data (1). If the reverse is true, and Legacy Sales Data contains rows that aren’t mapped to the recipe columns Product ID and Region, then preview inserts null values in those columns for all rows coming from Legacy Sales Data.
+
+The Legacy Sales Data rows show null values for the Product ID and Region columns.
+Note
+Note If a measure column isn’t mapped to a source and null measure handling isn’t enabled, the Append node inserts zeroes instead of nulls for those source rows.
+To map two columns, enter the column name from the appended rows next to its corresponding recipe column.
+To add a column from the appended rows that doesn’t exist in the recipe, click + (below the mapped columns) and select the column. Leave the recipe column blank.
+Click Apply to add the node to the recipe.
+Save the recipe.
+When you run the recipe, the Append node combines rows from both sets of input data into the same dataset.
+
+
+Filter Node: Filter Rows
+In CRM Analytics, use a Filter node to remove rows that you don’t need in your target. For example, you can filter case records to focus on escalated cases only. Filter values are case-sensitive. Filter nodes next to a direct data input node speed up recipe runs by reducing the number of records pulled into the recipe.
+
+
+User Permissions
+Needed
+To manage and create a recipe:	Edit CRM Analytics Dataflows OR Edit Dataset Recipes
+In the recipe that already has at least one Input node, select the Add Node button (Add Node button) between two nodes or at the end of the recipe. To show the Add Node button between two nodes, hover the cursor on the connecting line.
+In the Add Node dialog box, select Filter.
+The Add Node modal shows all possible nodes that you can add, including the Filter node.
+A filter node adjacent to a direct data input node is marked with a lightning bolt. This direct data filter limits the number of records loaded into the recipe.
+
+The direct data input node is demarcated wtih a lightning bolt.
+Click the + to add a standard filter. A standard filter uses conventional filter operators—equals, does not equal, less than, and so on. For more granularity in your filter options, such as access to string and math functions, select Add Custom Filter Expression from the dropdown next to Filters. Filter values for both options are case-sensitive.
+If you define a filter condition on a dimension column, you can select a filter value from a list of values in your dataset. For direct datasets and datasets, you can search for all values. Otherwise, you are limited to preview data. If a value doesn’t appear in the list, adjust your sample size or refine your search. Then, click Add new value and enter the value.
+
+Highlight Add new value function for filter condition
+Note
+Note Column search results display up to 250 values for direct datasets and 2000 for datasets.
+Click Apply.
+To display the current standard filter logic click Actions button and Add Standard Filter Logic.
+The Add Filter Logic option available after selecting the down arrow on the filter node.
+The default AND logic is shown, and each filter component is assigned a number.
+
+To edit the logic, click the pencil icon (Edit logic button.).
+The Filter node has a pencil icon selectable next to the displayed filter logic.
+Build the filter logic with parenthesis and the AND, OR, and NOT Boolean operators.
+Add boolean operators to the filter logic.
+Click Apply.
+Save the recipe.

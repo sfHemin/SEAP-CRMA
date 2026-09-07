@@ -27,3 +27,10 @@ src/mastra/public/crma-memory.db-wal
 
 # Logs
 *.log
+
+# Runtime scratch — regenerated per session, not source. Never commit.
+# (chat transcript, "what was deployed" ledger, error scratch, session backups)
+session-history.json
+components-built.json
+err.txt
+.session-backup/

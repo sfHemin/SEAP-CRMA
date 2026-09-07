@@ -1,0 +1,1016 @@
+{
+  "conversionDetails": [],
+  "createdBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "/img/userprofile/default_profile_45_v2.png"
+  },
+  "createdDate": "2026-08-02T03:22:29.000Z",
+  "dataflowLastUpdate": "2026-08-02T03:22:29.000Z",
+  "fileUrl": "/services/data/v62.0/wave/recipes/05vId000000CesCIAS/file",
+  "format": "R3",
+  "historiesUrl": "/services/data/v62.0/wave/recipes/05vId000000CesCIAS/histories",
+  "id": "05vId000000CesCIAS",
+  "label": "Segmentation Cluster Analysis: Account Segmentation V1",
+  "lastModifiedBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "/img/userprofile/default_profile_45_v2.png"
+  },
+  "lastModifiedDate": "2026-08-02T03:22:29.000Z",
+  "licenseAttributes": {
+    "type": "einsteinanalytics"
+  },
+  "name": "Segmentation_Cluster_Analysis_Account_Segmentation_V1",
+  "publishingTarget": "Dataset",
+  "recipeDefinition": {
+    "nodes": {
+      "LOAD_DATASET0": {
+        "action": "load",
+        "parameters": {
+          "dataset": {
+            "connectionName": "SFDC_LOCAL",
+            "label": "Opportunity",
+            "sourceObjectName": "Opportunity",
+            "type": "connectedDataset"
+          },
+          "fields": [
+            "Id",
+            "AccountId",
+            "Name",
+            "StageName",
+            "Amount",
+            "CloseDate",
+            "IsClosed",
+            "IsWon",
+            "Type"
+          ],
+          "sampleDetails": {
+            "sortBy": [],
+            "type": "TopN"
+          }
+        },
+        "sources": []
+      },
+      "FILTER0": {
+        "action": "filter",
+        "parameters": {
+          "filterExpressions": [
+            {
+              "field": "IsClosed",
+              "operands": [
+                "true"
+              ],
+              "operator": "EQUAL",
+              "type": "TEXT"
+            },
+            {
+              "field": "Amount",
+              "operands": [
+                "0"
+              ],
+              "operator": "GREATER_THAN",
+              "type": "NUMBER"
+            }
+          ]
+        },
+        "sources": [
+          "LOAD_DATASET0"
+        ]
+      },
+      "EXTRACT1": {
+        "action": "extractGrains",
+        "parameters": {
+          "grainExtractions": []
+        },
+        "sources": [
+          "FILTER0"
+        ]
+      },
+      "AGGREGATE3": {
+        "action": "aggregate",
+        "parameters": {
+          "aggregations": [
+            {
+              "action": "COUNT",
+              "label": "Rows",
+              "name": "COUNT_Rows"
+            },
+            {
+              "action": "AVG",
+              "label": "Average Amount",
+              "name": "AVG_Amount",
+              "source": "Amount"
+            },
+            {
+              "action": "SUM",
+              "label": "Sum of Amount",
+              "name": "SUM_Amount",
+              "source": "Amount"
+            }
+          ],
+          "groupings": [
+            "AccountId"
+          ],
+          "nodeType": "STANDARD",
+          "pivots": []
+        },
+        "sources": [
+          "EXTRACT1"
+        ]
+      },
+      "EXTRACT2": {
+        "action": "extractGrains",
+        "parameters": {
+          "grainExtractions": []
+        },
+        "sources": [
+          "FILTER1"
+        ]
+      },
+      "AGGREGATE5": {
+        "action": "aggregate",
+        "parameters": {
+          "aggregations": [
+            {
+              "action": "COUNT",
+              "label": "Rows",
+              "name": "COUNT_Rows"
+            },
+            {
+              "action": "AVG",
+              "label": "Average Amount",
+              "name": "AVG_Amount",
+              "source": "Amount"
+            },
+            {
+              "action": "SUM",
+              "label": "Sum of Amount",
+              "name": "SUM_Amount",
+              "source": "Amount"
+            }
+          ],
+          "groupings": [
+            "AccountId"
+          ],
+          "nodeType": "STANDARD",
+          "pivots": []
+        },
+        "sources": [
+          "EXTRACT2"
+        ]
+      },
+      "FILTER1": {
+        "action": "filter",
+        "parameters": {
+          "filterExpressions": [
+            {
+              "field": "IsWon",
+              "operands": [
+                "true"
+              ],
+              "operator": "EQUAL",
+              "type": "TEXT"
+            }
+          ]
+        },
+        "sources": [
+          "FILTER0"
+        ]
+      },
+      "JOIN0": {
+        "action": "join",
+        "parameters": {
+          "joinType": "LOOKUP",
+          "leftKeys": [
+            "AccountId"
+          ],
+          "rightKeys": [
+            "AccountId"
+          ],
+          "rightQualifier": "Won"
+        },
+        "schema": {
+          "fields": [],
+          "slice": {
+            "fields": [
+              "Won.AccountId"
+            ],
+            "ignoreMissingFields": true,
+            "mode": "DROP"
+          }
+        },
+        "sources": [
+          "AGGREGATE3",
+          "EDIT_ATTRIBUTES2"
+        ]
+      },
+      "EDIT_ATTRIBUTES0": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "COUNT_Rows",
+              "newProperties": {
+                "label": "RowsWon",
+                "name": "COUNT_RowsWon"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "AGGREGATE5"
+        ]
+      },
+      "EDIT_ATTRIBUTES1": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "AVG_Amount",
+              "newProperties": {
+                "label": "AvgAmountWon",
+                "name": "AVG_AmountWon"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES0"
+        ]
+      },
+      "EDIT_ATTRIBUTES2": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "SUM_Amount",
+              "newProperties": {
+                "label": "SumAmountWon",
+                "name": "SUM_Amount"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES1"
+        ]
+      },
+      "FORMULA10": {
+        "action": "formula",
+        "parameters": {
+          "expressionType": "SQL",
+          "fields": [
+            {
+              "defaultValue": "0",
+              "formulaExpression": "&#39;Won.COUNT_RowsWon&#39; / COUNT_Rows",
+              "label": "WinRateByRow",
+              "name": "Won.COUNT_RowsWon_formula",
+              "precision": 10,
+              "scale": 2,
+              "type": "NUMBER"
+            }
+          ]
+        },
+        "sources": [
+          "JOIN0"
+        ]
+      },
+      "EDIT_ATTRIBUTES10": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Won.COUNT_RowsWon_formula",
+              "newProperties": {
+                "label": "WinRateByRow",
+                "name": "WinRateByRow"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "FORMULA10"
+        ]
+      },
+      "FORMULA11": {
+        "action": "formula",
+        "parameters": {
+          "expressionType": "SQL",
+          "fields": [
+            {
+              "defaultValue": "0",
+              "formulaExpression": "&#39;Won.SUM_Amount&#39; / SUM_Amount",
+              "label": "WinRateByAmount",
+              "name": "Won.SUM_Amount_formula",
+              "precision": 10,
+              "scale": 2,
+              "type": "NUMBER"
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES10"
+        ]
+      },
+      "EDIT_ATTRIBUTES11": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Won.SUM_Amount_formula",
+              "newProperties": {
+                "label": "WinRateByAmount",
+                "name": "WinRateByAmount"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "FORMULA11"
+        ]
+      },
+      "LOAD_DATASET1": {
+        "action": "load",
+        "parameters": {
+          "dataset": {
+            "connectionName": "SFDC_LOCAL",
+            "label": "Account",
+            "sourceObjectName": "Account",
+            "type": "connectedDataset"
+          },
+          "fields": [
+            "Id",
+            "Name",
+            "Industry",
+            "BillingCountry",
+            "AnnualRevenue"
+          ],
+          "sampleDetails": {
+            "sortBy": [],
+            "type": "TopN"
+          }
+        },
+        "sources": []
+      },
+      "JOIN1": {
+        "action": "join",
+        "parameters": {
+          "joinType": "LOOKUP",
+          "leftKeys": [
+            "Id"
+          ],
+          "rightKeys": [
+            "AccountId"
+          ],
+          "rightQualifier": "Opps"
+        },
+        "schema": {
+          "fields": [],
+          "slice": {
+            "fields": [
+              "Opps.AccountId"
+            ],
+            "ignoreMissingFields": true,
+            "mode": "DROP"
+          }
+        },
+        "sources": [
+          "LOAD_DATASET1",
+          "EDIT_ATTRIBUTES11"
+        ]
+      },
+      "EDIT_ATTRIBUTES12": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Opps.COUNT_Rows",
+              "newProperties": {
+                "label": "Deal Count",
+                "name": "DealCount"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "JOIN1"
+        ]
+      },
+      "EDIT_ATTRIBUTES13": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Opps.AVG_Amount",
+              "newProperties": {
+                "label": "Avg Deal Size ($)",
+                "name": "AverageDealSize"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES12"
+        ]
+      },
+      "EDIT_ATTRIBUTES14": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Opps.SUM_Amount",
+              "newProperties": {
+                "label": "Account Lifetime Value",
+                "name": "AccountLifetimeValue"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES13"
+        ]
+      },
+      "EDIT_ATTRIBUTES15": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Opps.WinRateByRow",
+              "newProperties": {
+                "label": "Win Rate By Row",
+                "name": "WinRateByRow"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES14"
+        ]
+      },
+      "EDIT_ATTRIBUTES16": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Opps.WinRateByAmount",
+              "newProperties": {
+                "label": "Win Rate % (Amount)",
+                "name": "WinRateByAmount"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES15"
+        ]
+      },
+      "CLUSTERING0": {
+        "action": "clustering",
+        "parameters": {
+          "clusterCount": 4,
+          "sourceFields": [
+            "DealCount",
+            "AverageDealSize",
+            "AccountLifetimeValue",
+            "WinRateByRow",
+            "WinRateByAmount"
+          ],
+          "targetField": {
+            "label": "Cluster",
+            "name": "Id_clustering"
+          },
+          "targetScaledFields": []
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES16"
+        ]
+      },
+      "EDIT_ATTRIBUTES18": {
+        "action": "schema",
+        "parameters": {
+          "fields": [
+            {
+              "name": "Id_clustering",
+              "newProperties": {
+                "label": "Cluster",
+                "name": "Cluster"
+              }
+            }
+          ]
+        },
+        "sources": [
+          "CLUSTERING0"
+        ]
+      },
+      "OUTPUT0": {
+        "action": "save",
+        "parameters": {
+          "dataset": {
+            "folderName": "SharedApp",
+            "label": "Clustered Accounts",
+            "name": "Clustered_Accounts",
+            "type": "analyticsDataset"
+          },
+          "fields": [],
+          "measuresToCurrencies": []
+        },
+        "sources": [
+          "FORMULA_SEGMENT"
+        ]
+      },
+      "LOAD_DATASET2": {
+        "action": "load",
+        "parameters": {
+          "dataset": {
+            "connectionName": "SFDC_LOCAL",
+            "label": "OpportunityLineItem",
+            "sourceObjectName": "OpportunityLineItem",
+            "type": "connectedDataset"
+          },
+          "fields": [
+            "Id",
+            "OpportunityId",
+            "Product2Id",
+            "Name",
+            "Quantity",
+            "TotalPrice"
+          ],
+          "sampleDetails": {
+            "sortBy": [],
+            "type": "TopN"
+          }
+        },
+        "sources": []
+      },
+      "LOAD_DATASET3": {
+        "action": "load",
+        "parameters": {
+          "dataset": {
+            "connectionName": "SFDC_LOCAL",
+            "label": "Product2",
+            "sourceObjectName": "Product2",
+            "type": "connectedDataset"
+          },
+          "fields": [
+            "Id",
+            "Name",
+            "Family",
+            "ProductCode"
+          ],
+          "sampleDetails": {
+            "sortBy": [],
+            "type": "TopN"
+          }
+        },
+        "sources": []
+      },
+      "JOIN3": {
+        "action": "join",
+        "parameters": {
+          "joinType": "LOOKUP",
+          "leftKeys": [
+            "Product2Id"
+          ],
+          "rightKeys": [
+            "Id"
+          ],
+          "rightQualifier": "Product2"
+        },
+        "schema": {
+          "fields": [],
+          "slice": {
+            "fields": [],
+            "ignoreMissingFields": true,
+            "mode": "DROP"
+          }
+        },
+        "sources": [
+          "LOAD_DATASET2",
+          "LOAD_DATASET3"
+        ]
+      },
+      "JOIN4": {
+        "action": "join",
+        "parameters": {
+          "joinType": "LOOKUP",
+          "leftKeys": [
+            "OpportunityId"
+          ],
+          "rightKeys": [
+            "Id"
+          ],
+          "rightQualifier": "Opp"
+        },
+        "schema": {
+          "fields": [],
+          "slice": {
+            "fields": [],
+            "ignoreMissingFields": true,
+            "mode": "DROP"
+          }
+        },
+        "sources": [
+          "JOIN3",
+          "LOAD_DATASET0"
+        ]
+      },
+      "JOIN5": {
+        "action": "join",
+        "parameters": {
+          "joinType": "LOOKUP",
+          "leftKeys": [
+            "Opp.AccountId"
+          ],
+          "rightKeys": [
+            "Id"
+          ],
+          "rightQualifier": "Account"
+        },
+        "schema": {
+          "fields": [],
+          "slice": {
+            "fields": [
+              "Account.Id"
+            ],
+            "ignoreMissingFields": true,
+            "mode": "DROP"
+          }
+        },
+        "sources": [
+          "JOIN4",
+          "EDIT_ATTRIBUTES18"
+        ]
+      },
+      "OUTPUT2": {
+        "action": "save",
+        "parameters": {
+          "dataset": {
+            "folderName": "SharedApp",
+            "label": "Clustered Opp Products",
+            "name": "Clustered_Opp_Products",
+            "type": "analyticsDataset"
+          },
+          "fields": [],
+          "measuresToCurrencies": []
+        },
+        "sources": [
+          "JOIN5"
+        ]
+      },
+      "FORMULA_SEGMENT": {
+        "action": "formula",
+        "parameters": {
+          "expressionType": "SQL",
+          "fields": [
+            {
+              "defaultValue": "Standard",
+              "formulaExpression": "case when AccountLifetimeValue &gt;= 100000 then &#39;Strategic&#39; when AccountLifetimeValue &gt;= 25000 then &#39;Growth&#39; else &#39;Standard&#39; end",
+              "label": "Value Tier",
+              "name": "ValueTier",
+              "precision": 255,
+              "type": "TEXT"
+            }
+          ]
+        },
+        "sources": [
+          "EDIT_ATTRIBUTES18"
+        ]
+      }
+    },
+    "runMode": "full",
+    "ui": {
+      "nodes": {
+        "LOAD_DATASET0": {
+          "label": "Opportunity",
+          "type": "LOAD_DATASET",
+          "top": 112,
+          "left": 250.2,
+          "parameters": {
+            "sampleSize": 2000
+          }
+        },
+        "FILTER0": {
+          "label": "FILTER0",
+          "type": "FILTER",
+          "top": 112,
+          "left": 390.2
+        },
+        "AGGREGATE6": {
+          "label": "AGGREGATE6",
+          "type": "AGGREGATE",
+          "top": 252,
+          "left": 530.2,
+          "graph": {
+            "EXTRACT1": null,
+            "AGGREGATE3": null
+          },
+          "connectors": [
+            {
+              "source": "EXTRACT1",
+              "target": "AGGREGATE3"
+            }
+          ]
+        },
+        "AGGREGATE7": {
+          "label": "AGGREGATE7",
+          "type": "AGGREGATE",
+          "top": 112,
+          "left": 670.2,
+          "graph": {
+            "EXTRACT2": null,
+            "AGGREGATE5": null
+          },
+          "connectors": [
+            {
+              "source": "EXTRACT2",
+              "target": "AGGREGATE5"
+            }
+          ]
+        },
+        "FILTER1": {
+          "label": "FILTER1",
+          "type": "FILTER",
+          "top": 112,
+          "left": 530.2
+        },
+        "JOIN0": {
+          "label": "JOIN0",
+          "type": "JOIN",
+          "top": 112,
+          "left": 950.2
+        },
+        "TRANSFORM0": {
+          "label": "TRANSFORM0",
+          "type": "TRANSFORM",
+          "top": 112,
+          "left": 810.2,
+          "graph": {
+            "EDIT_ATTRIBUTES0": null,
+            "EDIT_ATTRIBUTES1": null,
+            "EDIT_ATTRIBUTES2": null
+          },
+          "connectors": [
+            {
+              "source": "EDIT_ATTRIBUTES0",
+              "target": "EDIT_ATTRIBUTES1"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES1",
+              "target": "EDIT_ATTRIBUTES2"
+            }
+          ]
+        },
+        "TRANSFORM1": {
+          "label": "TRANSFORM1",
+          "type": "TRANSFORM",
+          "top": 112,
+          "left": 1090.2,
+          "graph": {
+            "FORMULA10": {
+              "parameters": {
+                "type": "BASE_FORMULA_UI"
+              }
+            },
+            "EDIT_ATTRIBUTES10": null,
+            "FORMULA11": {
+              "parameters": {
+                "type": "BASE_FORMULA_UI"
+              }
+            },
+            "EDIT_ATTRIBUTES11": null
+          },
+          "connectors": [
+            {
+              "source": "FORMULA10",
+              "target": "EDIT_ATTRIBUTES10"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES10",
+              "target": "FORMULA11"
+            },
+            {
+              "source": "FORMULA11",
+              "target": "EDIT_ATTRIBUTES11"
+            }
+          ]
+        },
+        "LOAD_DATASET1": {
+          "label": "Account",
+          "type": "LOAD_DATASET",
+          "top": 252,
+          "left": 1090.2,
+          "parameters": {
+            "sampleSize": 2000
+          }
+        },
+        "JOIN1": {
+          "label": "JOIN1",
+          "type": "JOIN",
+          "top": 112,
+          "left": 1230.2
+        },
+        "TRANSFORM2": {
+          "label": "TRANSFORM2",
+          "type": "TRANSFORM",
+          "top": 112,
+          "left": 1370.2,
+          "graph": {
+            "EDIT_ATTRIBUTES12": null,
+            "EDIT_ATTRIBUTES13": null,
+            "EDIT_ATTRIBUTES14": null,
+            "EDIT_ATTRIBUTES15": null,
+            "EDIT_ATTRIBUTES16": null,
+            "CLUSTERING0": null,
+            "EDIT_ATTRIBUTES18": null
+          },
+          "connectors": [
+            {
+              "source": "EDIT_ATTRIBUTES12",
+              "target": "EDIT_ATTRIBUTES13"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES13",
+              "target": "EDIT_ATTRIBUTES14"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES14",
+              "target": "EDIT_ATTRIBUTES15"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES15",
+              "target": "EDIT_ATTRIBUTES16"
+            },
+            {
+              "source": "EDIT_ATTRIBUTES16",
+              "target": "CLUSTERING0"
+            },
+            {
+              "source": "CLUSTERING0",
+              "target": "EDIT_ATTRIBUTES18"
+            }
+          ]
+        },
+        "OUTPUT0": {
+          "label": "OUTPUT0",
+          "type": "OUTPUT",
+          "top": 252,
+          "left": 1650.2
+        },
+        "LOAD_DATASET2": {
+          "label": "OpportunityLineItem",
+          "type": "LOAD_DATASET",
+          "top": 252,
+          "left": 110.19999999999999,
+          "parameters": {
+            "sampleSize": 2000
+          }
+        },
+        "LOAD_DATASET3": {
+          "label": "Product2",
+          "type": "LOAD_DATASET",
+          "top": 392,
+          "left": 110.19999999999999,
+          "parameters": {
+            "sampleSize": 2000
+          }
+        },
+        "JOIN3": {
+          "label": "JOIN3",
+          "type": "JOIN",
+          "top": 252,
+          "left": 250.2
+        },
+        "JOIN4": {
+          "label": "JOIN4",
+          "type": "JOIN",
+          "top": 392,
+          "left": 390.2
+        },
+        "JOIN5": {
+          "label": "JOIN5",
+          "type": "JOIN",
+          "top": 112,
+          "left": 1510.2
+        },
+        "OUTPUT2": {
+          "label": "OUTPUT2",
+          "type": "OUTPUT",
+          "top": 112,
+          "left": 1650.2
+        },
+        "TRANSFORM3": {
+          "label": "TRANSFORM3",
+          "type": "TRANSFORM",
+          "top": 252,
+          "left": 1510.2,
+          "graph": {
+            "FORMULA_SEGMENT": {
+              "parameters": {
+                "type": "BASE_FORMULA_UI"
+              },
+              "label": "Formula"
+            }
+          },
+          "connectors": []
+        }
+      },
+      "connectors": [
+        {
+          "source": "LOAD_DATASET0",
+          "target": "FILTER0"
+        },
+        {
+          "source": "FILTER0",
+          "target": "AGGREGATE6"
+        },
+        {
+          "source": "FILTER1",
+          "target": "AGGREGATE7"
+        },
+        {
+          "source": "FILTER0",
+          "target": "FILTER1"
+        },
+        {
+          "source": "AGGREGATE6",
+          "target": "JOIN0"
+        },
+        {
+          "source": "TRANSFORM0",
+          "target": "JOIN0"
+        },
+        {
+          "source": "AGGREGATE7",
+          "target": "TRANSFORM0"
+        },
+        {
+          "source": "JOIN0",
+          "target": "TRANSFORM1"
+        },
+        {
+          "source": "LOAD_DATASET1",
+          "target": "JOIN1"
+        },
+        {
+          "source": "TRANSFORM1",
+          "target": "JOIN1"
+        },
+        {
+          "source": "JOIN1",
+          "target": "TRANSFORM2"
+        },
+        {
+          "source": "TRANSFORM3",
+          "target": "OUTPUT0"
+        },
+        {
+          "source": "LOAD_DATASET2",
+          "target": "JOIN3"
+        },
+        {
+          "source": "LOAD_DATASET3",
+          "target": "JOIN3"
+        },
+        {
+          "source": "JOIN3",
+          "target": "JOIN4"
+        },
+        {
+          "source": "LOAD_DATASET0",
+          "target": "JOIN4"
+        },
+        {
+          "source": "JOIN4",
+          "target": "JOIN5"
+        },
+        {
+          "source": "TRANSFORM2",
+          "target": "JOIN5"
+        },
+        {
+          "source": "JOIN5",
+          "target": "OUTPUT2"
+        },
+        {
+          "source": "TRANSFORM2",
+          "target": "TRANSFORM3"
+        }
+      ],
+      "hiddenColumns": []
+    },
+    "version": "62.0"
+  },
+  "scheduleAttributes": {
+    "assetId": "05vId000000CesCIAS",
+    "events": {
+      "events": []
+    },
+    "frequency": "none"
+  },
+  "status": "New",
+  "targetDataflowId": "02KId000000PziDMAS",
+  "type": "recipe",
+  "url": "/services/data/v62.0/wave/recipes/05vId000000CesCIAS?format=R3",
+  "validationDetails": []
+}

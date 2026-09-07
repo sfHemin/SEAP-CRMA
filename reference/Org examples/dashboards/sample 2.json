@@ -1,0 +1,1358 @@
+{
+    "label": "Win/Loss and Account Health",
+    "mobileDisabled": false,
+    "state": {
+        "dataSourceLinksInfo": {
+            "enableAutomaticLinking": false,
+            "excludeRelationships": [],
+            "links": []
+        },
+        "filters": [],
+        "gridLayouts": [
+            {
+                "name": "Default",
+                "numColumns": 12,
+                "pages": [
+                    {
+                        "name": "Page1",
+                        "navigationHidden": false,
+                        "widgets": [
+                            {
+                                "colspan": 12,
+                                "column": 0,
+                                "name": "title_1",
+                                "row": 0,
+                                "rowspan": 2,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 0,
+                                "name": "kpi_won_rev",
+                                "row": 2,
+                                "rowspan": 4,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 3,
+                                "name": "kpi_accounts",
+                                "row": 2,
+                                "rowspan": 4,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 6,
+                                "name": "kpi_won_opps",
+                                "row": 2,
+                                "rowspan": 4,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 9,
+                                "name": "kpi_avg_deal",
+                                "row": 2,
+                                "rowspan": 4,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 4,
+                                "column": 0,
+                                "name": "chart_by_industry",
+                                "row": 6,
+                                "rowspan": 12,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 4,
+                                "column": 4,
+                                "name": "chart_win_loss_trend",
+                                "row": 6,
+                                "rowspan": 12,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 4,
+                                "column": 8,
+                                "name": "chart_by_band",
+                                "row": 6,
+                                "rowspan": 12,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 12,
+                                "column": 0,
+                                "name": "table_win_loss",
+                                "row": 18,
+                                "rowspan": 10,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 12,
+                                "column": 0,
+                                "name": "table_top_accounts",
+                                "row": 28,
+                                "rowspan": 12,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 0,
+                                "name": "filter_fy",
+                                "row": 40,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 3,
+                                "name": "filter_fq",
+                                "row": 40,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 6,
+                                "name": "filter_region",
+                                "row": 40,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 9,
+                                "name": "filter_industry",
+                                "row": 40,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 0,
+                                "name": "filter_manager",
+                                "row": 43,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 3,
+                                "name": "filter_owner",
+                                "row": 43,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 6,
+                                "name": "filter_tier",
+                                "row": 43,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            },
+                            {
+                                "colspan": 3,
+                                "column": 9,
+                                "name": "filter_outcome",
+                                "row": 43,
+                                "rowspan": 3,
+                                "widgetStyle": {}
+                            }
+                        ],
+                        "label": "Untitled"
+                    }
+                ],
+                "rowHeight": "fine",
+                "selectors": [],
+                "style": {
+                    "alignmentX": "left",
+                    "alignmentY": "top",
+                    "backgroundColor": "#E6ECF2",
+                    "cellSpacingX": 8,
+                    "cellSpacingY": 8,
+                    "fit": "original",
+                    "gutterColor": "#C5D3E0"
+                },
+                "version": 1
+            }
+        ],
+        "layouts": [],
+        "steps": {
+            "f_manager_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Manager",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Manager_Name"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "chart_industry_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Won Revenue by Industry",
+                "query": {
+                    "measures": [
+                        [
+                            "sum",
+                            "Amount"
+                        ]
+                    ],
+                    "groups": [
+                        "Industry"
+                    ],
+                    "filters": [
+                        [
+                            "Outcome",
+                            [
+                                "Won"
+                            ],
+                            "in"
+                        ]
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "visualizationType": "hbar",
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "table_acct_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001i3qCAA",
+                        "label": "Account 360",
+                        "name": "DS_Account_360",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001i3qCAA"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Top Accounts",
+                "query": {
+                    "measures": [
+                        [
+                            "sum",
+                            "Won_Revenue"
+                        ],
+                        [
+                            "sum",
+                            "Open_Pipeline"
+                        ],
+                        [
+                            "sum",
+                            "Win_Rate"
+                        ]
+                    ],
+                    "groups": [
+                        "Name",
+                        "Owner_Name",
+                        "Industry",
+                        "BillingState",
+                        "Customer_Tier",
+                        "Account_Status"
+                    ],
+                    "filters": [
+                        [
+                            "Won_Revenue",
+                            [
+                                0
+                            ],
+                            "greaterThan"
+                        ]
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_fy_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Fiscal Year",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "CloseDate_Year"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "chart_trend_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Win vs Loss Trend",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "CloseDate_Year",
+                        "CloseDate_Quarter",
+                        "Outcome"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "visualizationType": "vbar",
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_outcome_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Outcome",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Outcome"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "table_wl_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Win/Loss Detail",
+                "query": {
+                    "measures": [
+                        [
+                            "sum",
+                            "Amount"
+                        ],
+                        [
+                            "sum",
+                            "Sales_Cycle_Days"
+                        ]
+                    ],
+                    "groups": [
+                        "Rep_Name",
+                        "Manager_Name",
+                        "Sales_Region",
+                        "Industry",
+                        "Outcome",
+                        "Deal_Size_Band"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "chart_band_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Outcomes by Deal Size Band",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Deal_Size_Band",
+                        "Outcome"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "visualizationType": "hbar",
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_fq_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Fiscal Quarter",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "CloseDate_Quarter"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "kpi_wl_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Win/Loss KPIs",
+                "query": {
+                    "measures": [
+                        [
+                            "sum",
+                            "Amount"
+                        ],
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [],
+                    "filters": [
+                        [
+                            "Outcome",
+                            [
+                                "Won"
+                            ],
+                            "in"
+                        ]
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "kpi_acct_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001i3qCAA",
+                        "label": "Account 360",
+                        "name": "DS_Account_360",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001i3qCAA"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Account Count",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": []
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_industry_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Industry",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Industry"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_owner_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Owner",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Rep_Name"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_tier_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001i3qCAA",
+                        "label": "Account 360",
+                        "name": "DS_Account_360",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001i3qCAA"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Customer Tier",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Customer_Tier"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            },
+            "f_region_1": {
+                "broadcastFacet": true,
+                "datasets": [
+                    {
+                        "id": "0Fbhg0000001iAHCAY",
+                        "label": "Win Loss Analysis",
+                        "name": "DS_Win_Loss_Analysis",
+                        "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+                    }
+                ],
+                "isGlobal": false,
+                "label": "Filter Region",
+                "query": {
+                    "measures": [
+                        [
+                            "count",
+                            "*"
+                        ]
+                    ],
+                    "groups": [
+                        "Sales_Region"
+                    ]
+                },
+                "receiveFacetSource": {
+                    "mode": "all",
+                    "steps": []
+                },
+                "selectMode": "single",
+                "type": "aggregateflex",
+                "useExternalFilters": true,
+                "useGlobal": true,
+                "visualizationParameters": {
+                    "options": {}
+                },
+                "sortable": true
+            }
+        },
+        "widgetStyle": {
+            "backgroundColor": "#FFFFFF",
+            "borderColor": "#E6ECF2",
+            "borderEdges": [],
+            "borderRadius": 8,
+            "borderWidth": 1,
+            "tooltipStyle": {
+                "backgroundColor": "#16325c",
+                "labelColor": "#9faab5",
+                "valueColor": "#ffffff"
+            }
+        },
+        "widgets": {
+            "chart_by_industry": {
+                "parameters": {
+                    "showActionMenu": true,
+                    "legend": {
+                        "show": false,
+                        "showHeader": true,
+                        "inside": false,
+                        "descOrder": false,
+                        "position": "right-top",
+                        "customSize": "auto"
+                    },
+                    "measureAxis2": [],
+                    "measureAxis1": [
+                        "sum_Amount"
+                    ],
+                    "visualizationType": "hbar",
+                    "step": "chart_industry_1",
+                    "title": {
+                        "fontSize": 14,
+                        "subtitleFontSize": 11,
+                        "label": "Won Revenue by Industry",
+                        "align": "left",
+                        "subtitleLabel": ""
+                    },
+                    "trellis": {
+                        "enable": false,
+                        "showGridLines": true,
+                        "flipLabels": false,
+                        "type": "x",
+                        "chartsPerLine": 4,
+                        "size": [
+                            100,
+                            100
+                        ]
+                    },
+                    "dimensionAxis": [
+                        "Industry"
+                    ],
+                    "applyConditionalFormatting": false,
+                    "theme": "wave",
+                    "valueType": "compactNumber",
+                    "compactDecimalDigits": -1,
+                    "axisMode": "sync",
+                    "autoFitMode": "keepLabels",
+                    "binValues": false,
+                    "bins": {
+                        "breakpoints": {
+                            "low": 0,
+                            "high": 100
+                        },
+                        "bands": {
+                            "low": {
+                                "label": "",
+                                "color": "#B22222"
+                            },
+                            "medium": {
+                                "label": "",
+                                "color": "#ffa500"
+                            },
+                            "high": {
+                                "label": "",
+                                "color": "#008000"
+                            }
+                        }
+                    },
+                    "tooltip": {
+                        "content": {
+                            "legend": {
+                                "customizeLegend": false,
+                                "showDimensions": true,
+                                "dimensions": [],
+                                "showMeasures": true,
+                                "measures": [],
+                                "showPercentage": true,
+                                "showNullValues": true,
+                                "showBinLabel": true
+                            }
+                        }
+                    },
+                    "exploreLink": true
+                },
+                "type": "chart"
+            },
+            "kpi_avg_deal": {
+                "parameters": {
+                    "compact": true,
+                    "interactions": [],
+                    "measureField": "avg_Amount",
+                    "numberSize": 18,
+                    "step": "kpi_wl_1",
+                    "textAlignment": "center",
+                    "title": "Avg Deal Size",
+                    "showActionMenu": true,
+                    "exploreLink": true,
+                    "titleColor": "#091A3E",
+                    "titleSize": 16,
+                    "numberColor": "#091A3E",
+                    "numberBold": false,
+                    "titleBold": false,
+                    "numberItalic": false,
+                    "titleItalic": false
+                },
+                "type": "number"
+            },
+            "filter_fq": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_fq_1",
+                    "title": "Fiscal Quarter"
+                },
+                "type": "listselector"
+            },
+            "filter_region": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_region_1",
+                    "title": "Region"
+                },
+                "type": "listselector"
+            },
+            "table_win_loss": {
+                "parameters": {
+                    "columnProperties": {},
+                    "columns": [],
+                    "customBulkActions": [],
+                    "headerProperties": {},
+                    "interactions": [],
+                    "showActionMenu": true,
+                    "step": "table_wl_1",
+                    "mode": "variable",
+                    "borderWidth": 1,
+                    "borderColor": "#e0e5ee",
+                    "evenRowColor": null,
+                    "oddRowColor": null,
+                    "innerMinorBorderColor": "#e0e5ee",
+                    "innerMajorBorderColor": "#a8b7c7",
+                    "verticalPadding": 8,
+                    "numberOfLines": 1,
+                    "header": {
+                        "backgroundColor": "#f4f6f9",
+                        "fontColor": "#16325c",
+                        "fontSize": 12,
+                        "alignment": "left",
+                        "italic": false,
+                        "underline": false,
+                        "textWrap": false
+                    },
+                    "cell": {
+                        "backgroundColor": "#ffffff",
+                        "fontColor": "#16325c",
+                        "fontSize": 12,
+                        "textWrap": false
+                    },
+                    "minColumnWidth": 40,
+                    "maxColumnWidth": 300,
+                    "showRowIndexColumn": false
+                },
+                "type": "table"
+            },
+            "filter_owner": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_owner_1",
+                    "title": "Owner"
+                },
+                "type": "listselector"
+            },
+            "table_top_accounts": {
+                "parameters": {
+                    "columnProperties": {},
+                    "columns": [],
+                    "customBulkActions": [],
+                    "headerProperties": {},
+                    "interactions": [],
+                    "showActionMenu": true,
+                    "step": "table_acct_1",
+                    "mode": "variable",
+                    "borderWidth": 1,
+                    "borderColor": "#e0e5ee",
+                    "evenRowColor": null,
+                    "oddRowColor": null,
+                    "innerMinorBorderColor": "#e0e5ee",
+                    "innerMajorBorderColor": "#a8b7c7",
+                    "verticalPadding": 8,
+                    "numberOfLines": 1,
+                    "header": {
+                        "backgroundColor": "#f4f6f9",
+                        "fontColor": "#16325c",
+                        "fontSize": 12,
+                        "alignment": "left",
+                        "italic": false,
+                        "underline": false,
+                        "textWrap": false
+                    },
+                    "cell": {
+                        "backgroundColor": "#ffffff",
+                        "fontColor": "#16325c",
+                        "fontSize": 12,
+                        "textWrap": false
+                    },
+                    "minColumnWidth": 40,
+                    "maxColumnWidth": 300,
+                    "showRowIndexColumn": false
+                },
+                "type": "table"
+            },
+            "filter_fy": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_fy_1",
+                    "title": "Fiscal Year"
+                },
+                "type": "listselector"
+            },
+            "kpi_accounts": {
+                "parameters": {
+                    "compact": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "numberSize": 18,
+                    "step": "kpi_acct_1",
+                    "textAlignment": "center",
+                    "title": "Total Accounts",
+                    "showActionMenu": true,
+                    "exploreLink": true,
+                    "titleColor": "#091A3E",
+                    "titleSize": 16,
+                    "numberColor": "#091A3E",
+                    "numberBold": false,
+                    "titleBold": false,
+                    "numberItalic": false,
+                    "titleItalic": false
+                },
+                "type": "number"
+            },
+            "chart_win_loss_trend": {
+                "parameters": {
+                    "showActionMenu": true,
+                    "legend": {
+                        "show": true,
+                        "showHeader": true,
+                        "inside": false,
+                        "descOrder": false,
+                        "position": "right-top",
+                        "customSize": "auto"
+                    },
+                    "measureAxis2": [],
+                    "measureAxis1": [
+                        "count"
+                    ],
+                    "visualizationType": "vbar",
+                    "step": "chart_trend_1",
+                    "title": {
+                        "fontSize": 14,
+                        "subtitleFontSize": 11,
+                        "label": "Win vs Loss by Quarter",
+                        "align": "left",
+                        "subtitleLabel": ""
+                    },
+                    "trellis": {
+                        "enable": false,
+                        "showGridLines": true,
+                        "flipLabels": false,
+                        "type": "x",
+                        "chartsPerLine": 4,
+                        "size": [
+                            100,
+                            100
+                        ]
+                    },
+                    "dimensionAxis": [
+                        "CloseDate_Quarter"
+                    ],
+                    "applyConditionalFormatting": false,
+                    "theme": "wave",
+                    "valueType": "compactNumber",
+                    "compactDecimalDigits": -1,
+                    "axisMode": "sync",
+                    "autoFitMode": "keepLabels",
+                    "binValues": false,
+                    "bins": {
+                        "breakpoints": {
+                            "low": 0,
+                            "high": 100
+                        },
+                        "bands": {
+                            "low": {
+                                "label": "",
+                                "color": "#B22222"
+                            },
+                            "medium": {
+                                "label": "",
+                                "color": "#ffa500"
+                            },
+                            "high": {
+                                "label": "",
+                                "color": "#008000"
+                            }
+                        }
+                    },
+                    "tooltip": {
+                        "content": {
+                            "legend": {
+                                "customizeLegend": false,
+                                "showDimensions": true,
+                                "dimensions": [],
+                                "showMeasures": true,
+                                "measures": [],
+                                "showPercentage": true,
+                                "showNullValues": true,
+                                "showBinLabel": true
+                            }
+                        }
+                    },
+                    "exploreLink": true
+                },
+                "type": "chart"
+            },
+            "chart_by_band": {
+                "parameters": {
+                    "showActionMenu": true,
+                    "legend": {
+                        "show": true,
+                        "showHeader": true,
+                        "inside": false,
+                        "descOrder": false,
+                        "position": "right-top",
+                        "customSize": "auto"
+                    },
+                    "measureAxis2": [],
+                    "measureAxis1": [
+                        "count"
+                    ],
+                    "visualizationType": "hbar",
+                    "step": "chart_band_1",
+                    "title": {
+                        "fontSize": 14,
+                        "subtitleFontSize": 11,
+                        "label": "Outcomes by Deal Size Band",
+                        "align": "left",
+                        "subtitleLabel": ""
+                    },
+                    "trellis": {
+                        "enable": false,
+                        "showGridLines": true,
+                        "flipLabels": false,
+                        "type": "x",
+                        "chartsPerLine": 4,
+                        "size": [
+                            100,
+                            100
+                        ]
+                    },
+                    "dimensionAxis": [
+                        "Deal_Size_Band"
+                    ],
+                    "applyConditionalFormatting": false,
+                    "theme": "wave",
+                    "valueType": "compactNumber",
+                    "compactDecimalDigits": -1,
+                    "axisMode": "sync",
+                    "autoFitMode": "keepLabels",
+                    "binValues": false,
+                    "bins": {
+                        "breakpoints": {
+                            "low": 0,
+                            "high": 100
+                        },
+                        "bands": {
+                            "low": {
+                                "label": "",
+                                "color": "#B22222"
+                            },
+                            "medium": {
+                                "label": "",
+                                "color": "#ffa500"
+                            },
+                            "high": {
+                                "label": "",
+                                "color": "#008000"
+                            }
+                        }
+                    },
+                    "tooltip": {
+                        "content": {
+                            "legend": {
+                                "customizeLegend": false,
+                                "showDimensions": true,
+                                "dimensions": [],
+                                "showMeasures": true,
+                                "measures": [],
+                                "showPercentage": true,
+                                "showNullValues": true,
+                                "showBinLabel": true
+                            }
+                        }
+                    },
+                    "exploreLink": true
+                },
+                "type": "chart"
+            },
+            "filter_outcome": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_outcome_1",
+                    "title": "Outcome"
+                },
+                "type": "listselector"
+            },
+            "filter_industry": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_industry_1",
+                    "title": "Industry"
+                },
+                "type": "listselector"
+            },
+            "kpi_won_rev": {
+                "parameters": {
+                    "compact": true,
+                    "interactions": [],
+                    "measureField": "sum_Amount",
+                    "numberSize": 18,
+                    "step": "kpi_wl_1",
+                    "textAlignment": "center",
+                    "title": "Total Won Revenue",
+                    "showActionMenu": true,
+                    "exploreLink": true,
+                    "titleColor": "#091A3E",
+                    "titleSize": 16,
+                    "numberColor": "#091A3E",
+                    "numberBold": false,
+                    "titleBold": false,
+                    "numberItalic": false,
+                    "titleItalic": false
+                },
+                "type": "number"
+            },
+            "filter_manager": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_manager_1",
+                    "title": "Manager"
+                },
+                "type": "listselector"
+            },
+            "filter_tier": {
+                "parameters": {
+                    "compact": false,
+                    "displayMode": "filter",
+                    "filterStyle": {},
+                    "instant": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "showActionMenu": true,
+                    "step": "f_tier_1",
+                    "title": "Customer Tier"
+                },
+                "type": "listselector"
+            },
+            "title_1": {
+                "parameters": {
+                    "content": {
+                        "richTextContent": [
+                            {
+                                "attributes": {
+                                    "color": "#16325c",
+                                    "size": "20px",
+                                    "bold": true
+                                },
+                                "insert": "Win/Loss and Account Health"
+                            },
+                            {
+                                "attributes": {
+                                    "align": "left"
+                                },
+                                "insert": "\n"
+                            }
+                        ]
+                    },
+                    "interactions": [],
+                    "showActionMenu": false
+                },
+                "type": "text"
+            },
+            "kpi_won_opps": {
+                "parameters": {
+                    "compact": true,
+                    "interactions": [],
+                    "measureField": "count",
+                    "numberSize": 18,
+                    "step": "kpi_wl_1",
+                    "textAlignment": "center",
+                    "title": "Won Opportunities",
+                    "showActionMenu": true,
+                    "exploreLink": true,
+                    "titleColor": "#091A3E",
+                    "titleSize": 16,
+                    "numberColor": "#091A3E",
+                    "numberBold": false,
+                    "titleBold": false,
+                    "numberItalic": false,
+                    "titleItalic": false
+                },
+                "type": "number"
+            }
+        },
+        "parameters": []
+    },
+    "datasets": [
+        {
+            "id": "0Fbhg0000001i3qCAA",
+            "label": "Account 360",
+            "name": "DS_Account_360",
+            "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001i3qCAA"
+        },
+        {
+            "id": "0Fbhg0000001iAHCAY",
+            "label": "Win Loss Analysis",
+            "name": "DS_Win_Loss_Analysis",
+            "url": "/services/data/v67.0/wave/datasets/0Fbhg0000001iAHCAY"
+        }
+    ]
+}

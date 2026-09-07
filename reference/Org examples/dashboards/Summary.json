@@ -1,0 +1,1265 @@
+{
+  "allowPreview": true,
+  "assetSharingUrl": "https://storm-b937d15ac2e285.my.salesforce.com/analytics/wave/dashboard?assetId=0FKId000000XlXfOAK&orgId=00DId000000JHxU&loginHost=ind172.sfdc-ppgy19.salesforce.com&urlType=sharing",
+  "createdBy": {
+    "id": "005Id000001TxWnIAK",
+    "name": "Automated Process",
+    "profilePhotoUrl": "https://storm-b937d15ac2e285.file.force.com/profilephoto/005/T"
+  },
+  "createdDate": "2026-05-14T02:06:01.000Z",
+  "datasets": [
+    {
+      "id": "0FbId000000bzuYKAQ",
+      "label": "Period",
+      "name": "Period",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000bzuYKAQ"
+    },
+    {
+      "id": "0FbId000000bzuZKAQ",
+      "label": "User",
+      "name": "User",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000bzuZKAQ"
+    },
+    {
+      "id": "0FbId000000bzuaKAA",
+      "label": "ForecastingData",
+      "name": "ForecastingData",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000bzuaKAA"
+    },
+    {
+      "id": "0FbId000000bzubKAA",
+      "label": "CurrencyType",
+      "name": "CurrencyType",
+      "url": "/services/data/v62.0/wave/datasets/0FbId000000bzubKAA"
+    }
+  ],
+  "dateVersion": 1,
+  "description": "See your progress this month",
+  "files": [],
+  "folder": {
+    "id": "00lId000000WsidIAC",
+    "label": "Einstein Forecasting",
+    "name": "DefaultForecastingAnalytics",
+    "url": "/services/data/v62.0/wave/folders/00lId000000WsidIAC"
+  },
+  "historiesUrl": "/services/data/v62.0/wave/dashboards/0FKId000000XlXfOAK/histories",
+  "id": "0FKId000000XlXfOAK",
+  "label": "My Performance",
+  "lastModifiedBy": {
+    "id": "005Id000001TxWnIAK",
+    "name": "Automated Process",
+    "profilePhotoUrl": "https://storm-b937d15ac2e285.file.force.com/profilephoto/005/T"
+  },
+  "lastModifiedDate": "2026-05-14T04:54:04.000Z",
+  "mobileDisabled": false,
+  "name": "Summary_Dashboard",
+  "permissions": {
+    "create": true,
+    "manage": true,
+    "modify": true,
+    "view": true
+  },
+  "refreshDate": "2026-05-14T04:53:49.000Z",
+  "state": {
+    "dataSourceLinksInfo": {
+      "enableAutomaticLinking": false,
+      "excludeRelationships": [],
+      "links": []
+    },
+    "filters": [],
+    "gridLayouts": [
+      {
+        "name": "Mobile",
+        "numColumns": 48,
+        "pages": [
+          {
+            "name": "Page1",
+            "navigationHidden": false,
+            "widgets": [
+              {
+                "colspan": 48,
+                "column": 0,
+                "name": "UserImageChart",
+                "row": 0,
+                "rowspan": 16,
+                "widgetStyle": {
+                  "borderColor": "#FFFFFF",
+                  "borderEdges": [
+                    "bottom"
+                  ]
+                }
+              },
+              {
+                "colspan": 48,
+                "column": 0,
+                "name": "RunningUserName",
+                "row": 16,
+                "rowspan": 4,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 46,
+                "column": 1,
+                "name": "PercentQuotaNumber",
+                "row": 20,
+                "rowspan": 2,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 46,
+                "column": 1,
+                "name": "QuotaSubtext_2",
+                "row": 22,
+                "rowspan": 2,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 48,
+                "column": 0,
+                "name": "TopContainer",
+                "row": 0,
+                "rowspan": 26,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#D8DDE6",
+                  "borderEdges": [
+                    "bottom"
+                  ],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 48,
+                "column": 0,
+                "name": "KeyMetrics",
+                "row": 26,
+                "rowspan": 3,
+                "widgetStyle": {
+                  "backgroundColor": "#E6ECF2",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 42,
+                "column": 3,
+                "name": "number_1",
+                "row": 31,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 43,
+                "column": 2,
+                "name": "number_2",
+                "row": 41,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 43,
+                "column": 2,
+                "name": "number_3",
+                "row": 46,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 43,
+                "column": 2,
+                "name": "number_4",
+                "row": 51,
+                "rowspan": 5,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 46,
+                "column": 1,
+                "name": "MiddleContainer_1",
+                "row": 29,
+                "rowspan": 10,
+                "widgetStyle": {
+                  "borderColor": "#D8DDE6",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 47,
+                "column": 0,
+                "name": "TrendingPerformance",
+                "row": 57,
+                "rowspan": 3,
+                "widgetStyle": {
+                  "backgroundColor": "#E6ECF2",
+                  "borderColor": "#E6ECF2",
+                  "borderEdges": [],
+                  "borderRadius": 0,
+                  "borderWidth": 1
+                }
+              },
+              {
+                "colspan": 46,
+                "column": 1,
+                "name": "TrendingPerformanceChart",
+                "row": 60,
+                "rowspan": 42,
+                "widgetStyle": {
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4
+                }
+              },
+              {
+                "colspan": 46,
+                "column": 1,
+                "name": "container_1",
+                "row": 40,
+                "rowspan": 17,
+                "widgetStyle": {
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "rgb(216, 221, 230)",
+                  "borderEdges": [
+                    "all"
+                  ],
+                  "borderRadius": 4,
+                  "borderWidth": 1
+                }
+              }
+            ]
+          }
+        ],
+        "rowHeight": "fine",
+        "selectors": [
+          "maxWidth(599)",
+          "platform(iOS)"
+        ],
+        "style": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "backgroundColor": "#E6ECF2",
+          "cellSpacingX": 0,
+          "cellSpacingY": 0,
+          "fit": "original",
+          "gutterColor": "#C5D3E0"
+        },
+        "version": 1
+      },
+      {
+        "name": "Desktop",
+        "numColumns": 14,
+        "pages": [
+          {
+            "label": "My Performance",
+            "name": "Desktop_Summary_Page",
+            "navigationHidden": false,
+            "widgets": [
+              {
+                "colspan": 3,
+                "column": 1,
+                "name": "DesktopKPI_1",
+                "row": 1,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 3,
+                "column": 4,
+                "name": "DesktopKPI_2",
+                "row": 1,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 3,
+                "column": 7,
+                "name": "DesktopKPI_3",
+                "row": 1,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 3,
+                "column": 10,
+                "name": "DesktopKPI_4",
+                "row": 1,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 14,
+                "column": 0,
+                "name": "MiddleContainer_1",
+                "row": 1,
+                "rowspan": 6,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              },
+              {
+                "colspan": 14,
+                "column": 0,
+                "name": "Desktop_TrendingPerformanceChart",
+                "row": 8,
+                "rowspan": 30,
+                "widgetStyle": {
+                  "borderEdges": []
+                }
+              }
+            ]
+          }
+        ],
+        "rowHeight": "fine",
+        "selectors": [
+          "minWidth(200)"
+        ],
+        "style": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "backgroundColor": "#FFFFFF",
+          "cellSpacingX": 4,
+          "cellSpacingY": 0,
+          "fit": "original",
+          "gutterColor": "#C5D3E0"
+        },
+        "version": 1
+      }
+    ],
+    "layouts": [],
+    "steps": {
+      "CurrencyTypeStep": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;CurrencyType&quot;; q = filter q by &#39;CurrencyCode&#39; in [&quot;{{coalesce(cell(ForecastingUserPreference.result, 0, &quot;ForecastingViewCurrency&quot;), &quot;DefaultCurrency&quot;).asString()}}&quot;] || &#39;IsCorporate&#39; == &quot;true&quot;; q = foreach q generate &#39;NewConversionRate&#39; as &#39;ConversionRate&#39;, &#39;CurrencyCode&#39; as &#39;IsoCode&#39;, &#39;IsCorporate&#39;;q = order q by &#39;IsCorporate&#39; asc;\nq = limit q 2;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "QuotaAchieved": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "QuotaAchieved",
+        "numbers": [],
+        "query": "a = load &quot;User&quot;; a = foreach a generate case when (&quot;{{ cell(QuotaDetermination.result, 0, &quot;IsQuotaAvailable&quot;).asString() }}&quot; == &quot;QuotaAvailable&quot; and {{ cell(QuotaDetermination.result, 0, &quot;PercentQuotaAchieved&quot;).asString() }} &lt;= 49) then &quot;#D14062&quot; when (&quot;{{ cell(QuotaDetermination.result, 0, &quot;IsQuotaAvailable&quot;).asString() }}&quot; == &quot;QuotaAvailable&quot; and {{ cell(QuotaDetermination.result, 0, &quot;PercentQuotaAchieved&quot;).asString() }} &gt;= 50 and {{ cell(QuotaDetermination.result, 0, &quot;PercentQuotaAchieved&quot;).asString() }} &lt;= 99) then &quot;#F9A549&quot; else &quot;#0BA976&quot; end as &#39;color&#39;, case when &quot;{{ cell(QuotaDetermination.result, 0, &quot;IsQuotaAvailable&quot;).asString() }}&quot; == &quot;NoQuota&quot; then &quot;&quot; else &quot;Quota Attainment&quot; end as &#39;QuotaSubText&#39;, case when &quot;{{ cell(QuotaDetermination.result, 0, &quot;IsQuotaAvailable&quot;).asString() }}&quot; == &quot;NoQuota&quot; then &quot;&quot; else &quot;{{ cell(QuotaDetermination.result, 0, &quot;PercentQuotaAchieved&quot;).asString() }}%&quot; end as &#39;PercentQuotaAchieved&#39;;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "columnProperties": {},
+            "columns": [],
+            "customBulkActions": [],
+            "interactions": [],
+            "maxColumnWidth": 300,
+            "minColumnWidth": 40,
+            "mode": "variable",
+            "totals": true
+          },
+          "type": "table"
+        }
+      },
+      "QuotaDetermination": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "QuotaDetermination",
+        "numbers": [],
+        "query": "b = load &quot;ForecastingData&quot;;b = filter b by &#39;Type&#39; == &quot;Quota&quot; &amp;&amp; &#39;Category&#39; == &quot;Quota&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot;&amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;; c = load &quot;User&quot;; c = filter c by &#39;Id&#39; == &quot;!{user.Id}&quot;; d = group c by &#39;Id&#39; left, b by &#39;Owner_ID&#39;; d = foreach d generate first(c.&#39;FullPhotoUrl&#39;) as &#39;ChatterImage&#39;, case when sum(b.&#39;Value&#39;) is not null then &quot;QuotaAvailable&quot; else &quot;NoQuota&quot; end as &#39;IsQuotaAvailable&#39;, coalesce(round({{coalesce(cell(ForecastingClosedItem.result, 0, &quot;AmountWithoutManagerAdjustment&quot;), 0).asObject()}} / ( sum(b.&#39;Value&#39;) * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}}) * 100, 1), 0) as &#39;PercentQuotaAchieved&#39;; d = limit d 2000;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "parameters": {
+            "columnProperties": {},
+            "columns": [],
+            "customBulkActions": [],
+            "interactions": [],
+            "maxColumnWidth": 300,
+            "minColumnWidth": 40,
+            "mode": "variable",
+            "totals": true
+          },
+          "type": "table"
+        }
+      },
+      "ForecastingPrediction": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "ForecastingPrediction",
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Category&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;Amount&#39;;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "UserData": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;User&quot;; q = filter q by &#39;Id&#39; == &quot;!{user.Id}&quot;; q = foreach q generate q.&#39;FirstName&#39; as &#39;FirstName&#39;, q.&#39;Name&#39; as &#39;Name&#39;, q.&#39;Id&#39; as &#39;Id&#39;, q.&#39;Username&#39; as &#39;Username&#39;, q.&#39;DefaultCurrencyIsoCode&#39; as &#39;DefaultCurrencyIsoCode&#39;;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [
+          "Name",
+          "Id",
+          "Username",
+          "FirstName"
+        ],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "FirstKPI": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "FirstKPI",
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;\nq = filter q by &#39;Type&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Category&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;KPIValue1&#39;;\nq = foreach q generate KPIValue1 as &#39;KPIValue1_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;;\n",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "ForecastingClosedItem": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "ForecastingClosedItem",
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; == &quot;AmountWithoutManagerAdjustment&quot; &amp;&amp; &#39;Category&#39; == &quot;ClosedOnly&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;AmountWithoutManagerAdjustment&#39;, &#39;Date&#39; as &#39;Date&#39;; q = order q by &#39;Date&#39; desc; q = limit q 1;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "TrendingPerformanceChartStep": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; in [&quot;AmountWithoutManagerAdjustment&quot;, &quot;Actual&quot;, &quot;Predicted&quot; ] &amp;&amp; &#39;Category&#39; in [&quot;Predicted&quot;, &quot;Actual&quot;, &quot;CommitForecast&quot;, &quot;BestCaseForecast&quot; ] &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;q = group q by (&#39;Date_Year&#39;, &#39;Date_Month&#39;, &#39;Date_Day&#39;, &#39;Category&#39;);q = foreach q generate (((&#39;Date_Year&#39; + &quot;~~~&quot;) + &#39;Date_Month&#39;) + &quot;~~~&quot;) + &#39;Date_Day&#39; as &#39;Date_Year~~~Date_Month~~~Date_Day&#39;, &#39;Category&#39; as &#39;Category&#39;, sum(&#39;Value&#39;) * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;Amount&#39;, &quot;{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&quot; as &#39;Currency&#39;, case when &#39;Category&#39; == &quot;Predicted&quot; then sum(&#39;ValueHigherBound&#39;) * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} end as &#39;Upper Bound&#39;, case when &#39;Category&#39; == &quot;Predicted&quot; then sum(&#39;ValueLowerBound&#39;) * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} end as &#39;Lower Bound&#39;;q = order q by (&#39;Date_Year~~~Date_Month~~~Date_Day&#39; desc, &#39;Category&#39; desc);q = limit q 100;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "none",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "KPIDetermination_1": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "KPIDetermination",
+        "numbers": [],
+        "query": "a = load &quot;ForecastingData&quot;;a = filter a by &#39;Type&#39; == &quot;Quota&quot; &amp;&amp; &#39;Category&#39; == &quot;Quota&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nb = load &quot;ForecastingData&quot;;b = filter b by &#39;Type&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Category&#39; == &quot;Prediction&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nc = load &quot;ForecastingData&quot;;c = filter c by &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = group c by &#39;Owner_ID&#39; left, a by &#39;Owner_ID&#39; left, b by &#39;Owner_ID&#39;;\nq = foreach q generate c.&#39;Owner_ID&#39; as &#39;OwnerId&#39;, a.&#39;Owner_ID&#39; as &#39;Quota Owner&#39;, b.&#39;Owner_ID&#39; as &#39;Prediction Owner&#39;, case when (a.&#39;Owner_ID&#39; is not null &amp;&amp; b.&#39;Owner_ID&#39; is not null) then &quot;PredictionAndQuota&quot; when (a.&#39;Owner_ID&#39; is not null &amp;&amp; b.&#39;Owner_ID&#39; is null) then &quot;NoPrediction&quot; when (a.&#39;Owner_ID&#39; is null &amp;&amp; b.&#39;Owner_ID&#39; is not null) then &quot;NoQuota&quot; else &quot;NoPredictionNoQuota&quot; end as &#39;KPIDetermination&#39;;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "ForecastingCommitItem": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; == &quot;AmountWithoutManagerAdjustment&quot; &amp;&amp; &#39;Category&#39; == &quot;CommitForecast&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;AmountWithoutManagerAdjustment&#39;, &#39;Date&#39; as &#39;Date&#39;; q = order q by &#39;Date&#39; desc; q = limit q 1;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "ForecastingBestCaseItem": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "ForecastingBestCaseItem",
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; == &quot;AmountWithoutManagerAdjustment&quot; &amp;&amp; &#39;Category&#39; == &quot;BestCaseForecast&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;AmountWithoutManagerAdjustment&#39;, &#39;Date&#39; as &#39;Date&#39;; q = order q by &#39;Date&#39; desc; q = limit q 1;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      },
+      "KPICalculation_Cumulative": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "KPICalculation_Cumulative",
+        "numbers": [],
+        "query": "r = load &quot;ForecastingData&quot;;\nq = load &quot;User&quot;;\nq = filter q by &#39;Id&#39; == &quot;!{user.Id}&quot;;\nq = foreach q generate (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}} when &quot;NoQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}} else {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} end) as &#39;KPIValue1&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then &quot;Einstein Prediction&quot; when &quot;NoQuota&quot; then &quot;Einstein Prediction&quot; else &quot;Closed&quot; end) as &#39;KPILabel1&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}}-{{coalesce(cell(ForecastingQuota.result,0,&quot;Amount&quot;),0).asObject()}} when &quot;NoQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}}-{{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} when &quot;NoPrediction&quot; then {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingQuota.result,0,&quot;Amount&quot;),0).asObject()}} else {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} end) as &#39;KPIValue2&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then &quot;Einstein Prediction to Quota Gap&quot; when &quot;NoQuota&quot; then &quot;Einstein Prediction to Commit Gap&quot; when &quot;NoPrediction&quot; then &quot;Closed to Quota Gap&quot; else &quot;Closed to Commit Gap&quot; end) as &#39;KPILabel2&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}}-{{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} when &quot;NoQuota&quot; then {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}} when &quot;NoPrediction&quot; then {{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingQuota.result,0,&quot;Amount&quot;),0).asObject()}} else {{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingBestCaseItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} end) as &#39;KPIValue3&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then &quot;Einstein Prediction to Commit Gap&quot; when &quot;NoQuota&quot; then &quot;Closed to Einstein Prediction Gap&quot; when &quot;NoPrediction&quot; then &quot;Commit to Quota Gap&quot; else &quot;Commit to Best Case Gap&quot; end) as &#39;KPILabel3&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingQuota.result,0,&quot;Amount&quot;),0).asObject()}} when &quot;NoQuota&quot; then {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} when &quot;NoPrediction&quot; then {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} else {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}}-{{coalesce(cell(ForecastingBestCaseItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} end) as &#39;KPIValue4&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then &quot;Closed to Quota Gap&quot; when &quot;NoQuota&quot; then &quot;Closed to Commit Gap&quot; when &quot;NoPrediction&quot; then &quot;Closed to Commit Gap&quot; else &quot;Closed to Best Case Gap&quot; end) as &#39;KPILabel4&#39;;\nq = foreach q generate KPIValue1 as &#39;KPIValue1_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel1, KPIValue2 as &#39;KPIValue2_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel2, (case when KPIValue2&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor2&#39;, KPIValue3 as &#39;KPIValue3_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel3, (case when KPIValue3&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor3&#39;, KPIValue4 as &#39;KPIValue4_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel4, (case when KPIValue4&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor4&#39;;\n",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "ForecastingUserPreference": {
+        "broadcastFacet": false,
+        "groups": [],
+        "numbers": [],
+        "query": "SELECT ForecastingViewCurrency from ForecastingUserPreference",
+        "receiveFacetSource": {
+          "mode": "none",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [
+          "ForecastingViewCurrency"
+        ],
+        "type": "soql"
+      },
+      "KPICalculation_Non_Cumulative": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "KPICalculation_Non_Cumulative",
+        "numbers": [],
+        "query": "r = load &quot;ForecastingData&quot;;\nq = load &quot;User&quot;;\nq = filter q by &#39;Id&#39; == &quot;!{user.Id}&quot;;\nq = foreach q generate (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}} when &quot;NoQuota&quot; then {{coalesce(cell(ForecastingPrediction.result,0,&quot;Amount&quot;),0).asObject()}} else {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} end) as &#39;KPIValue1&#39;, (case &quot;{{cell(KPIDetermination_1.result, 0, &quot;KPIDetermination&quot;).asString()}}&quot; when &quot;PredictionAndQuota&quot; then &quot;Einstein Prediction&quot; when &quot;NoQuota&quot; then &quot;Einstein Prediction&quot; else &quot;Closed&quot; end) as &#39;KPILabel1&#39;, {{coalesce(cell(ForecastingClosedItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} as &#39;KPIValue2&#39;, &quot;Closed&quot; as &#39;KPILabel2&#39;, {{coalesce(cell(ForecastingCommitItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} as &#39;KPIValue3&#39;, &quot;Commit&quot; as &#39;KPILabel3&#39;, {{coalesce(cell(ForecastingBestCaseItem.result,0,&quot;AmountWithoutManagerAdjustment&quot;),0).asObject()}} as &#39;KPIValue4&#39;, &quot;Best Case&quot; as &#39;KPILabel4&#39;;\nq = foreach q generate KPIValue1 as &#39;KPIValue1_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel1, KPIValue2 as &#39;KPIValue2_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel2, (case when KPIValue2&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor2&#39;, KPIValue3 as &#39;KPIValue3_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel3, (case when KPIValue3&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor3&#39;, KPIValue4 as &#39;KPIValue4_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}&#39;, KPILabel4, (case when KPIValue4&lt;0 then &quot;#D14062&quot; else &quot;#08A976&quot; end) as &#39;KPIColor4&#39;;\n",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "CurrentPeriod": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;Period&quot;; q = filter q by date(&#39;StartDate_Year&#39;, &#39;StartDate_Month&#39;, &#39;StartDate_Day&#39;) in [&quot;current month&quot;..&quot;current month&quot;]; q = filter q by &#39;Type&#39; in [&quot;Month&quot;, &quot;0&quot;]; q = foreach q generate &#39;Id&#39; as &#39;Id&#39;, upper(toString(now(), &quot;yyyy-MM-dd&quot;)) as &#39;now&#39;; q = limit q 1;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "TrendingPerformanceTodayLine": {
+        "broadcastFacet": true,
+        "groups": [],
+        "label": "TrendingPerformanceTodayLine",
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; in [&quot;Predicted&quot;] &amp;&amp; &#39;Category&#39; in [&quot;Predicted&quot;] &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = group q by (&#39;Date_Year&#39;, &#39;Date_Month&#39;, &#39;Date_Day&#39;, &#39;Category&#39;);\nq = foreach q generate (((&#39;Date_Year&#39; + &quot;~~~&quot;) + &#39;Date_Month&#39;) + &quot;~~~&quot;) + &#39;Date_Day&#39; as &#39;Date_Year~~~Date_Month~~~Date_Day&#39;;\nq = order q by &#39;Date_Year~~~Date_Month~~~Date_Day&#39; asc;\nq = limit q 1;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true
+      },
+      "ForecastingQuota": {
+        "broadcastFacet": true,
+        "groups": [],
+        "numbers": [],
+        "query": "q = load &quot;ForecastingData&quot;;q = filter q by &#39;Type&#39; == &quot;Quota&quot; &amp;&amp; &#39;Category&#39; == &quot;Quota&quot; &amp;&amp; &#39;Owner_ID&#39; == &quot;!{user.Id}&quot; &amp;&amp; &#39;Period_ID&#39; == &quot;{{cell(CurrentPeriod.result, 0, &quot;Id&quot;).asString()}}&quot;;\nq = foreach q generate &#39;Owner_ID&#39; as &#39;OwnerId&#39;, &#39;Value&#39; * {{coalesce(cell(CurrencyTypeStep.result, 0, &quot;ConversionRate&quot;), 1).asObject()}} as &#39;Amount&#39;;",
+        "receiveFacetSource": {
+          "mode": "all",
+          "steps": []
+        },
+        "selectMode": "single",
+        "strings": [],
+        "type": "saql",
+        "useGlobal": true,
+        "visualizationParameters": {
+          "visualizationType": "hbar"
+        }
+      }
+    },
+    "widgetStyle": {
+      "backgroundColor": "#FFFFFF",
+      "borderColor": "#E6ECF2",
+      "borderEdges": [],
+      "borderRadius": 0,
+      "borderWidth": 1
+    },
+    "widgets": {
+      "TopContainer": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "KeyMetrics": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "size": "16px",
+                  "color": "#54698D"
+                },
+                "insert": "KEY METRICS"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "QuotaSubtext_2": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "size": "16px",
+                  "color": "#54698D"
+                },
+                "insert": "{{cell(QuotaAchieved.result, 0, &quot;QuotaSubText&quot;).asString() }}"
+              },
+              {
+                "attributes": {
+                  "align": "center"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "PercentQuotaNumber": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "size": "16px",
+                  "color": "{{cell(QuotaAchieved.result, 0, &quot;color&quot;).asString() }}"
+                },
+                "insert": "{{ cell(QuotaAchieved.result, 0, &quot;PercentQuotaAchieved&quot;).asString() }}"
+              },
+              {
+                "attributes": {
+                  "align": "center"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "number_4": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": false,
+          "interactions": [],
+          "measureField": "KPIValue4_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor4&quot;).asString()}}",
+          "numberSize": 15,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel4&quot;).asString()}}",
+          "titleColor": "#54698D",
+          "titleSize": 15,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "Desktop_TrendingPerformanceChart": {
+        "parameters": {
+          "autoFitMode": "none",
+          "totalValue": "computeTotal",
+          "showPoints": true,
+          "legend": {
+            "showHeader": false,
+            "show": true,
+            "customSize": 10,
+            "position": "bottom-center",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [
+                  "Amount",
+                  "Upper Bound",
+                  "Lower Bound"
+                ],
+                "showNullValues": true,
+                "customizeLegend": true,
+                "showPercentage": false,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": [
+                  "Date_Year~~~Date_Month~~~Date_Day",
+                  "Category",
+                  "Currency"
+                ]
+              }
+            }
+          },
+          "visualizationType": "time",
+          "missingValue": "cumulativeUntilLastData",
+          "exploreLink": true,
+          "timeAxis": {
+            "showTitle": false,
+            "predictiveLine": {
+              "color": "rgb(22, 50, 92)",
+              "time": "{{coalesce(cell(TrendingPerformanceTodayLine.result, 0, &quot;Date_Year~~~Date_Month~~~Date_Day&quot;), cell(CurrentPeriod.result, 0, &quot;now&quot;)).asString()}}",
+              "label": "Today"
+            },
+            "showAxis": true,
+            "title": ""
+          },
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "",
+            "align": "center",
+            "subtitleLabel": ""
+          },
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "totalLabel": "",
+          "fillArea": false,
+          "showActionMenu": true,
+          "showZero": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": false,
+            "showAxis": true,
+            "referenceLines": [
+              {
+                "color": "rgb(46, 196, 78)",
+                "label": {
+                  "data": "Quota: {{cell(ForecastingQuota.result, 0, &quot;Amount&quot;).asString()}}",
+                  "type": "static"
+                },
+                "value": {
+                  "data": "{{cell(ForecastingQuota.result, 0, &quot;Amount&quot;).asObject()}}",
+                  "type": "static"
+                }
+              }
+            ],
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "theme": "wave",
+          "step": "TrendingPerformanceChartStep",
+          "drawArea": {
+            "measure": "Amount",
+            "showDrawArea": true,
+            "bounding1": "Lower Bound",
+            "bounding2": "Upper Bound"
+          }
+        },
+        "type": "chart"
+      },
+      "number_3": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": false,
+          "interactions": [],
+          "measureField": "KPIValue3_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor3&quot;).asString()}}",
+          "numberSize": 15,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel3&quot;).asString()}}",
+          "titleColor": "#54698D",
+          "titleSize": 15,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "number_2": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": false,
+          "interactions": [],
+          "measureField": "KPIValue2_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor2&quot;).asString()}}",
+          "numberSize": 15,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel2&quot;).asString()}}",
+          "titleColor": "#54698D",
+          "titleSize": 15,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "container_1": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "number_1": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": true,
+          "interactions": [],
+          "measureField": "KPIValue1_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "#16325C",
+          "numberSize": 30,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel1&quot;).asString()}}",
+          "titleColor": "#54698D",
+          "titleSize": 15,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "MiddleContainer_1": {
+        "parameters": {
+          "alignmentX": "left",
+          "alignmentY": "top",
+          "fit": "original",
+          "interactions": []
+        },
+        "type": "container"
+      },
+      "RunningUserName": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "size": "32px",
+                  "color": "#16325C"
+                },
+                "insert": "{{ cell(UserData.result, 0, &quot;Name&quot;).asString() }}"
+              },
+              {
+                "attributes": {
+                  "align": "center"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "TrendingPerformanceChart": {
+        "parameters": {
+          "totalValue": "computeTotal",
+          "showPoints": true,
+          "legend": {
+            "showHeader": false,
+            "show": true,
+            "customSize": "auto",
+            "position": "top-center",
+            "inside": false
+          },
+          "axisMode": "multi",
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [
+                  "Amount",
+                  "Upper Bound",
+                  "Lower Bound"
+                ],
+                "showNullValues": true,
+                "customizeLegend": true,
+                "showPercentage": false,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": [
+                  "Date_Year~~~Date_Month~~~Date_Day",
+                  "Category",
+                  "Currency"
+                ]
+              }
+            }
+          },
+          "visualizationType": "time",
+          "missingValue": "cumulativeUntilLastData",
+          "exploreLink": false,
+          "timeAxis": {
+            "showTitle": false,
+            "predictiveLine": {
+              "color": "#091A3E",
+              "time": "{{coalesce(cell(TrendingPerformanceTodayLine.result, 0, &quot;Date_Year~~~Date_Month~~~Date_Day&quot;), cell(CurrentPeriod.result, 0, &quot;now&quot;)).asString()}}",
+              "label": "Today"
+            },
+            "showAxis": true,
+            "title": ""
+          },
+          "title": {
+            "fontSize": 14,
+            "subtitleFontSize": 11,
+            "label": "",
+            "align": "center",
+            "subtitleLabel": ""
+          },
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": true,
+            "enable": false,
+            "type": "x",
+            "chartsPerLine": 4
+          },
+          "totalLabel": "",
+          "fillArea": false,
+          "showActionMenu": true,
+          "showZero": true,
+          "measureAxis2": {
+            "sqrtScale": false,
+            "showTitle": true,
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "measureAxis1": {
+            "sqrtScale": false,
+            "showTitle": false,
+            "referenceLines": [
+              {
+                "color": "rgb(27, 204, 32)",
+                "label": {
+                  "data": "Quota: {{cell(ForecastingQuota.result, 0, &quot;Amount&quot;).asString()}}",
+                  "type": "static"
+                },
+                "value": {
+                  "data": "{{cell(ForecastingQuota.result, 0, &quot;Amount&quot;).asString()}}",
+                  "type": "static"
+                }
+              }
+            ],
+            "showAxis": true,
+            "title": "",
+            "customDomain": {
+              "showDomain": false
+            }
+          },
+          "theme": "wave",
+          "step": "TrendingPerformanceChartStep",
+          "drawArea": {
+            "measure": "Amount",
+            "showDrawArea": true,
+            "bounding1": "Lower Bound",
+            "bounding2": "Upper Bound"
+          }
+        },
+        "type": "chart"
+      },
+      "DesktopKPI_2": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": true,
+          "interactions": [],
+          "measureField": "KPIValue2_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor2&quot;).asString()}}",
+          "numberSize": 28,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel2&quot;).asString()}}",
+          "titleColor": "#335779",
+          "titleSize": 14,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "DesktopKPI_1": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": true,
+          "interactions": [],
+          "measureField": "KPIValue1_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "#335779",
+          "numberSize": 28,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel1&quot;).asString()}}",
+          "titleColor": "#335779",
+          "titleSize": 14,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "TrendingPerformance": {
+        "parameters": {
+          "content": {
+            "richTextContent": [
+              {
+                "attributes": {
+                  "size": "16px",
+                  "color": "#54698D"
+                },
+                "insert": "TRENDING PERFORMANCE"
+              },
+              {
+                "attributes": {
+                  "align": "left"
+                },
+                "insert": "\n"
+              }
+            ]
+          },
+          "interactions": [],
+          "showActionMenu": true
+        },
+        "type": "text"
+      },
+      "UserImageChart": {
+        "parameters": {
+          "totalValue": "computeTotal",
+          "max": 100,
+          "legend": {
+            "showHeader": true,
+            "show": false,
+            "position": "right-top",
+            "inside": false
+          },
+          "tooltip": {
+            "content": {
+              "legend": {
+                "showBinLabel": true,
+                "measures": [],
+                "showNullValues": true,
+                "customizeLegend": false,
+                "showPercentage": false,
+                "showDimensions": true,
+                "showMeasures": true,
+                "dimensions": []
+              }
+            }
+          },
+          "visualizationType": "polargauge",
+          "exploreLink": false,
+          "medium": 49,
+          "title": {
+            "fontSize": 10,
+            "subtitleFontSize": 11,
+            "label": "",
+            "align": "left",
+            "subtitleLabel": ""
+          },
+          "trellis": {
+            "flipLabels": false,
+            "showGridLines": false,
+            "enable": true,
+            "type": "x",
+            "chartsPerLine": 1
+          },
+          "icons": {
+            "useIcons": true,
+            "iconProps": {
+              "fit": "cover",
+              "column": "ChatterImage"
+            }
+          },
+          "inner": 90,
+          "colors": {
+            "mediumColor2": "#F9A549",
+            "mediumColor1": "#F9A549",
+            "lowColor1": "#D14062",
+            "lowColor2": "#D14062",
+            "highColor1": "#0BA976",
+            "highColor2": "#0BA976"
+          },
+          "totalLabel": "",
+          "high": 99,
+          "min": 0,
+          "showActionMenu": true,
+          "valueType": "none",
+          "theme": "dark",
+          "step": "QuotaDetermination"
+        },
+        "type": "chart"
+      },
+      "DesktopKPI_4": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": true,
+          "interactions": [],
+          "measureField": "KPIValue4_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor4&quot;).asString()}}",
+          "numberSize": 28,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel4&quot;).asString()}}",
+          "titleColor": "#335779",
+          "titleSize": 14,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      },
+      "DesktopKPI_3": {
+        "parameters": {
+          "compact": true,
+          "exploreLink": true,
+          "interactions": [],
+          "measureField": "KPIValue3_{{coalesce(cell(CurrencyTypeStep.result, 0, &quot;IsoCode&quot;), &quot;DefaultCurrency&quot;).asString()}}",
+          "numberColor": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPIColor3&quot;).asString()}}",
+          "numberSize": 28,
+          "showActionMenu": true,
+          "step": "KPICalculation_Cumulative",
+          "textAlignment": "center",
+          "title": "{{cell(KPICalculation_Cumulative.result, 0, &quot;KPILabel3&quot;).asString()}}",
+          "titleColor": "#335779",
+          "titleSize": 14,
+          "tooltip": {
+            "customizeTooltip": false
+          }
+        },
+        "type": "number"
+      }
+    }
+  },
+  "templateAssetSourceName": "Summary_Dashboard",
+  "templateSourceId": "sfdc_internal__ForecastingAnalytics",
+  "type": "dashboard",
+  "url": "/services/data/v62.0/wave/dashboards/0FKId000000XlXfOAK",
+  "visibility": "All"
+}

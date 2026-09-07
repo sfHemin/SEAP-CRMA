@@ -1,0 +1,381 @@
+{
+  "dataSourceLinksInfo": {
+    "enableAutomaticLinking": false,
+    "excludeRelationships": [],
+    "links": []
+  },
+  "filters": [],
+  "gridLayouts": [
+    {
+      "name": "Default",
+      "numColumns": 12,
+      "rowHeight": "fine",
+      "version": 1,
+      "style": {
+        "alignmentX": "left",
+        "alignmentY": "top",
+        "backgroundColor": "#E6ECF2",
+        "cellSpacingX": 8,
+        "cellSpacingY": 8,
+        "fit": "original",
+        "gutterColor": "#C5D3E0"
+      },
+      "pages": [
+        {
+          "name": "Page1",
+          "navigationHidden": false,
+          "widgets": [
+            {
+              "name": "title_text",
+              "row": 0,
+              "column": 0,
+              "colspan": 12,
+              "rowspan": 2
+            },
+            {
+              "name": "kpi_total_value",
+              "row": 2,
+              "column": 0,
+              "colspan": 4,
+              "rowspan": 4
+            },
+            {
+              "name": "kpi_deal_count",
+              "row": 2,
+              "column": 4,
+              "colspan": 4,
+              "rowspan": 4
+            },
+            {
+              "name": "kpi_avg_deal",
+              "row": 2,
+              "column": 8,
+              "colspan": 4,
+              "rowspan": 4
+            },
+            {
+              "name": "chart_by_cluster",
+              "row": 6,
+              "column": 0,
+              "colspan": 6,
+              "rowspan": 10
+            },
+            {
+              "name": "chart_rank_industry",
+              "row": 6,
+              "column": 6,
+              "colspan": 6,
+              "rowspan": 10
+            },
+            {
+              "name": "filter_cluster",
+              "row": 16,
+              "column": 0,
+              "colspan": 6,
+              "rowspan": 3
+            },
+            {
+              "name": "filter_industry",
+              "row": 16,
+              "column": 6,
+              "colspan": 6,
+              "rowspan": 3
+            },
+            {
+              "name": "table_detail",
+              "row": 19,
+              "column": 0,
+              "colspan": 12,
+              "rowspan": 10
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layouts": [],
+  "widgetStyle": {
+    "borderEdges": [],
+    "borderColor": "#E6ECF2",
+    "borderRadius": 8,
+    "borderWidth": 1,
+    "backgroundColor": "#FFFFFF"
+  },
+  "steps": {
+    "cluster_agg_1": {
+      "type": "aggregateflex",
+      "label": "By Cluster",
+      "datasets": [
+        {
+          "name": "Clustered_Accounts"
+        }
+      ],
+      "query": {
+        "query": "{\"measures\": [[\"sum\", \"AccountLifetimeValue\"]], \"groups\": [\"Cluster\"]}",
+        "version": -1
+      },
+      "broadcastFacet": true,
+      "receiveFacetSource": {
+        "mode": "all"
+      },
+      "isGlobal": false,
+      "useGlobal": true,
+      "selectMode": "single",
+      "visualizationParameters": {
+        "visualizationType": "hbar"
+      },
+      "useExternalFilters": true
+    },
+    "rank_industry_1": {
+      "type": "saql",
+      "label": "Rank by Industry",
+      "query": "q = load \"0FbId000000c7nUKAQ/0FcId000000RGbxKAG\"; q = group q by 'Industry'; q = foreach q generate 'Industry' as 'Industry', sum('AccountLifetimeValue') as 'Lifetime_Value', rank() over([..] partition by all order by sum('AccountLifetimeValue') desc) as 'Rank'; q = order q by 'Rank' asc; q = limit q 10;",
+      "strings": [
+        "Industry"
+      ],
+      "numbers": [
+        "Lifetime_Value",
+        "Rank"
+      ],
+      "groups": [],
+      "broadcastFacet": true,
+      "receiveFacetSource": {
+        "mode": "all"
+      },
+      "useGlobal": true,
+      "selectMode": "single",
+      "useExternalFilters": true
+    },
+    "kpi_1": {
+      "type": "aggregateflex",
+      "label": "KPIs",
+      "datasets": [
+        {
+          "name": "Clustered_Accounts"
+        }
+      ],
+      "query": {
+        "query": "{\"measures\": [[\"sum\", \"AccountLifetimeValue\"], [\"sum\", \"DealCount\"], [\"avg\", \"AverageDealSize\"]], \"groups\": []}",
+        "version": -1
+      },
+      "broadcastFacet": true,
+      "receiveFacetSource": {
+        "mode": "all"
+      },
+      "isGlobal": false,
+      "useGlobal": true,
+      "selectMode": "single",
+      "useExternalFilters": true
+    },
+    "detail_1": {
+      "type": "aggregateflex",
+      "label": "Detail",
+      "datasets": [
+        {
+          "name": "Clustered_Accounts"
+        }
+      ],
+      "query": {
+        "query": "{\"measures\": [[\"sum\", \"AccountLifetimeValue\"], [\"sum\", \"DealCount\"]], \"groups\": [\"Industry\", \"Cluster\"]}",
+        "version": -1
+      },
+      "broadcastFacet": true,
+      "receiveFacetSource": {
+        "mode": "all"
+      },
+      "isGlobal": false,
+      "useGlobal": true,
+      "selectMode": "single",
+      "useExternalFilters": true
+    },
+    "filter_cluster_1": {
+      "type": "aggregateflex",
+      "label": "Cluster Filter",
+      "datasets": [
+        {
+          "name": "Clustered_Accounts"
+        }
+      ],
+      "query": {
+        "query": "{\"measures\": [[\"count\", \"*\"]], \"groups\": [\"Cluster\"]}",
+        "version": -1
+      },
+      "broadcastFacet": true,
+      "isGlobal": true,
+      "useGlobal": true,
+      "selectMode": "multi",
+      "useExternalFilters": true
+    },
+    "filter_industry_1": {
+      "type": "aggregateflex",
+      "label": "Industry Filter",
+      "datasets": [
+        {
+          "name": "Clustered_Accounts"
+        }
+      ],
+      "query": {
+        "query": "{\"measures\": [[\"count\", \"*\"]], \"groups\": [\"Industry\"]}",
+        "version": -1
+      },
+      "broadcastFacet": true,
+      "isGlobal": true,
+      "useGlobal": true,
+      "selectMode": "multi",
+      "useExternalFilters": true
+    }
+  },
+  "widgets": {
+    "title_text": {
+      "type": "text",
+      "parameters": {
+        "content": {
+          "richTextContent": [
+            {
+              "attributes": {
+                "color": "#16325c",
+                "size": "20px"
+              },
+              "insert": "CRMA Verification Dashboard \u2014 Clustered Accounts"
+            },
+            {
+              "attributes": {
+                "align": "left"
+              },
+              "insert": "\n"
+            }
+          ]
+        },
+        "interactions": [],
+        "showActionMenu": true
+      }
+    },
+    "kpi_total_value": {
+      "type": "number",
+      "parameters": {
+        "step": "kpi_1",
+        "measureField": "sum_AccountLifetimeValue",
+        "title": "Total Lifetime Value",
+        "compact": true,
+        "numberSize": 18,
+        "textAlignment": "center",
+        "interactions": []
+      }
+    },
+    "kpi_deal_count": {
+      "type": "number",
+      "parameters": {
+        "step": "kpi_1",
+        "measureField": "sum_DealCount",
+        "title": "Total Deals",
+        "compact": true,
+        "numberSize": 18,
+        "textAlignment": "center",
+        "interactions": []
+      }
+    },
+    "kpi_avg_deal": {
+      "type": "number",
+      "parameters": {
+        "step": "kpi_1",
+        "measureField": "avg_AverageDealSize",
+        "title": "Avg Deal Size",
+        "compact": true,
+        "numberSize": 18,
+        "textAlignment": "center",
+        "interactions": []
+      }
+    },
+    "chart_by_cluster": {
+      "type": "chart",
+      "parameters": {
+        "step": "cluster_agg_1",
+        "visualizationType": "hbar",
+        "title": {
+          "fontSize": 14,
+          "subtitleFontSize": 11,
+          "label": "Lifetime Value by Cluster",
+          "align": "left",
+          "subtitleLabel": ""
+        },
+        "measureAxis1": [
+          "sum_AccountLifetimeValue"
+        ],
+        "measureAxis2": [],
+        "dimensionAxis": [
+          "Cluster"
+        ],
+        "trellis": {
+          "enable": false
+        },
+        "legend": {
+          "show": false
+        },
+        "showActionMenu": true
+      }
+    },
+    "chart_rank_industry": {
+      "type": "chart",
+      "parameters": {
+        "step": "rank_industry_1",
+        "visualizationType": "hbar",
+        "title": {
+          "fontSize": 14,
+          "subtitleFontSize": 11,
+          "label": "Top 10 Industries (ranked)",
+          "align": "left",
+          "subtitleLabel": ""
+        },
+        "columnMap": {
+          "dimensionAxis": [
+            "Industry"
+          ],
+          "plots": [
+            "Lifetime_Value"
+          ]
+        },
+        "trellis": {
+          "enable": false
+        },
+        "legend": {
+          "show": false
+        },
+        "showActionMenu": true
+      }
+    },
+    "filter_cluster": {
+      "type": "listselector",
+      "parameters": {
+        "step": "filter_cluster_1",
+        "displayMode": "filter",
+        "instant": true,
+        "title": "Filter: Cluster",
+        "compact": false,
+        "interactions": []
+      }
+    },
+    "filter_industry": {
+      "type": "listselector",
+      "parameters": {
+        "step": "filter_industry_1",
+        "displayMode": "filter",
+        "instant": true,
+        "title": "Filter: Industry",
+        "compact": false,
+        "interactions": []
+      }
+    },
+    "table_detail": {
+      "type": "table",
+      "parameters": {
+        "columnProperties": {},
+        "columns": [],
+        "customBulkActions": [],
+        "headerProperties": {},
+        "interactions": [],
+        "showActionMenu": true,
+        "step": "detail_1"
+      }
+    }
+  }
+}

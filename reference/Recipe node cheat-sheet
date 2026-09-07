@@ -1,0 +1,384 @@
+# CRMA Recipe Node Cheat-Sheet — GROUND TRUTH from deployed sample recipes
+# ---------------------------------------------------------------------------
+# Every shape below is extracted from REAL deployed recipes in "Sample recipes/"
+# (Sample 1.json = 86 nodes, Sample 2.json = 41 nodes). These deployed and ran
+# successfully, so the syntax is verified — trust these over the API schema doc,
+# which lists title-case enum names that do NOT match what the API actually
+# accepts at runtime.
+#
+# Keywords: join node joinType LEFT_OUTER LOOKUP leftKeys rightKeys rightQualifier,
+# aggregate aggregations SUM COUNT AVG groupings nodeType STANDARD, formula
+# formulaExpression field reference double quotes, schema EDIT_ATTRIBUTES DROP_FIELDS
+# rename, load connectedDataset analyticsDataset, save output folderName,
+# filter EQUAL operator, computeRelative lag lead, extractGrains, typeCast,
+# date now() year() month() concat() coalesce() case when.
+# ---------------------------------------------------------------------------
+
+## GOLDEN RULE
+When unsure of ANY node shape, read the actual sample recipes:
+  read-reference "Sample recipes/Sample 2.json"   (cleaner, 41 nodes: aggregate, join, formula, computeRelative, extractGrains, typeCast, schema, save)
+  read-reference "Sample recipes/Sample 1.json"   (86 nodes: join×4, formula×25, schema×40, filter, sqlFilter, appendV2, timeSeriesV2)
+These are ground truth. Mirror their exact structure.
+
+===========================================================================
+## FORMULA NODE — verified from Sample 2
+===========================================================================
+action = "formula". parameters.fields[] holds the field definitions.
+
+⛔ CRITICAL — ONE FIELD PER FORMULA NODE (ORG-VERIFIED 2026-09-07).
+A formula node can define EXACTLY ONE field. Putting multiple fields in fields[] fails in the
+Recipe Builder with: "The node Formula defines N fields. A node can only define one field."
+PROOF: every formula node in the real deployed recipes has exactly 1 field — Sample 2 has 19
+formula nodes (all 1-field), Segmentation has 3 (all 1-field). NONE define more than one.
+
+To derive MULTIPLE fields (e.g. Weighted_Pipeline + Opportunity_Age + Opportunity_Status), CHAIN
+one formula node PER field: FORMULA0 (Weighted_Pipeline) → FORMULA1 (Opportunity_Age) →
+FORMULA2 (Opportunity_Status) → ... each node's sources = [previous node]. Do NOT cram them into
+one node's fields[] array. (The multi-field fields[] array is only for computeRelative, NOT formula.)
+
+Each field: { name, label, type, formulaExpression }.
+
+REAL examples (copy the quoting style EXACTLY):
+  concat(year(Forecast_Date),'-',month(Forecast_Date),'-W',Rno)
+  concat(AccountId,'-',ProductId,'-',year(Forecast_Date), '-', month(Forecast_Date))
+  coalesce("ForecastSalesUnitsW-1", null, 0)
+  case when "SUM_ForecastSalesUnitsW-1" = 0 then 0 else 1 end
+  case when Final_Forecast_SaleUnits < 0 then 'Yes' else 'No' end
+  now()
+
+QUOTING RULES (verified — this is the opposite of dashboard SAQL):
+  - Field name with special chars (hyphen, etc.): wrap in DOUBLE quotes → "ForecastSalesUnitsW-1"
+  - Plain field name (letters/underscore only): bare, no quotes → Forecast_Date, AccountId, Rno
+  - STRING literal: SINGLE quotes → 'Yes', 'No', '-'
+  - Comparisons: = (single equals), <, >, <=, >=  (NOT ==)
+
+VERIFIED WORKING FUNCTIONS in recipe formula:
+  now()                       ← current timestamp (YES it works — DatasetCreatedDate = now())
+  year(dateField)             ← extract year
+  month(dateField)            ← extract month
+  concat(a, b, c, ...)        ← string concatenation
+  coalesce(a, b, c)           ← first non-null
+  case when <cond> then <v> else <v> end
+  Arithmetic: + - * /
+
+Field JSON shape:
+```json
+{
+  "name": "NegativeForecastFlag",
+  "label": "Negative Forecast Flag",
+  "type": "TEXT",
+  "formulaExpression": "case when Final_Forecast_SaleUnits < 0 then 'Yes' else 'No' end"
+}
+```
+type valid values: TEXT, NUMBER, DATETIME, DATE.
+For NUMBER add "precision" and "scale". For DATETIME add "format" (e.g. "dd/MM/yyyy").
+
+CHAINED multi-field example (the CORRECT way to derive several fields):
+```json
+"FORMULA0": { "action": "formula", "parameters": { "expressionType": "SQL",
+  "fields": [ { "name": "Weighted_Pipeline", "label": "Weighted Pipeline", "type": "NUMBER",
+               "precision": 18, "scale": 2, "formulaExpression": "Amount * Probability / 100" } ] },
+  "sources": ["JOIN2"] },
+"FORMULA1": { "action": "formula", "parameters": { "expressionType": "SQL",
+  "fields": [ { "name": "Opportunity_Status", "label": "Opportunity Status", "type": "TEXT",
+               "formulaExpression": "case when IsWon = 'true' then 'Won' when IsClosed = 'true' then 'Lost' else 'Open' end" } ] },
+  "sources": ["FORMULA0"] },
+"OUTPUT0": { "action": "save", "parameters": { ... }, "sources": ["FORMULA1"] }
+```
+One field each, chained via sources. NEVER `fields: [f1, f2, f3, f4]` in a single formula node.
+
+NOTE on date differences: the samples do NOT compute datediff in a recipe formula.
+They compute date parts (year/month) and build keys, then do time math via
+computeRelative (lag/lead) or in the dashboard. If you need "days between two dates",
+prefer doing it in the dashboard SAQL step with daysBetween()/date_diff(), OR test
+now() arithmetic against a date field in a scratch formula before relying on it.
+
+===========================================================================
+## JOIN NODE — verified from Sample 2 (JOIN1) and Sample 1
+===========================================================================
+action = "join". sources = [leftNodeName, rightNodeName].
+
+```json
+"JOIN1": {
+  "action": "join",
+  "parameters": {
+    "joinType": "LEFT_OUTER",
+    "leftKeys":  ["cgcloud__Account__c", "ProductId", "ForecastDateString"],
+    "rightKeys": ["cgcloud__Account__c", "ProductId", "ForecastDateString"],
+    "rightQualifier": "NonPromo"
+  },
+  "sources": ["FILTER0", "DROP_FIELDS4"]
+}
+```
+
+VERIFIED joinType values (UPPERCASE_SNAKE — NOT title case):
+  "LEFT_OUTER"   ← keep all left rows (most common for enrichment)
+  "LOOKUP"       ← enrich (from Sample 1)
+  Other API values: "INNER", "RIGHT_OUTER", "CROSS" (not seen in samples — verify before use)
+
+  DO NOT USE title case ("LeftOuter", "Lookup") — the API schema doc lists those
+  but the runtime rejects them. Use UPPERCASE_SNAKE as the deployed samples do.
+
+KEY FACTS (verified against samples):
+  - leftKeys / rightKeys are ARRAYS (can be multi-key composite joins).
+  - rightQualifier is present; leftQualifier is NOT used in the samples — omit it
+    unless a validate error explicitly asks for it.
+  - After join, right-side fields are prefixed: NonPromo.FieldName.
+  - Rename/drop right-side fields DOWNSTREAM using a schema node (see below).
+  - sources[0] = left (driving) node, sources[1] = right (lookup) node.
+
+===========================================================================
+## SCHEMA NODE — rename / drop fields (verified from Sample 1)
+===========================================================================
+action = "schema". This is how you RENAME fields after a join (not rightQualifier
+formula tricks). Two operation shapes:
+
+RENAME (EDIT_ATTRIBUTES-style — set newProperties.name + .label):
+```json
+"EDIT_ATTRIBUTES25": {
+  "action": "schema",
+  "parameters": {
+    "fields": [
+      {
+        "name": "SUM_Predicted_SalesUnits",
+        "newProperties": {
+          "name": "Predicted_Baseline_SalesUnits",
+          "label": "Predicted Baseline SalesUnits"
+        }
+      }
+    ]
+  },
+  "sources": ["<previous node>"]
+}
+```
+
+DROP fields: use a schema node whose fields carry a drop flag, OR the join's own
+schema.slice. In Sample recipes, dropping is done with dedicated DROP_FIELDS schema
+nodes — read Sample 1 for the exact drop shape when you need it.
+
+Node naming convention in samples: schema nodes are named by function —
+EDIT_ATTRIBUTES25, DROP_FIELDS4 — but the action is always "schema".
+
+===========================================================================
+## AGGREGATE NODE — verified from Sample 2 (AGGREGATE1)
+===========================================================================
+action = "aggregate".
+
+```json
+"AGGREGATE1": {
+  "action": "aggregate",
+  "parameters": {
+    "aggregations": [
+      { "action": "SUM", "name": "SUM_Amount",  "label": "Sum of Amount",  "source": "Amount" },
+      { "action": "COUNT", "name": "Row_Count",  "label": "Row Count",      "source": "Id" }
+    ],
+    "groupings": ["cgcloud__Account__c", "ProductId", "ForecastDateString"],
+    "nodeType": "STANDARD",
+    "pivots": []
+  },
+  "sources": ["<previous node>"]
+}
+```
+
+VERIFIED (UPPERCASE — NOT title case):
+  aggregations[].action: "SUM", "COUNT", "AVG", "MAX", "MIN", "UNIQUE" (uppercase).
+    (API doc says "Sum"/"Count" — WRONG at runtime. Samples use "SUM"/"COUNT".)
+  nodeType: "STANDARD" (uppercase). NOT "Standard".
+  groupings: array of field-name strings.
+  pivots: [] (present, usually empty).
+  aggregations[].source = input field name.
+
+CONDITIONAL aggregation (SUM only Won opps): the aggregate node has no WHERE.
+  Pattern used in samples: a FORMULA node BEFORE aggregate creates a numeric flag
+  (e.g. Won_Amount = case when IsWon = 'true' then Amount else 0 end), then SUM that.
+
+===========================================================================
+## LOAD NODE — two forms
+===========================================================================
+action = "load", sources = [].
+
+FORM A — load a SAVED dataset (dataset-to-dataset, verified from samples):
+```json
+"parameters": {
+  "dataset": { "type": "analyticsDataset", "name": "Forecast_Dataset4", "label": "..." },
+  "fields": [],
+  "sampleDetails": { "type": "TopN", "sortBy": [] }
+}
+```
+
+FORM B — load a SALESFORCE OBJECT via SFDC_LOCAL (connectedDataset).
+The samples don't include this form (they chain datasets), so use the shape the org
+uses. Confirmed working shape:
+```json
+"parameters": {
+  "dataset": { "type": "connectedDataset", "label": "Opportunity" }
+}
+```
+type "connectedDataset" is REQUIRED for object loads or the API returns JSON_PARSER_ERROR.
+If a connectedDataset load fails, get-recipe on an existing org recipe that loads
+a Salesforce object and mirror its exact dataset block.
+
+===========================================================================
+## SAVE (OUTPUT) NODE — verified from Sample 2 (OUTPUT1)
+===========================================================================
+action = "save".
+
+```json
+"OUTPUT1": {
+  "action": "save",
+  "parameters": {
+    "dataset": {
+      "type": "analyticsDataset",
+      "name": "Forecast_Dataset4",
+      "label": "Forecasted Baseline Sales Units Dataset",
+      "folderName": "CR_sampleForecastBaselineIndirectNew_V1"
+    },
+    "fields": [],
+    "measuresToCurrencies": []
+  },
+  "sources": ["<last node>"]
+}
+```
+name + label are REQUIRED. folderName sets the target app.
+Missing label → run fails "Output dataset label can not be empty".
+
+===========================================================================
+## FILTER NODE
+===========================================================================
+action = "filter".
+```json
+"parameters": {
+  "filterExpressions": [
+    { "type": "TEXT", "field": "IsClosed", "operator": "EQUAL", "operands": ["false"] }
+  ]
+}
+```
+operator: "EQUAL" (verified). Booleans use type "TEXT" + string operand "false"/"true".
+No "logic" key. No OR inside one filterExpressions array — use two filter nodes or a
+formula flag field then filter on it.
+
+Sample 1 also uses action = "sqlFilter" for SQL-expression filters — read it if you
+need a complex filter condition.
+
+===========================================================================
+## computeRelative NODE — window functions lag/lead/row_number (from Sample 2)
+===========================================================================
+action = "computeRelative". Use for prior-period values, running calcs, sequencing.
+```json
+"parameters": {
+  "expressionType": "SQL",
+  "fields": [
+    {
+      "name": "ForecastSalesUnitsW-1",
+      "label": "ForecastSalesUnitsW-1",
+      "type": "NUMBER",
+      "precision": 10, "scale": 2,
+      "formulaExpression": "lag(Final_Forecast_SaleUnits)",
+      "defaultValue": ""
+    }
+  ],
+  "orderBy": [{ "fieldName": "Forecast_Date", "direction": "ASC" }],
+  "partitionBy": ["AccountProductKey"]
+}
+```
+Verified functions: lag(field), lead(field), row_number().
+expressionType here is "SQL" (uppercase) — note this differs from formula nodes;
+mirror the sample exactly per node type.
+
+===========================================================================
+## TYPECAST NODE — convert a field's type  [ORG-VERIFIED 2026-09-06]
+===========================================================================
+Built + ran on storm-org: converted Account.NumberOfEmployees (int) → NUMBER measure,
+which then summed correctly (83,960). action = "typeCast".
+Uses newProperties.typeProperties — NOT a flat "type" key (flat type → JSON_PARSER_ERROR).
+```json
+"TYPECAST0": {
+  "action": "typeCast",
+  "parameters": {
+    "fields": [
+      {
+        "name": "NumberOfEmployees",
+        "newProperties": {
+          "label": "Employees Measure",
+          "name": "Employees_Measure",
+          "typeProperties": { "precision": 18, "scale": 0, "type": "NUMBER" }
+        }
+      }
+    ]
+  },
+  "sources": ["LOAD_ACCOUNT"]
+}
+```
+typeProperties.type: NUMBER (with precision+scale), TEXT, DATE_ONLY, DATE_TIME.
+Common use: text-that-should-be-a-measure → NUMBER so it can be summed/averaged in dashboards.
+
+===========================================================================
+## appendV2 NODE — union two branches (SQL UNION)  [ORG-VERIFIED 2026-09-06]
+===========================================================================
+Built + ran on storm-org: unioned 21 Enterprise + 25 Mid-Market Account rows into one dataset.
+action = "appendV2". Uses fieldMappings with top/bottom (NOT a sources array in parameters).
+sources[0] = top branch, sources[1] = bottom branch.
+```json
+"APPEND0": {
+  "action": "appendV2",
+  "parameters": {
+    "fieldMappings": [
+      { "top": "Id",   "bottom": "Id" },
+      { "top": "Name", "bottom": "Name" },
+      { "top": "Type", "bottom": "Type" },
+      { "top": "Employees_Measure", "bottom": "Employees_Measure" }
+    ]
+  },
+  "sources": ["FILTER_BRANCH_A", "FILTER_BRANCH_B"]
+}
+```
+- fieldMappings maps top-branch field → bottom-branch field (names can differ across branches).
+- List every field you want in the union output. Unmapped fields are dropped.
+- For disjoint schemas, the Sample also shows enableDisjointedSchemaMerge — but plain fieldMappings
+  is the proven simple case.
+
+===========================================================================
+## timeSeriesV2 NODE — forecasting (advanced, mirror Sample 1)
+===========================================================================
+Complex ML node needing time-series data (dated rows over many periods) + Holt-Winters config.
+NOT trivially verifiable without a proper date-partitioned dataset. Key params (from Sample 1):
+  algorithm ("HOLT_WINTERS"), algorithmParameters {model, seasonality}, forecastDateField,
+  forecastDatesBy ("Fiscal-Y-W"), forecastFields[{aggregate, forecastField}], forecastLength,
+  forecastLengthType ("ROLLING"), groupingFields[{source, targets}], targetDateField.
+When you need it: read-reference "Sample recipes/Sample 1.json", find the timeSeriesV2 node,
+mirror it exactly, and adjust fields to your dataset. Verify with a real run before trusting output.
+
+===========================================================================
+## NODE ORDER OF PRECEDENCE WHEN DOCS CONFLICT
+===========================================================================
+1. Deployed sample recipes (Sample 1/2.json) — HIGHEST trust. Real, ran successfully.
+2. get-recipe on an existing org recipe — real, org-specific.
+3. This cheat-sheet — distilled from #1 and #2.
+4. Recipe reference (REST API schema doc) — lists property NAMES reliably, but its
+   enum CASING (Sum/Lookup/Standard) is WRONG at runtime. Trust it for "what fields
+   exist", not for "what string value to pass".
+
+
+---
+## VERIFIED PATTERN — Boolean fields from SFDC_LOCAL — string comparison in formula SQL
+VERIFIED 2026-09-06: Boolean fields loaded from SFDC_LOCAL (e.g. IsClosed, IsWon, SDO_Sales_Stalled_Opportunity__c) are stored as strings "true"/"false" in the recipe engine. In formula nodes (expressionType:"SQL"), compare them as string literals with single quotes: IsClosed = 'false', IsWon = 'true'. DO NOT use native boolean (= true / = false) — that causes immediate progress:0 run failure. Filter nodes already use type:"TEXT" + operands:["true"] which is consistent with this. Probe recipe DS_Probe_Bool_Test confirmed this on storm-org.
+
+
+---
+## VERIFIED PATTERN — Win/Loss closed-opp recipe pattern (FILTER → JOIN×3 → SCHEMA → FORMULA chain)
+VERIFIED 2026-09-06: Filter IsClosed with type:"TEXT", operands:["true"] on LOAD node directly (before joins). Then LEFT_OUTER join Account (rightQualifier:"Acct"), User/rep (rightQualifier:"Owner"), User/manager via "Owner.ManagerId" left key (rightQualifier:"Mgr"). SCHEMA renames Acct.*/Owner.*/Mgr.*. Formulas chain: FORMULA0(Outcome) → FORMULA1(Sales_Cycle_Days using AgeInDays) → FORMULA2(Deal_Size_Band by Amount tiers). AgeInDays on a closed opp = total sales cycle days. Deal_Size_Band: Enterprise>=100000, Mid-Market>=25000, SMB>=5000, else Small. 477 rows on storm-org.
+
+
+---
+## VERIFIED PATTERN — Account 360 roll-up pattern: Opp aggregate → LEFT_OUTER join to Account
+VERIFIED 2026-09-07: Aggregate Opportunity rows by AccountId (FORMULA chain for conditional sums → AGGREGATE0 groupings:["AccountId"]), then LEFT_OUTER join Account (left) to AGGREGATE0 (right) using leftKeys:["Id"] rightKeys:["AccountId"] rightQualifier:"Opp". SCHEMA renames Opp.* fields. Then JOIN User owner/manager as normal. Formula flags pattern: one FORMULA per flag (Is_Won, Is_Lost, Is_Open, Won_Amount, Open_Amount, Weighted_Opp) chained before AGGREGATE. Win_Rate formula: case when Total_Opps > 0 then Won_Opps / Total_Opps * 100 else 0 end. Customer_Tier: >=500000 Strategic, >=100000 Key, >=1 Growth, else Other. 1103 account rows on storm-org (most have no opps → Other/No History).
+
+
+---
+## VERIFIED PATTERN — Aggregate after Join-then-Schema: join reps BEFORE aggregate so name fields are in groupings
+VERIFIED DS_Sales_Rep_Performance: When aggregating by rep name + manager name, join User tables BEFORE the AGGREGATE node so Rep_Name/Manager_Name are available as grouping dimensions. Pattern: LOAD_OPP → FORMULA chain → JOIN_REP → JOIN_MGR → SCHEMA (rename Owner.Name→Rep_Name, Mgr.Name→Manager_Name) → AGGREGATE (groupings: [OwnerId, Rep_Name, Manager_Name, FiscalYear, FiscalQuarter]) → post-agg FORMULA (Win_Rate, Pipeline_Coverage) → OUTPUT. FiscalYear from SFDC_LOCAL is a NUMBER field — treat as measure in SAQL (cannot group by it directly in query-dataset).
+
+
+---
+## VERIFIED PATTERN — FiscalYear/FiscalQuarter are integers — cannot group in SAQL, cannot cast to TEXT in recipe
+VERIFIED 2026-09-07 on storm-org: Opportunity.FiscalYear and FiscalQuarter are INTEGER fields from SFDC_LOCAL. In CRMA datasets they land as MEASURES (numbers). Cannot group by them in SAQL (error 119: "Invalid group expression: FiscalYear. Dimension field or a non-epoch date access function expected"). Cannot convert to TEXT in recipe formula (cast(), '' || field, concat() all fail with syntax error). typeCast node with typeProperties.type:"TEXT" deploys OK but FAILS at run time (progress=0.33, after load step). WORKAROUND: Use CloseDate_Year and CloseDate_Quarter (auto-generated date dimensions from the CloseDate field — type TEXT, groupable) for fiscal period filters and chart groupings in dashboards. Keep FiscalYear/FiscalQuarter as raw numeric fields in the dataset for reference; do NOT attempt to group by them in SAQL or use them as dashboard dimensions.

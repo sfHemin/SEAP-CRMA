@@ -1,0 +1,207 @@
+{
+  "nodes": {
+    "LOAD_ACCOUNT": {
+      "action": "load",
+      "parameters": {
+        "dataset": {
+          "type": "connectedDataset",
+          "connectionName": "SFDC_LOCAL",
+          "sourceObjectName": "Account",
+          "label": "Account"
+        },
+        "fields": [
+          "Id",
+          "Name",
+          "Type",
+          "Industry",
+          "AnnualRevenue",
+          "NumberOfEmployees",
+          "BillingState"
+        ]
+      },
+      "sources": []
+    },
+    "TYPECAST0": {
+      "action": "typeCast",
+      "parameters": {
+        "fields": [
+          {
+            "name": "NumberOfEmployees",
+            "newProperties": {
+              "label": "Employees Measure",
+              "name": "Employees_Measure",
+              "typeProperties": {
+                "precision": 18,
+                "scale": 0,
+                "type": "NUMBER"
+              }
+            }
+          }
+        ]
+      },
+      "sources": [
+        "LOAD_ACCOUNT"
+      ]
+    },
+    "FILTER_CUSTOMER": {
+      "action": "filter",
+      "parameters": {
+        "filterExpressions": [
+          {
+            "type": "TEXT",
+            "field": "Type",
+            "operator": "EQUAL",
+            "operands": [
+              "Enterprise"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        "TYPECAST0"
+      ]
+    },
+    "FILTER_CHANNEL": {
+      "action": "filter",
+      "parameters": {
+        "filterExpressions": [
+          {
+            "type": "TEXT",
+            "field": "Type",
+            "operator": "EQUAL",
+            "operands": [
+              "Mid-Market"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        "TYPECAST0"
+      ]
+    },
+    "APPEND0": {
+      "action": "appendV2",
+      "parameters": {
+        "fieldMappings": [
+          {
+            "top": "Id",
+            "bottom": "Id"
+          },
+          {
+            "top": "Name",
+            "bottom": "Name"
+          },
+          {
+            "top": "Type",
+            "bottom": "Type"
+          },
+          {
+            "top": "Industry",
+            "bottom": "Industry"
+          },
+          {
+            "top": "AnnualRevenue",
+            "bottom": "AnnualRevenue"
+          },
+          {
+            "top": "Employees_Measure",
+            "bottom": "Employees_Measure"
+          },
+          {
+            "top": "BillingState",
+            "bottom": "BillingState"
+          }
+        ]
+      },
+      "sources": [
+        "FILTER_CUSTOMER",
+        "FILTER_CHANNEL"
+      ]
+    },
+    "OUTPUT0": {
+      "action": "save",
+      "parameters": {
+        "dataset": {
+          "type": "analyticsDataset",
+          "name": "DS_Verify_TypeCast_Append",
+          "label": "Verify TypeCast Append",
+          "folderName": "SharedApp"
+        },
+        "fields": [],
+        "measuresToCurrencies": []
+      },
+      "sources": [
+        "APPEND0"
+      ]
+    }
+  },
+  "ui": {
+    "nodes": {
+      "LOAD_ACCOUNT": {
+        "label": "Account",
+        "type": "LOAD_DATASET",
+        "top": 112,
+        "left": 112
+      },
+      "TYPECAST0": {
+        "label": "Cast Employees",
+        "type": "TRANSFORM",
+        "top": 112,
+        "left": 252
+      },
+      "FILTER_CUSTOMER": {
+        "label": "Direct",
+        "type": "FILTER",
+        "top": 42,
+        "left": 392
+      },
+      "FILTER_CHANNEL": {
+        "label": "Channel",
+        "type": "FILTER",
+        "top": 182,
+        "left": 392
+      },
+      "APPEND0": {
+        "label": "Union",
+        "type": "TRANSFORM",
+        "top": 112,
+        "left": 532
+      },
+      "OUTPUT0": {
+        "label": "Output",
+        "type": "OUTPUT",
+        "top": 112,
+        "left": 672
+      }
+    },
+    "connectors": [
+      {
+        "source": "LOAD_ACCOUNT",
+        "target": "TYPECAST0"
+      },
+      {
+        "source": "TYPECAST0",
+        "target": "FILTER_CUSTOMER"
+      },
+      {
+        "source": "TYPECAST0",
+        "target": "FILTER_CHANNEL"
+      },
+      {
+        "source": "FILTER_CUSTOMER",
+        "target": "APPEND0"
+      },
+      {
+        "source": "FILTER_CHANNEL",
+        "target": "APPEND0"
+      },
+      {
+        "source": "APPEND0",
+        "target": "OUTPUT0"
+      }
+    ],
+    "hiddenColumns": []
+  },
+  "version": "58.0",
+  "runMode": "full"
+}

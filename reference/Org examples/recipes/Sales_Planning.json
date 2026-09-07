@@ -1,0 +1,196 @@
+{
+  "conversionDetails": [],
+  "createdBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "/img/userprofile/default_profile_45_v2.png"
+  },
+  "createdDate": "2026-05-14T02:06:01.000Z",
+  "dataflowLastUpdate": "2026-05-14T02:06:01.000Z",
+  "fileUrl": "/services/data/v62.0/wave/recipes/05vId000000Ce7GIAS/file",
+  "format": "R3",
+  "historiesUrl": "/services/data/v62.0/wave/recipes/05vId000000Ce7GIAS/histories",
+  "id": "05vId000000Ce7GIAS",
+  "label": "Sales Planning",
+  "lastModifiedBy": {
+    "id": "005Id000000twTWIAY",
+    "name": "Hemin Kale",
+    "profilePhotoUrl": "/img/userprofile/default_profile_45_v2.png"
+  },
+  "lastModifiedDate": "2026-05-14T02:06:01.000Z",
+  "licenseAttributes": {
+    "type": "einsteinanalytics"
+  },
+  "name": "Sales_Planning",
+  "recipeDefinition": {
+    "nodes": {
+      "LOAD_DATASET0": {
+        "action": "load",
+        "parameters": {
+          "dataset": {
+            "connectionName": "SFDC_LOCAL",
+            "label": "Account",
+            "sourceObjectName": "Account",
+            "type": "connectedDataset"
+          },
+          "fields": [
+            "SDO_SPM_Upside_Potential__c",
+            "Id",
+            "Name",
+            "Type",
+            "BillingStreet",
+            "BillingCity",
+            "BillingState",
+            "BillingPostalCode",
+            "BillingCountry",
+            "Industry",
+            "AnnualRevenue",
+            "NumberOfEmployees",
+            "Rating",
+            "OwnerId",
+            "SystemModstamp",
+            "IsLocked",
+            "SDO_Sales_Open_Oppty_Value__c",
+            "SDO_Maps_TAM__c",
+            "SDO_MAPS_Dataset_Split__c",
+            "SDO_MAPS_Days_Since_Last_Visit__c",
+            "SDO_MAPS_Segment_c__c",
+            "SDO_MAPS_Service_Tier__c",
+            "SDO_MAPS_Tag__c",
+            "SDO_MAPS_Tier__c",
+            "SDO_MAPS_Time_Per_Visit_c__c",
+            "SDO_MAPS_Visit_Frequency__c",
+            "SDO_Maps_District__c",
+            "SDO_Maps_Territory__c"
+          ],
+          "sampleDetails": {
+            "sortBy": [],
+            "type": "TopN"
+          }
+        },
+        "sources": []
+      },
+      "FILTER0": {
+        "action": "filter",
+        "parameters": {
+          "filterExpressions": [
+            {
+              "field": "SDO_MAPS_Tag__c",
+              "operands": [
+                "SPM Base"
+              ],
+              "operator": "EQUAL",
+              "type": "TEXT"
+            }
+          ]
+        },
+        "sources": [
+          "LOAD_DATASET0"
+        ]
+      },
+      "OUTPUT0": {
+        "action": "save",
+        "parameters": {
+          "dataset": {
+            "folderName": "SharedApp",
+            "label": "Sales Planning",
+            "name": "Sales_Planning",
+            "type": "analyticsDataset"
+          },
+          "fields": [],
+          "measuresToCurrencies": []
+        },
+        "sources": [
+          "TRIM0"
+        ]
+      },
+      "TRIM0": {
+        "action": "formula",
+        "parameters": {
+          "expressionType": "SQL",
+          "fields": [
+            {
+              "formulaExpression": "trim(Id)",
+              "label": "Account ID Trim",
+              "name": "Id_trim",
+              "precision": 15,
+              "type": "TEXT"
+            }
+          ]
+        },
+        "sources": [
+          "FILTER0"
+        ]
+      }
+    },
+    "runMode": "full",
+    "ui": {
+      "nodes": {
+        "LOAD_DATASET0": {
+          "label": "Account",
+          "type": "LOAD_DATASET",
+          "top": 112,
+          "left": 112,
+          "parameters": {
+            "sampleSize": 2000
+          }
+        },
+        "FILTER0": {
+          "label": "Filter 0",
+          "type": "FILTER",
+          "top": 112,
+          "left": 252
+        },
+        "OUTPUT0": {
+          "label": "Output 0",
+          "type": "OUTPUT",
+          "top": 112,
+          "left": 532
+        },
+        "TRANSFORM0": {
+          "label": "Transform 0",
+          "type": "TRANSFORM",
+          "top": 112,
+          "left": 392,
+          "graph": {
+            "TRIM0": {
+              "parameters": {
+                "type": "TRIM_UI"
+              },
+              "label": "Trim"
+            }
+          },
+          "connectors": []
+        }
+      },
+      "connectors": [
+        {
+          "source": "LOAD_DATASET0",
+          "target": "FILTER0"
+        },
+        {
+          "source": "TRANSFORM0",
+          "target": "OUTPUT0"
+        },
+        {
+          "source": "FILTER0",
+          "target": "TRANSFORM0"
+        }
+      ],
+      "hiddenColumns": []
+    },
+    "version": "62.0"
+  },
+  "scheduleAttributes": {
+    "assetId": "05vId000000Ce7GIAS",
+    "events": {
+      "events": []
+    },
+    "frequency": "none"
+  },
+  "status": "New",
+  "targetDataflowId": "02KId000000PqTZMA0",
+  "type": "recipe",
+  "url": "/services/data/v62.0/wave/recipes/05vId000000Ce7GIAS?format=R3",
+  "validationDetails": []
+}
