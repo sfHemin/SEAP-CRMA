@@ -15,6 +15,8 @@ import { recipeTools } from "../tools/recipeTools.mjs";
 import { dashboardTools } from "../tools/dashboardTools.mjs";
 import { referenceTools } from "../tools/referenceTools.mjs";
 import { debuggerTools } from "../tools/debuggerTools.mjs";
+import { graphTools } from "../tools/graphTools.mjs";
+import { restTools } from "../tools/restTools.mjs";
 
 // Anchor the memory DB to an ABSOLUTE path next to this module. Both entry
 // points must share ONE store: the custom UI server (copilot.generate direct)
@@ -32,6 +34,9 @@ RECIPES: list, get (full R3 definition), edit/debug/transform (surgical node ope
 validate (dry-run against the org), create new, deploy (create OR update), and run.
 DASHBOARDS: list, get, edit, debug, answer questions about them, query their datasets, create new, and deploy.
 SALESFORCE DATA: describe any object (real field names + types), list custom objects, run SOQL queries.
+ORG-WIDE (READ-ONLY): build an asset dependency graph (build-asset-graph) to reason across all recipes/
+dashboards/datasets; and answer novel one-off questions via a GET-only REST call (wave-rest-get) when no
+specific tool fits. These are read-only — they never write to the org.
 
 ## Core rules — read these first
 
@@ -239,7 +244,7 @@ Primary sources, in order of trust:
 1. CRMA_BUILD_KNOWLEDGE.md — master doc: EVERY node type with EVERY variant + all enum values.
 2. Recipe node cheat-sheet — quick shapes, verified from deployed recipes.
 3. Org examples/recipes/*.json — real deployed recipes (Sales_Planning, Segmentation_Cluster).
-4. Org examples/Sample recipes/*.json — 86-node and 41-node deployed recipes.
+4. Org examples/Sample recipes/*.json — a library of real deployed recipes (R3, e.g. OpptyRecipe 54 nodes, CLVRecipe 33 nodes) plus a legacy dataflow (SalesAnalyticsDataflow, 201 nodes — legacy workflowDefinition format: mine it for SAQL/computeExpression patterns, do NOT copy its node format into an R3 recipe).
 
 Before authoring any node beyond load+save, search for the node type:
 - Join → search-reference "join node joinType" → CRMA_BUILD_KNOWLEDGE §1.2 lists ALL 7 join types (LOOKUP, LEFT_OUTER, INNER, RIGHT_OUTER, OUTER, CROSS, MULTI_VALUE_LOOKUP). Pick the RIGHT one for the relationship — do NOT default to one type. LOOKUP=enrich, LEFT_OUTER=keep-all-left, INNER=matched-only.
@@ -357,16 +362,35 @@ Only after A+B+C+D are complete should you author the recipe R3 definition.
    - Filter operand VALUES must match the org's actual data (e.g. BillingCountry is often "USA", not
      "United States") — when a run yields 0 rows, check the real values with query-dataset / a SOQL group-by
      before assuming the recipe is wrong.
-   - **Recipe UI format (Builder-native):** The ui section MUST use the Builder-native format or the Recipe
-     Builder shows "Can't Load the Recipe". Required shape:
-     ui.nodes: each key matches a node key, value = {label, type, top, left}. Types: "LOAD_DATASET", "FILTER",
-     "OUTPUT", "TRANSFORM". Use top:112, left:112/252/392/532 (evenly spaced, 140px apart).
-     If a transform node has sub-steps, add a "graph" object: {stepKey: {parameters:{type:"TRIM_UI"}, label:"Trim"}}.
-     ui.connectors: [{source:"LOAD_DATASET0", target:"FILTER0"}, ...] — explicit visual edges in pipeline order.
-     ui.hiddenColumns: [] (always present, usually empty).
-     load node: also include parameters.sampleDetails = {sortBy:[], type:"TopN"} and dataset.label = "ObjectLabel".
-     save node: also include parameters.fields = [] and parameters.measuresToCurrencies = [].
-     Node naming convention: LOAD_DATASET0, FILTER0, TRANSFORM0, OUTPUT0 (uppercase + index).
+   - **Recipe UI format (Builder-native) — CRITICAL, or the Builder shows "Can't Load the Recipe":**
+     A recipe has TWO parallel node models that must BOTH be present and consistent:
+       (1) runtime 'nodes' — the engine graph: EVERY transform is its own node (FORMULA0, DROP_FIELDS0,
+           EDIT_ATTRIBUTES0, BUCKET0, EXTRACT0, REPLACE0, TRIM0, SCHEMA0, etc.). The engine runs off this.
+       (2) 'ui.nodes' — the VISUAL graph the Recipe Builder draws. This is NOT 1:1 with runtime nodes.
+     ⛔ THE #1 CAUSE OF "Can't Load the Recipe": emitting ui.nodes 1:1 with the runtime nodes (i.e. giving
+        each FORMULA*/DROP_FIELDS*/EDIT_ATTRIBUTES*/etc. its own ui.node). The engine runs and deploy+run
+        SUCCEED, so this is invisible until a human opens the recipe — then the Builder can't map its visual
+        model and offers to "fix" it. DO NOT emit transform-family runtime nodes as standalone ui.nodes.
+     ✅ CORRECT ui.nodes shape — only these get their OWN visual node:
+        LOAD_DATASET*, OUTPUT*, FILTER*, JOIN*, APPEND*, and a standalone AGGREGATE* (when it's its own step).
+        value = {label, type, top, left} where type ∈ "LOAD_DATASET","FILTER","JOIN","APPEND","AGGREGATE","OUTPUT".
+     ✅ ALL consecutive transform-family runtime nodes (formula, dropFields/schema, editAttributes, bucket,
+        extract, replace, trim, computeExpression, etc.) COLLAPSE into a single visual 'TRANSFORM*' container:
+          "TRANSFORM0": { label:"Transform", type:"TRANSFORM", top, left,
+                          graph: { FORMULA0:null, DROP_FIELDS0:null, EDIT_ATTRIBUTES0:null } }
+        The 'graph' object lists (as keys) the runtime node keys that container holds; values are null (or a
+        small {parameters:{type:"..._UI"}, label} hint). Every transform-family runtime node MUST belong to
+        exactly one TRANSFORM container's graph — none left standalone, none omitted.
+     • Layout: top:112 baseline; left:112/252/392/532… (evenly spaced ~140px in pipeline order).
+     • ui.connectors: [{source:"LOAD_DATASET0", target:"TRANSFORM0"}, {source:"TRANSFORM0", target:"OUTPUT0"}]
+       — edges between the VISUAL nodes (so a container is one hop), NOT between the hidden runtime nodes.
+     • ui.hiddenColumns: [] (always present, usually empty).
+     • load node: parameters.sampleDetails = {sortBy:[], type:"TopN"} and dataset.label = "ObjectLabel".
+     • save node: parameters.fields = [] and parameters.measuresToCurrencies = [].
+     • Naming: LOAD_DATASET0, FILTER0, JOIN0, TRANSFORM0, OUTPUT0 (uppercase + index).
+     SELF-CHECK before deploy: for every runtime node whose action is a transform-family op, confirm it appears
+     inside some ui.nodes[TRANSFORM*].graph and is NOT a top-level ui.node. If any transform-family node is a
+     standalone ui.node, the Builder will reject it — fix before deploying. (validate-recipe now flags this.)
 6. **Write paths differ by asset type — this matters:**
    - **New recipes are created via the Wave REST API (POST /wave/recipes), NOT metadata deploy.** This is
      PROVEN WORKING on storm-org. The deploy-recipe tool handles this automatically: if a recipe named "name"
@@ -522,6 +546,32 @@ shapes, filter shapes, and interactions & bindings.
     widget interactions array — NEVER guess this shape from memory.
 Workflow: search-reference (get path + snippet) → read-reference (full doc) → then author. Cite the doc you used.
 If the library is unavailable (available:false), fall back to your built-in knowledge and say so briefly.
+
+## Org-wide reasoning + read-only improvisation (READ-ONLY tools)
+These widen what you can ANSWER without touching any write path. They never mutate the org.
+
+**build-asset-graph** — builds an in-memory dependency graph across ALL recipes/dashboards/datasets/objects
+(cached for the session). Reach for it on cross-asset / lineage / "which-or-what-breaks" questions:
+  - "Which dashboards break if I rename dataset field X?" / "what's the blast radius of changing recipe Y?"
+  - "Find every recipe that loads Opportunity." / "what feeds dataset Z and what consumes it?"
+  - "List orphaned datasets/dashboards."
+Build it once, then answer follow-ups from the cached graph instead of re-fetching. (Field-level impact and
+graph queries are its companion capabilities.)
+
+**wave-rest-get** — a single GET-only Salesforce/Wave REST call for NOVEL one-off questions that no specific
+tool covers. Use it as a last resort AFTER checking the purpose-built tools, e.g.:
+  - "How many datasets, and their sizes?" → /wave/datasets?pageSize=200
+  - "What dataspaces / apps / folders exist?" → /wave/dataspaces , /wave/folders
+  - "Dataflow job history / recent failures" → /wave/dataflowjobs?pageSize=50
+  - "Org limits" → /limits ; Tooling SOQL → /tooling/query?q=...
+Rules for using it:
+  - It is **READ-ONLY and cannot write** — GET only, path must be on the allowlist (/wave/*, /query,
+    /queryAll, /tooling/query, /limits). It will REJECT anything else; don't try to use it to deploy/patch.
+  - For plain SELECTs, prefer **run-soql**. For known asset reads, prefer the specific list-*/get-* tools
+    and **build-asset-graph** — only use wave-rest-get when those don't answer the question.
+  - Pass the bare path (no /services/data/vXX). Results are truncated to a limit with a note — raise the
+    limit argument (max 500) if you need more, and tell the user when a result was capped.
+  - If it returns ok:false, read the error message, pick an allowed path or a proper tool, and DON'T retry the same path.
 
 ## Dataset existence check — MANDATORY before building any dashboard
 
@@ -1015,5 +1065,5 @@ export const copilot = new Agent({
   model: opus(),
   memory,
   maxSteps: 100,
-  tools: { ...recipeTools, ...dashboardTools, ...referenceTools, ...debuggerTools },
+  tools: { ...recipeTools, ...dashboardTools, ...referenceTools, ...debuggerTools, ...graphTools, ...restTools },
 });

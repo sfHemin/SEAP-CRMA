@@ -229,8 +229,9 @@ const PAGE = `<!doctype html>
   .dp-select { background:#0c1526; color:#cfe0ff; border:1px solid #24406a; border-radius:6px;
     padding:7px 9px; font-size:13px; }
   /* text + placeholder */
-  .dp-text { display:flex; align-items:center; justify-content:center; }
-  .dp-text-body { font-size:14px; font-weight:600; color:var(--text); text-align:center; }
+  .dp-text { display:flex; align-items:center; justify-content:center; overflow:auto; }
+  .dp-text-body { font-size:14px; font-weight:600; color:var(--text); text-align:center;
+    line-height:1.4; white-space:pre-wrap; word-break:break-word; max-height:100%; }
   .dp-placeholder-note { font-size:12px; color:var(--muted); font-style:italic; }
 
   /* ── footer / composer ───────────────────────────────────────────────── */
@@ -375,8 +376,10 @@ function echartOption(w) {
       ...(isLine ? { smooth:true, areaStyle:{ opacity:0.25 }, lineStyle:{ color:PALETTE[i%PALETTE.length] } } : { barMaxWidth:30 }),
       itemStyle:{ color: PALETTE[i % PALETTE.length] },
     }));
-    return { ...base, tooltip:{ ...TOOLTIP, trigger:'axis' },
-      legend:{ textStyle:{ color:'#8fa3c4' }, top:0, right:0 },
+    return { ...base, grid:{ left:8, right:16, top:12, bottom:28, containLabel:true },
+      tooltip:{ ...TOOLTIP, trigger:'axis' },
+      legend:{ type:'scroll', bottom:0, textStyle:{ color:'#8fa3c4', fontSize:11 },
+        itemWidth:12, itemHeight:8, icon:'roundRect' },
       xAxis: (horiz && !isLine) ? val : cat,
       yAxis: (horiz && !isLine) ? { ...cat, inverse:true } : val,
       series };
@@ -386,8 +389,10 @@ function echartOption(w) {
     // bars + a line on a SECOND y-axis (per the official ECharts combo example) —
     // bar and line scales usually differ, so a shared axis flattens the line.
     const lineVals = values.map((v,i,a) => Math.round((v + (a[i-1]||v)) / 2));
-    return { ...base, tooltip:{ ...TOOLTIP, trigger:'axis' },
-      legend:{ textStyle:{ color:'#8fa3c4' }, top:0, right:0 },
+    return { ...base, grid:{ left:8, right:16, top:12, bottom:28, containLabel:true },
+      tooltip:{ ...TOOLTIP, trigger:'axis' },
+      legend:{ type:'scroll', bottom:0, textStyle:{ color:'#8fa3c4', fontSize:11 },
+        itemWidth:12, itemHeight:8, icon:'roundRect' },
       xAxis:{ type:'category', data:labels, ...AXIS_STYLE },
       yAxis:[
         { type:'value', ...AXIS_STYLE },
@@ -401,11 +406,18 @@ function echartOption(w) {
 
   if (w.type === 'donut' || w.type === 'pie') {
     const data = labels.map((l,i) => ({ name:l, value: values[i] ?? 0 }));
-    return { ...base, tooltip:{ ...TOOLTIP, trigger:'item' },
-      legend:{ orient:'vertical', right:0, top:'middle', textStyle:{ color:'#8fa3c4' } },
+    // Pie sits in the LEFT ~66% (center 33%, radius 66% → right edge ≈ 66%);
+    // the scrollable legend owns the RIGHT ~32%, so the two never overlap even
+    // with many/long slice names (names ellipsized, full text in the tooltip).
+    return { ...base, tooltip:{ ...TOOLTIP, trigger:'item', formatter:'{b}: {c} ({d}%)' },
+      legend:{ type:'scroll', orient:'vertical', right:6, top:'middle',
+        textStyle:{ color:'#8fa3c4', fontSize:11 }, itemWidth:10, itemHeight:10, icon:'circle',
+        pageIconColor:'#8fa3c4', pageTextStyle:{ color:'#8fa3c4' },
+        formatter:(name)=> (name && name.length>14) ? name.slice(0,13)+'…' : name },
       color: PALETTE,
-      series:[{ type:'pie', radius: w.type==='donut' ? ['45%','72%'] : '72%',
-        center:['38%','50%'], data, label:{ show:false } }] };
+      series:[{ type:'pie', radius: w.type==='donut' ? ['42%','66%'] : '66%',
+        center:['33%','52%'], data, label:{ show:false },
+        emphasis:{ label:{ show:true, fontSize:12, color:'#cfe0ff' } } }] };
   }
 
   if (w.type === 'scatter') {

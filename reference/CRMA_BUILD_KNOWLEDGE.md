@@ -1,6 +1,6 @@
 # CRMA BUILD KNOWLEDGE — Master reference for recipe + dashboard authoring
 
-> Ground truth harvested from deployed storm-org recipes/dashboards + the two Sample recipes
+> Ground truth harvested from deployed storm-org recipes/dashboards + the Org examples/Sample recipes library
 > + the Salesforce Recipe REST API doc. Every shape here appears in something that ACTUALLY
 > DEPLOYED AND RAN. When a value here disagrees with the API schema doc's casing, THIS wins —
 > the schema doc lists title-case enum names that the runtime rejects.
@@ -369,6 +369,39 @@ Also valid per API: `LESS_THAN`, `LESS_OR_EQUAL`, `IS_NULL`, `NOT_EQUAL`.
   ```
 - **appendV2**: union two branches (like SQL UNION). sources = [branchA, branchB].
 - **smartDataDiscoveryPredict**, **timeSeriesV2**: ML nodes — mirror Org examples exactly.
+
+## 1.11 THE `ui` BLOCK — why manually-opened recipes show "Can't Load the Recipe"
+
+A recipe has TWO parallel node models and BOTH must be present + consistent:
+- **`nodes`** = the RUNTIME graph. Every transform is its OWN node (FORMULA0, DROP_FIELDS0,
+  EDIT_ATTRIBUTES0, BUCKET0, EXTRACT0, REPLACE0, TRIM0, SCHEMA0…). The engine runs off this.
+- **`ui.nodes`** = the VISUAL graph the Recipe Builder draws. It is **NOT 1:1** with `nodes`.
+
+⛔ **THE BUG (verified 2026-09-07 on storm-org):** if you emit `ui.nodes` 1:1 with the runtime nodes
+— i.e. give each FORMULA*/DROP_FIELDS*/EDIT_ATTRIBUTES*/etc. its own top-level `ui.node` — the recipe
+still **deploys and runs fine** (the engine ignores `ui`), so the agent's deploy/diagnose never catches
+it. But when a **human opens it in Recipe Builder the first time**, the Builder can't reconcile its
+visual model and shows **"Can't Load the Recipe … we might move some nodes around / combine some
+transformations into the same Transform node."** Clicking "Yes, Fix It" makes Builder regenerate `ui`.
+
+✅ **CORRECT `ui.nodes`** — only these get their OWN visual node: `LOAD_DATASET*`, `OUTPUT*`, `FILTER*`,
+`JOIN*`, `APPEND*`, standalone `AGGREGATE*`, and ML/step nodes (e.g. `DISCOVERY_PREDICT*`). ALL
+consecutive transform-family runtime nodes COLLAPSE into a visual `TRANSFORM*` container whose `graph`
+lists the runtime keys it holds:
+```json
+"TRANSFORM0": { "label":"Transform", "type":"TRANSFORM", "top":112, "left":252,
+                "graph": { "FORMULA0":null, "EDIT_ATTRIBUTES0":null,
+                           "FORMULA1": {"parameters":{"type":"BASE_FORMULA_UI"}} } }
+```
+- `ui.connectors` wire the VISUAL nodes (a container is ONE hop): `{source:"LOAD_DATASET0",target:"TRANSFORM0"}`.
+- Evidence: EVERY real recipe has `ui.nodes` count < runtime `nodes` count (OpptyRecipe 54→32,
+  Segmentation 32→19). The only 1:1 real recipe (Verify_TypeCast_Append) has NO transform-family nodes.
+- Some transform-family runtime nodes legitimately have NO `ui` entry at all (e.g. an `extractGrains`
+  that only feeds an AGGREGATE) — that's fine; do NOT force every transform node into a container.
+
+**Guardrail:** `validate-recipe` now runs a static `lintRecipeUi()` that flags any transform-family
+runtime node emitted as a standalone `ui.node` (the exact bug) — before you deploy. `ok` is false if the
+ui would break the Builder even when the org dry-run passes.
 
 ---
 
