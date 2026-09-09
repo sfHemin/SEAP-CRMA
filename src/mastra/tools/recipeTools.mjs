@@ -121,20 +121,74 @@ export const applyRecipeEdits = createTool({
 });
 
 // ---- validate (dry-run deploy) --------------------------------------------
+// Runtime actions that are TRANSFORM-family: they must live INSIDE a visual
+// TRANSFORM container's `graph`, never as a standalone top-level ui.node. If any
+// appears as its own ui.node, the Recipe Builder shows "Can't Load the Recipe"
+// on manual open (the engine still runs, so deploy/run succeed — the bug is
+// invisible until a human opens it). This lint catches it before that happens.
+const TRANSFORM_FAMILY_ACTIONS = new Set([
+  "formula", "computeExpression", "dropFields", "schema", "editAttributes",
+  "bucket", "extractGrains", "extract", "replace", "trim", "detectSentiment",
+  "typeCast", "flatten", "detectDuplicates",
+]);
+
+/**
+ * Static lint of a recipe's ui block against its runtime nodes. Returns a list
+ * of human-readable problems (empty = clean). Pure — no org call, safe offline.
+ * Focus: the "Can't Load the Recipe" cause — transform-family runtime nodes must
+ * be collapsed into TRANSFORM containers, not emitted as standalone ui.nodes.
+ */
+export function lintRecipeUi(definition) {
+  const problems = [];
+  const def = definition?.recipeDefinition || definition || {};
+  const nodes = def.nodes || {};
+  const ui = def.ui || {};
+  const uiNodes = ui.nodes || {};
+  if (!def.nodes) return ["No `nodes` (runtime graph) found — not an R3 recipe definition."];
+  if (!def.ui || !ui.nodes) {
+    return ["No `ui.nodes` block — the Recipe Builder needs a Builder-native ui. Add ui.nodes/connectors/hiddenColumns."];
+  }
+  // THE bug: a transform-family runtime node emitted as a standalone ui.node
+  // (i.e. its own top-level visual node instead of collapsed into a TRANSFORM
+  // container). This is the exact shape the Recipe Builder rejects on open.
+  // Note: real recipes legitimately leave SOME transform-family runtime nodes
+  // out of the ui entirely (e.g. an extractGrains that only feeds an AGGREGATE
+  // step) — that is NOT a problem, so we do NOT require every transform node to
+  // appear in a container. We only flag the ones wrongly promoted to standalone.
+  for (const [uiKey, uiVal] of Object.entries(uiNodes)) {
+    const rt = nodes[uiKey];
+    if (rt && TRANSFORM_FAMILY_ACTIONS.has(rt.action) && uiVal?.type !== "TRANSFORM") {
+      problems.push(`ui.nodes["${uiKey}"] is a standalone visual node but its runtime action "${rt.action}" is transform-family — it MUST be collapsed into a TRANSFORM container's graph, or the Builder shows "Can't Load the Recipe".`);
+    }
+  }
+  return problems;
+}
+
 export const validateRecipe = createTool({
   id: "validate-recipe",
   description:
     "Validate a recipe definition against the org WITHOUT writing (metadata deploy --dry-run). " +
-    "Use to debug: it surfaces the org's own compile/deploy errors. name = target metadata name.",
+    "Use to debug: it surfaces the org's own compile/deploy errors. name = target metadata name. " +
+    "ALSO runs a static ui-block lint that catches the \"Can't Load the Recipe\" cause (transform-family " +
+    "runtime nodes emitted as standalone ui.nodes instead of collapsed into TRANSFORM containers) — the " +
+    "org dry-run does NOT catch this because the engine runs fine; only the Builder rejects it on open.",
   inputSchema: z.object({ name: z.string(), definition: z.any(), metaXml: z.string().nullable().optional() }),
-  outputSchema: z.object({ ok: z.boolean(), output: z.string() }),
+  outputSchema: z.object({ ok: z.boolean(), output: z.string(), uiWarnings: z.array(z.string()) }),
   execute: async (context) => {
+    // Static ui lint first (offline, no org) — catches the Builder-load bug.
+    const uiWarnings = lintRecipeUi(context.definition);
     // Force dry-run regardless of env for this tool.
     const prev = process.env.DEPLOY_DRY_RUN;
     process.env.DEPLOY_DRY_RUN = "true";
     const res = await metadataDeploy("WaveRecipe", context.name, context.definition, context.metaXml || null);
     process.env.DEPLOY_DRY_RUN = prev;
-    return { ok: /Succeeded/i.test(res.output), output: res.output };
+    const orgOk = /Succeeded/i.test(res.output);
+    let output = res.output;
+    if (uiWarnings.length) {
+      output += `\n\n⚠️ UI-BLOCK LINT (${uiWarnings.length}) — org dry-run passes but the Recipe Builder will show "Can't Load the Recipe" on manual open:\n- ` + uiWarnings.join("\n- ");
+    }
+    // ok requires BOTH: org accepts it AND the ui is Builder-loadable.
+    return { ok: orgOk && uiWarnings.length === 0, output, uiWarnings };
   },
 });
 

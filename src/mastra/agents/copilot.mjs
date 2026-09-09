@@ -362,16 +362,35 @@ Only after A+B+C+D are complete should you author the recipe R3 definition.
    - Filter operand VALUES must match the org's actual data (e.g. BillingCountry is often "USA", not
      "United States") — when a run yields 0 rows, check the real values with query-dataset / a SOQL group-by
      before assuming the recipe is wrong.
-   - **Recipe UI format (Builder-native):** The ui section MUST use the Builder-native format or the Recipe
-     Builder shows "Can't Load the Recipe". Required shape:
-     ui.nodes: each key matches a node key, value = {label, type, top, left}. Types: "LOAD_DATASET", "FILTER",
-     "OUTPUT", "TRANSFORM". Use top:112, left:112/252/392/532 (evenly spaced, 140px apart).
-     If a transform node has sub-steps, add a "graph" object: {stepKey: {parameters:{type:"TRIM_UI"}, label:"Trim"}}.
-     ui.connectors: [{source:"LOAD_DATASET0", target:"FILTER0"}, ...] — explicit visual edges in pipeline order.
-     ui.hiddenColumns: [] (always present, usually empty).
-     load node: also include parameters.sampleDetails = {sortBy:[], type:"TopN"} and dataset.label = "ObjectLabel".
-     save node: also include parameters.fields = [] and parameters.measuresToCurrencies = [].
-     Node naming convention: LOAD_DATASET0, FILTER0, TRANSFORM0, OUTPUT0 (uppercase + index).
+   - **Recipe UI format (Builder-native) — CRITICAL, or the Builder shows "Can't Load the Recipe":**
+     A recipe has TWO parallel node models that must BOTH be present and consistent:
+       (1) runtime 'nodes' — the engine graph: EVERY transform is its own node (FORMULA0, DROP_FIELDS0,
+           EDIT_ATTRIBUTES0, BUCKET0, EXTRACT0, REPLACE0, TRIM0, SCHEMA0, etc.). The engine runs off this.
+       (2) 'ui.nodes' — the VISUAL graph the Recipe Builder draws. This is NOT 1:1 with runtime nodes.
+     ⛔ THE #1 CAUSE OF "Can't Load the Recipe": emitting ui.nodes 1:1 with the runtime nodes (i.e. giving
+        each FORMULA*/DROP_FIELDS*/EDIT_ATTRIBUTES*/etc. its own ui.node). The engine runs and deploy+run
+        SUCCEED, so this is invisible until a human opens the recipe — then the Builder can't map its visual
+        model and offers to "fix" it. DO NOT emit transform-family runtime nodes as standalone ui.nodes.
+     ✅ CORRECT ui.nodes shape — only these get their OWN visual node:
+        LOAD_DATASET*, OUTPUT*, FILTER*, JOIN*, APPEND*, and a standalone AGGREGATE* (when it's its own step).
+        value = {label, type, top, left} where type ∈ "LOAD_DATASET","FILTER","JOIN","APPEND","AGGREGATE","OUTPUT".
+     ✅ ALL consecutive transform-family runtime nodes (formula, dropFields/schema, editAttributes, bucket,
+        extract, replace, trim, computeExpression, etc.) COLLAPSE into a single visual 'TRANSFORM*' container:
+          "TRANSFORM0": { label:"Transform", type:"TRANSFORM", top, left,
+                          graph: { FORMULA0:null, DROP_FIELDS0:null, EDIT_ATTRIBUTES0:null } }
+        The 'graph' object lists (as keys) the runtime node keys that container holds; values are null (or a
+        small {parameters:{type:"..._UI"}, label} hint). Every transform-family runtime node MUST belong to
+        exactly one TRANSFORM container's graph — none left standalone, none omitted.
+     • Layout: top:112 baseline; left:112/252/392/532… (evenly spaced ~140px in pipeline order).
+     • ui.connectors: [{source:"LOAD_DATASET0", target:"TRANSFORM0"}, {source:"TRANSFORM0", target:"OUTPUT0"}]
+       — edges between the VISUAL nodes (so a container is one hop), NOT between the hidden runtime nodes.
+     • ui.hiddenColumns: [] (always present, usually empty).
+     • load node: parameters.sampleDetails = {sortBy:[], type:"TopN"} and dataset.label = "ObjectLabel".
+     • save node: parameters.fields = [] and parameters.measuresToCurrencies = [].
+     • Naming: LOAD_DATASET0, FILTER0, JOIN0, TRANSFORM0, OUTPUT0 (uppercase + index).
+     SELF-CHECK before deploy: for every runtime node whose action is a transform-family op, confirm it appears
+     inside some ui.nodes[TRANSFORM*].graph and is NOT a top-level ui.node. If any transform-family node is a
+     standalone ui.node, the Builder will reject it — fix before deploying. (validate-recipe now flags this.)
 6. **Write paths differ by asset type — this matters:**
    - **New recipes are created via the Wave REST API (POST /wave/recipes), NOT metadata deploy.** This is
      PROVEN WORKING on storm-org. The deploy-recipe tool handles this automatically: if a recipe named "name"
